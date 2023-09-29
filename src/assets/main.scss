@@ -1,0 +1,106 @@
+/*
+STYLES GUIDE
+  0. VARIABLES
+  1. RESET
+  2. LAYOUT
+  3. GENERIC ITEMS
+  4. PARTS OF WEB
+  5. ANIMATIONS 
+*/
+
+/* 0. VARIABLES */
+$button-color: #1E293B;
+$button-dark-color: #141b27;
+$alert-color: #dd0000;
+
+/* 0. RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  vertical-align: baseline;
+}
+
+/* 1. LAYOUT */
+html, body {
+  font-family: "Noto Sans", sans-serif;
+  text-align: center;
+}
+
+.right-cover-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+}
+
+.column-right {
+  flex: 1;
+}
+
+/* 2. GENERIC ITEMS */
+a {
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+input {
+  width: 100%;
+  min-height: 30px;
+  border-radius: 0 !important;
+}
+
+input[type="submit"] {
+  margin-top: 25px;
+}
+
+label {
+  font-weight: 600;
+  width: 100%;
+}
+
+.in-alert {
+  color: $alert-color;
+}
+
+/* 3. PARTS OF WEB */
+
+/* buttons */
+.btn-primary {
+  background-color: $button-color;
+  border: none;
+}
+
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+  background-color: #141b27 !important;
+}
+
+.btn-outline-secondary {
+  border: 1px solid #dbdbdb;
+  border-radius: 0;
+}
+/* end buttons */
+
+/* login */
+.login-form {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.children-login-form {
+  max-width: 380px;
+}
+/* end login */
+
+/* 5. ANIMATIONS */
