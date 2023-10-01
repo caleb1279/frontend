@@ -37,12 +37,12 @@
               placeholder="**********"
               required
             />
-            <button
+            <span
               class="btn btn-outline-secondary"
               v-on:click.prevent="viewPassword"
             >
               <font-awesome-icon :icon="passwordIcon" class="password-icon" />
-            </button>
+            </span>
           </div>
           <input
             class="btn btn-primary"
@@ -77,16 +77,12 @@ export default class LoginForm extends Vue {
   passwordIcon = "eye";
 
   login() {
-    let json = {
-      email: this.uname,
-      password: this.passwd,
-    };
-    RequestController.Login(json)
+    RequestController.Login({ email: this.uname, password: this.passwd })
       .then((data: AxiosResponse) => {
-        if (data.data.status == "200") {
+        this.msg = data.data.status === "200" ? "" : data.data.message;
+        if (data.data.status === "200") {
+          RequestController.SetTokenBearer(data.data.Authorization);
           this.$router.push("/");
-        } else {
-          this.msg = data.data.message;
         }
         console.log(data);
       })
@@ -115,13 +111,11 @@ label {
 h1 {
   font-size: medium;
 }
-
 .column-left {
   margin: 0;
   width: 50%;
   height: 100%;
 }
-
 .image-logo {
   max-width: 300px;
   margin-bottom: 18px;

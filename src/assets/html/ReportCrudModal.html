@@ -1,0 +1,71 @@
+<div class="modal" tabindex="-1" id="projectModal" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form v-on:click.prevent="">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <%= htmlWebpackPlugin.options.crudtitle %> de Reportes
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            v-on:click.prevent=""></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="total-row form-group">
+              <label for="title">Nombre de la actividad:</label>
+              <input v-model="newReport.title" class="form-control shadow-none" type="text" id="title" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="total-row form-group">
+              <label for="description">Descripción de la actividad:</label>
+              <textarea v-model="newReport.description" id="description" class="form-control shadow-none"
+                required></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="date">Fecha en que se realiza:</label>
+                <b-form-datepicker placeholder="" :min="min" :max="max" v-model="newReport.date"
+                  class="form-control shadow-none"
+                  :date-format-options="{ day: 'numeric', month: 'numeric', year: 'numeric' }" locale="es"
+                  id="date"></b-form-datepicker>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="time">Duración en horas:</label>
+                <input type="number" v-model="newReport.hours" class="form-control shadow-none" id="time" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="total-row form-group">
+              <label for="project">Nombre del proyecto:</label>
+              <vue-bootstrap-autocomplete v-model="newReport.project" class="shadow-none" showAllResults="true"
+                :minMatchingChars="1" inputClass="shadow-none" id="project" :data="projectlist" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="total-row form-group">
+              <label for="stage">Seleccione una etapa:</label>
+              <select v-model="newReport.stage" class="form-select shadow-none" aria-label="Default select example"
+                id="stage" required>
+                <option v-for="stage in stagelist">{{ stage }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" v-on:click.prevent="">
+            Cerrar
+          </button>
+          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" v-on:click.prevent="">
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

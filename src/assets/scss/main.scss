@@ -1,0 +1,206 @@
+/*
+STYLES GUIDE
+  0. VARIABLES
+  1. RESET
+  2. LAYOUT
+  3. GENERIC ITEMS
+  4. GENERIC TYPES
+  5. PARTS OF WEB
+*/
+
+/* 0. VARIABLES */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+
+$alert-color: #dd0000;
+$dark-color: #1E293B;
+$link-color: #0063c5;
+$hover-dark-color: #141b27;
+$hover-light-color: #dadada;
+$border-light-color: #dbdbdb;
+$light-color: #f8f9fa;
+
+/* 1. RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: 0;
+	vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+body {
+	line-height: 1;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+blockquote, q {
+	quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* 2. LAYOUT */
+.right-cover-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+}
+
+.column-right {
+  flex: 1;
+}
+
+/* subcomponent wrapper */
+.wrapper-dock {
+  display: flex;
+  flex-grow: 1;
+}
+
+.container-dock {
+  flex: 1;
+}
+/* end wrapper */
+
+/* 3. GENERIC ITEMS */
+html, body {
+  font-family: "Noto Sans", sans-serif;
+  text-align: center;
+}
+
+h1 {
+  font-size: xx-large;
+  font-weight: 500;
+}
+
+a {
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+ul li {
+  text-align: center;
+  list-style: none;
+}
+
+ul {
+  padding: 0;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+input {
+  width: 100%;
+  min-height: 30px;
+  border-radius: 0 !important;
+}
+
+input[type="submit"] {
+  margin-top: 25px;
+}
+
+label {
+  font-weight: 600;
+  width: 100%;
+}
+
+nav {
+  border-bottom: 1px solid $border-light-color;
+}
+
+figure {
+  margin: 0 auto !important;
+}
+
+/* 4. GENERIC TYPES */
+
+.in-alert {
+  color: $alert-color;
+}
+
+.in-link {
+  color: $link-color;
+  text-decoration: underline;
+}
+
+.avatar-rounded {
+  border-radius: 50%;
+}
+
+.maintitle {
+  text-align: left;
+}
+
+/* 5. PARTS OF WEB */
+
+/* buttons */
+.btn-primary {
+  background-color: $dark-color;
+  border: none;
+}
+
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+  background-color: $hover-dark-color !important;
+}
+
+.btn-outline-secondary {
+  border: 1px solid $border-light-color;
+  border-radius: 0;
+}
+/* end buttons */
+
+/* login */
+.login-form {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.children-login-form {
+  max-width: 380px;
+}
+/* end login */
+
+/* sidebar */
+.sidebar {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: $light-color;
+  border-right: 1px solid $border-light-color;
+}
+
+.sidebar ul li {
+  padding: 10px 5px;
+}
+
+.sidebar-item:hover {
+  background-color: $hover-light-color;
+}
+/* end sidebar */

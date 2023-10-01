@@ -1,0 +1,71 @@
+<div class="modal" tabindex="-1" id="projectModal" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form v-on:click.prevent="">
+        <div class="modal-header">
+          <h5 class="modal-title"><%= htmlWebpackPlugin.options.crudtitle %> de Proyectos</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            v-on:click.prevent=""></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="total-row form-group">
+              <label for="projectid">Número del proyecto:</label>
+              <input class="form-control shadow-none" type="text" id="projectid" required />
+            </div>
+          </div>
+          <div class="row">
+            <div class="total-row form-group">
+              <label for="project">Nombre del proyecto:</label>
+              <input type="text" class="form-control shadow-none" id="project" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="labdate">Fecha de laboratorio:</label>
+                <b-form-datepicker placeholder="" class="form-control shadow-none" :date-format-options="{
+                      day: 'numeric',
+                      month: 'numeric',
+                      year: 'numeric',
+                    }" locale="es" id="labdate"></b-form-datepicker>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="prodate">Fecha producción:</label>
+                <b-form-datepicker placeholder="" class="form-control shadow-none" :date-format-options="{
+                      day: 'numeric',
+                      month: 'numeric',
+                      year: 'numeric',
+                    }" locale="es" id="prodate"></b-form-datepicker>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="total-row form-group">
+              <label for="source">Fuente de desarrollo:</label>
+              <input type="text" id="source" class="form-control shadow-none" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="total-row form-group">
+              <label for="status">Etapa del proyecto:</label>
+              <select class="form-select shadow-none" aria-label="Default select example" id="status" required>
+                <option>Desarrollo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" v-on:click.prevent="">
+            Cerrar
+          </button>
+          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" v-on:click.prevent="">
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
