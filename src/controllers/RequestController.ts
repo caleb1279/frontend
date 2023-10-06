@@ -2,7 +2,7 @@ import router from "@/router";
 import axios from "axios";
 
 const request = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: process.env.BACKEND_URL,
   withCredentials: false,
   headers: {
     Accept: "application/json",
