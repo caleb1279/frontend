@@ -67,8 +67,9 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-import RequestController from "@/controllers/RequestController";
-import { AxiosError, AxiosResponse } from "axios";
+import session from "@/controllers/SessionController";
+/* import RequestController from "@/controllers/RequestController";
+import { AxiosError, AxiosResponse } from "axios"; */
 
 export default class LoginForm extends Vue {
   msg = "";
@@ -77,18 +78,23 @@ export default class LoginForm extends Vue {
   passwordIcon = "eye";
 
   login() {
-    RequestController.Login({ email: this.uname, password: this.passwd })
+    session.Login("auth-1234");
+    /*RequestController.Login({ email: this.uname, password: this.passwd })
       .then((data: AxiosResponse) => {
-        this.msg = data.data.status === "200" ? "" : data.data.message;
         if (data.data.status === "200") {
-          RequestController.SetTokenBearer(data.data.Authorization);
+          this.$storage.setStorageSync(
+            "Authorization",
+            data.data.Authorization
+          );
           this.$router.push("/");
+        } else {
+          this.msg = data.data.message;
         }
         console.log(data);
       })
       .catch((error: AxiosError) => {
         this.msg = error.message;
-      });
+      }); */
   }
 
   viewPassword() {
@@ -111,11 +117,13 @@ label {
 h1 {
   font-size: medium;
 }
+
 .column-left {
   margin: 0;
   width: 50%;
   height: 100%;
 }
+
 .image-logo {
   max-width: 300px;
   margin-bottom: 18px;

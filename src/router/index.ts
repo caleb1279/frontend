@@ -4,6 +4,9 @@ import ErrorNotFound from "@/components/ErrorNotFound.vue";
 import HomePage from "@/components/HomePage.vue";
 import ReportCrud from "@/components/ReportCrud.vue";
 import ProjectCrud from "@/components/ProjectCrud.vue";
+import session from "@/controllers/SessionController";
+
+const authExceptions: Array<string> = ["ErrorNotFound", "Login"];
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -25,12 +28,12 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/login",
-    name: "login",
+    name: "Login",
     component: LoginForm,
   },
   {
     path: "/:pathMatch(.*)*",
-    name: "error404",
+    name: "ErrorNotFound",
     component: ErrorNotFound,
   },
 ];
@@ -38,6 +41,14 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+});
+
+router.afterEach((to) => {
+  const authenticated = session.ValidateSesison();
+  console.log(authenticated);
+  if (!authenticated && !authExceptions.includes(String(to.name))) {
+    router.push("/login");
+  }
 });
 
 export default router;

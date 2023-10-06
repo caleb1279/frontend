@@ -60,7 +60,7 @@
         </ul>
         <div class="logout">
           <ul>
-            <a href="" v-on:click.prevent="$router.push('/login')">
+            <a href="" v-on:click.prevent="logout()">
               <li class="sidebar-item">
                 <font-awesome-icon
                   icon="right-from-bracket"
@@ -86,7 +86,10 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-export default class ErrorNotFound extends Vue {}
+import session from "@/controllers/SessionController";
+export default class ErrorNotFound extends Vue {
+  logout = session.Logout;
+}
 </script>
 
 <style scoped lang="scss">

@@ -1,5 +1,8 @@
 import router from "@/router";
 import axios from "axios";
+import { useStorage } from "vue3-storage";
+
+const storage = useStorage();
 
 const request = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -8,6 +11,7 @@ const request = axios.create({
     Accept: "application/json",
     ContentType: "application/json",
     AccessControlAllowOrigin: "*",
+    Authorization: storage.getStorageSync("Authorization") || "",
   },
 });
 
@@ -25,11 +29,5 @@ request.interceptors.response.use(
 export default {
   Login(json: { email: string; password: string }) {
     return request.post("/login", json);
-  },
-  SetTokenBearer(token: string) {
-    request.defaults.headers.common["Authorization"] = "Bearer " + token;
-  },
-  GetInitData() {
-    return request.get("/users");
   },
 };

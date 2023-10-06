@@ -7,6 +7,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Axios from "vue-axios";
 import axios from "axios";
+import Vue3Storage, { StorageType } from "vue3-storage";
 
 import {
   faEye,
@@ -38,5 +39,6 @@ library.add(
 app.use(BootstrapVue3);
 app.use(Axios, axios);
 app.component("font-awesome-icon", FontAwesomeIcon);
+app.use(Vue3Storage, { namespace: "pro_", storage: StorageType.Local });
 
 app.use(router).mount("#app");
