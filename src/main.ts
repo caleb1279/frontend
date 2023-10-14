@@ -20,10 +20,8 @@ import {
   faListCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap/dist/js/bootstrap.js";
 import "./assets/scss/main.scss";
-import "bootstrap/dist/js/bootstrap.bundle.js";
+import "bootstrap/dist/css/bootstrap.css";
 
 const app = createApp(App);
 
