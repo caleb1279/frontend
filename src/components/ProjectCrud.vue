@@ -46,8 +46,8 @@
           <tr v-for="project in projectlist" :key="project.id">
             <td>{{ project.projectId }}</td>
             <td>{{ project.name }}</td>
-            <td>{{ project.labDate }}</td>
-            <td>{{ project.proDate }}</td>
+            <td>{{ new Date(project.labDate) }}</td>
+            <td>{{ new Date(project.proDate) }}</td>
             <td>{{ project.source }}</td>
             <td>{{ project.status ? "Activo" : "Inactivo" }}</td>
             <td>
@@ -75,8 +75,9 @@
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import controllers from "@/controllers/RequestController";
+import type { project } from "@/registerDataType";
 export default class ProjectCrud extends Vue {
-  projectlist = [];
+  projectlist!: project[];
   beforeMount() {
     controllers.getProjects(1).then((data) => {
       this.projectlist = data.data.projects;

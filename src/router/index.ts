@@ -45,7 +45,6 @@ const router = createRouter({
 
 router.afterEach((to) => {
   const authenticated = session.ValidateSesison();
-  console.log(authenticated);
   if (!authenticated && !authExceptions.includes(String(to.name))) {
     router.push("/login");
   }

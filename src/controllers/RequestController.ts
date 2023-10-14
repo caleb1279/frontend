@@ -1,6 +1,7 @@
 import router from "@/router";
 import axios from "axios";
 import { useStorage } from "vue3-storage";
+import type { user } from "@/registerDataType";
 
 const storage = useStorage();
 
@@ -27,7 +28,7 @@ request.interceptors.response.use(
 );
 
 export default {
-  Login(json: { email: string; password: string }) {
+  Login(json: user) {
     return request.post("/login", json);
   },
   getActivities() {
