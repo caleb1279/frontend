@@ -43,13 +43,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+          <tr v-for="project in projectlist" :key="project.id">
+            <td>{{ project.projectId }}</td>
+            <td>{{ project.name }}</td>
+            <td>{{ project.labDate }}</td>
+            <td>{{ project.proDate }}</td>
+            <td>{{ project.source }}</td>
+            <td>{{ project.status ? "Activo" : "Inactivo" }}</td>
             <td>
               <a
                 href="#"
@@ -74,7 +74,15 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-export default class ProjectCrud extends Vue {}
+import controllers from "@/controllers/RequestController";
+export default class ProjectCrud extends Vue {
+  projectlist = [];
+  beforeMount() {
+    controllers.getProjects(1).then((data) => {
+      this.projectlist = data.data.projects;
+    });
+  }
+}
 </script>
 
 <style scoped lang="scss">

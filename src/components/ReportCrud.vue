@@ -2,6 +2,11 @@
   <div class="border-top">
     <div class="maintitle px-4 mt-3">
       <h1>Reporte de actividades</h1>
+      <select name="" id="">
+        <option v-for="activity in activitylist" :key="activity.id">
+          {{ activity.name }}
+        </option>
+      </select>
     </div>
     <div class="d-flex">
       <div class="left-options">
@@ -73,7 +78,16 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-export default class ReportCrud extends Vue {}
+import controllers from "@/controllers/RequestController";
+export default class ReportCrud extends Vue {
+  activitylist = [];
+  beforeMount() {
+    controllers.getActivities().then((data) => {
+      console.log(data);
+      this.activitylist = data.data.user;
+    });
+  }
+}
 </script>
 
 <style scoped lang="scss">

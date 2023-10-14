@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Axios from "vue-axios";
 import axios from "axios";
 import Vue3Storage, { StorageType } from "vue3-storage";
+import Datepicker from "vue3-datepicker";
 
 import {
   faEye,

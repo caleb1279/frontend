@@ -5,7 +5,7 @@ import { useStorage } from "vue3-storage";
 const storage = useStorage();
 
 const request = axios.create({
-  baseURL: process.env.BACKEND_URL,
+  baseURL: "http://192.168.1.28:8082",
   withCredentials: false,
   headers: {
     Accept: "application/json",
@@ -29,5 +29,11 @@ request.interceptors.response.use(
 export default {
   Login(json: { email: string; password: string }) {
     return request.post("/login", json);
+  },
+  getActivities() {
+    return request.get("/activities");
+  },
+  getProjects(user: number) {
+    return request.get("/projects/" + user);
   },
 };
