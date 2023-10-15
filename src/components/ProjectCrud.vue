@@ -24,7 +24,16 @@
                     class="form-control shadow-none"
                     type="text"
                     id="projectid"
-                    required
+                    :class="{
+                      'is-valid': validFields.includes('projectid'),
+                      'is-invalid': !validFields.includes('projectid'),
+                    }"
+                    @input="
+                      validateFields(
+                        'projectid',
+                        newProject.projectId.length > 0
+                      )
+                    "
                   />
                 </div>
               </div>
@@ -36,6 +45,11 @@
                     class="form-control shadow-none"
                     v-model="newProject.name"
                     id="project"
+                    :class="{
+                      'is-valid': validFields.includes('name'),
+                      'is-invalid': !validFields.includes('name'),
+                    }"
+                    @input="validateFields('name', newProject.name.length > 0)"
                   />
                 </div>
               </div>
@@ -46,8 +60,15 @@
                     <date-picker
                       v-model="newProject.labDate"
                       class="form-control shadow-none"
-                      :clearable="true"
                       id="labdate"
+                      inputFormat="dd-MM-yyyy"
+                      :class="{
+                        'is-valid': validFields.includes('labdate'),
+                        'is-invalid': !validFields.includes('labdate'),
+                      }"
+                      @closed="
+                        validateFields('labdate', newProject.labDate !== null)
+                      "
                     />
                   </div>
                 </div>
@@ -57,8 +78,15 @@
                     <date-picker
                       v-model="newProject.proDate"
                       class="form-control shadow-none"
-                      :clearable="true"
                       id="prodate"
+                      inputFormat="dd-MM-yyyy"
+                      :class="{
+                        'is-valid': validFields.includes('prodate'),
+                        'is-invalid': !validFields.includes('prodate'),
+                      }"
+                      @closed="
+                        validateFields('prodate', newProject.proDate !== null)
+                      "
                     />
                   </div>
                 </div>
@@ -71,24 +99,33 @@
                     id="source"
                     v-model="newProject.source"
                     class="form-control shadow-none"
+                    :class="{
+                      'is-valid': validFields.includes('source'),
+                      'is-invalid': !validFields.includes('source'),
+                    }"
+                    @input="
+                      validateFields('source', newProject.source.length > 0)
+                    "
                   />
                 </div>
               </div>
               <div class="row">
                 <div class="total-row form-group has-validation">
-                  <label for="stage">Seleccione una etapa:</label>
+                  <label for="status">Seleccione un estado:</label>
                   <select
                     v-model="newProject.status"
                     class="form-select shadow-none"
-                    id="stage"
+                    id="status"
+                    :class="{
+                      'is-valid': validFields.includes('status'),
+                      'is-invalid': !validFields.includes('status'),
+                    }"
+                    @input="
+                      validateFields('status', newProject.status !== null)
+                    "
                   >
-                    <option value="default">Seleccionar</option>
-                    <option
-                      v-for="activity in activitylist"
-                      v-bind:key="activity.id"
-                    >
-                      {{ activity.name }}
-                    </option>
+                    <option :value="false">Inactivo</option>
+                    <option :value="true">Activo</option>
                   </select>
                 </div>
               </div>
@@ -151,8 +188,8 @@
           <tr v-for="project in projectlist" :key="project.id">
             <td>{{ project.projectId }}</td>
             <td>{{ project.name }}</td>
-            <td>{{ new Date(project.labDate) }}</td>
-            <td>{{ new Date(project.proDate) }}</td>
+            <td>{{ project.labDate }}</td>
+            <td>{{ project.proDate }}</td>
             <td>{{ project.source }}</td>
             <td>{{ project.status }}</td>
             <td>
@@ -180,31 +217,42 @@
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import controllers from "@/controllers/RequestController";
-import type { activity, project } from "@/registerDataType";
+import type { project } from "@/registerDataType";
 export default class ProjectCrud extends Vue {
-  projectlist!: project[];
-  activitylist!: activity[];
   newProject: project = {
     id: NaN,
-    labDate: "",
+    labDate: null,
     name: "",
-    proDate: "",
+    proDate: null,
     projectId: "",
     source: "",
-    status: "",
+    status: null,
   };
+  projectlist!: project[];
+  validFields: string[] = [];
   opccrud!: string;
+
   async beforeMount() {
-    this.projectlist = await controllers.getProjects(1);
-    this.activitylist = await controllers.getActivities();
+    this.projectlist = (await controllers.getProjects(1)) || [];
   }
   data() {
     return {
       projectlist: this.projectlist,
       opccrud: this.opccrud,
       newProject: this.newProject,
-      activitylist: this.activitylist,
+      validFields: this.validFields,
     };
+  }
+
+  validateFields(fieldName: string, condition: boolean) {
+    if (condition) {
+      if (!this.validFields.includes(fieldName))
+        this.validFields.push(fieldName);
+    } else {
+      const index = this.validFields.indexOf(fieldName);
+      if (this.validFields.includes(fieldName))
+        this.validFields.splice(index, 0);
+    }
   }
 }
 </script>

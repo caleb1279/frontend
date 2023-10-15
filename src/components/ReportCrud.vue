@@ -24,6 +24,11 @@
                     class="form-control shadow-none"
                     type="text"
                     id="title"
+                    :class="{
+                      'is-valid': validFields.includes('title'),
+                      'is-invalid': !validFields.includes('title'),
+                    }"
+                    @input="validateFields('title', newReport.title.length > 0)"
                   />
                 </div>
               </div>
@@ -34,6 +39,16 @@
                     v-model="newReport.description"
                     id="description"
                     class="form-control shadow-none"
+                    :class="{
+                      'is-valid': validFields.includes('description'),
+                      'is-invalid': !validFields.includes('description'),
+                    }"
+                    @input="
+                      validateFields(
+                        'description',
+                        newReport.description.length > 0
+                      )
+                    "
                   ></textarea>
                 </div>
               </div>
@@ -44,8 +59,13 @@
                     <date-picker
                       v-model="newReport.date"
                       class="form-control shadow-none"
-                      :clearable="true"
                       id="date"
+                      inputFormat="dd-MM-yyyy"
+                      :class="{
+                        'is-valid': validFields.includes('date'),
+                        'is-invalid': !validFields.includes('date'),
+                      }"
+                      @closed="validateFields('date', newReport.date !== null)"
                     />
                   </div>
                 </div>
@@ -57,7 +77,11 @@
                       type="number"
                       class="form-control shadow-none"
                       id="hours"
-                      min="0"
+                      :class="{
+                        'is-valid': validFields.includes('hours'),
+                        'is-invalid': !validFields.includes('hours'),
+                      }"
+                      @input="validateFields('hours', newReport.hours > 0)"
                     />
                   </div>
                 </div>
@@ -70,7 +94,14 @@
                     class="form-control shadow-none"
                     :minInputLength="1"
                     id="project"
-                    :items="['One', 'Two', 'Tree']"
+                    :items="projectlist"
+                    :class="{
+                      'is-valid': validFields.includes('project'),
+                      'is-invalid': !validFields.includes('project'),
+                    }"
+                    @input="
+                      validateFields('project', newReport.project.length > 0)
+                    "
                   />
                 </div>
               </div>
@@ -81,8 +112,12 @@
                     v-model="newReport.stage"
                     class="form-select shadow-none"
                     id="stage"
+                    :class="{
+                      'is-valid': validFields.includes('stage'),
+                      'is-invalid': !validFields.includes('stage'),
+                    }"
+                    @input="validateFields('stage', newReport.stage.length > 0)"
                   >
-                    <option value="default">Seleccionar</option>
                     <option
                       v-for="activity in activitylist"
                       v-bind:key="activity.id"
@@ -183,7 +218,7 @@
 
 <script lang="ts">
 import controllers from "@/controllers/RequestController";
-import type { activity, report } from "@/registerDataType";
+import type { activity, project, report } from "@/registerDataType";
 import { Vue } from "vue-class-component";
 
 export default class ReportCrud extends Vue {
@@ -191,18 +226,21 @@ export default class ReportCrud extends Vue {
     id: 0,
     title: "",
     description: "",
-    date: "",
+    date: null,
     hours: NaN,
     project: "",
     stage: "",
   };
   activitylist!: activity[];
   reportlist!: report[];
+  projectlist!: project[];
+  validFields: string[] = [];
   opccrud!: string;
 
   async beforeMount() {
     this.activitylist = (await controllers.getActivities()) || [];
     this.reportlist = (await controllers.getReports(1)) || [];
+    this.projectlist = (await controllers.getProjects(1)) || [];
   }
 
   data() {
@@ -211,7 +249,20 @@ export default class ReportCrud extends Vue {
       opccrud: this.opccrud,
       reportlist: this.reportlist,
       newReport: this.newReport,
+      validFields: this.validFields,
+      projectlist: this.projectlist.map((item) => item.name),
     };
+  }
+
+  validateFields(fieldName: string, condition: boolean) {
+    if (condition) {
+      if (!this.validFields.includes(fieldName))
+        this.validFields.push(fieldName);
+    } else {
+      const index = this.validFields.indexOf(fieldName);
+      if (this.validFields.includes(fieldName))
+        this.validFields.splice(index, 0);
+    }
   }
 }
 </script>
