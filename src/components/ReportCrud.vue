@@ -1,120 +1,93 @@
 <template>
   <div class="border-top">
-    <div class="maintitle px-4 mt-3">
-      <h1>Reporte de actividades</h1>
-    </div>
-    <div class="modal" tabindex="-1" id="activityModal" data-backdrop="static">
+    <div class="modal fade" id="activityModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
-          <form @submit.prevent="processcrud()" novalidate>
+          <form class="modal-form" v-on:submit.prevent="" novalidate>
             <div class="modal-header">
-              <h5 class="modal-title">{{ opccrud }} de Actividades</h5>
+              <h5 class="modal-title" id="exampleModalLabel">
+                {{ opccrud }} de Actividades
+              </h5>
               <button
                 type="button"
                 class="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
-                v-on:click="resetcrud()"
               ></button>
             </div>
             <div class="modal-body">
               <div class="row">
-                <div class="total-row form-group has-validation">
+                <div class="total-row form-group">
                   <label for="title">Nombre de la actividad:</label>
                   <input
                     v-model="newReport.title"
                     class="form-control shadow-none"
                     type="text"
                     id="title"
-                    @input="validateField(newReport.title)"
-                    :class="[
-                      fieldValidation.title ? 'is-valid' : '',
-                      !fieldValidation.title ? 'is-invalid' : '',
-                    ]"
-                    required
                   />
                 </div>
               </div>
               <div class="row">
-                <div class="total-row form-group has-validation">
+                <div class="total-row form-group">
                   <label for="description">Descripción de la actividad:</label>
                   <textarea
                     v-model="newReport.description"
                     id="description"
                     class="form-control shadow-none"
-                    @input="validateField(newReport.description)"
-                    :class="{
-                      'is-valid': fieldValidation.description,
-                      'is-invalid': !fieldValidation.description,
-                    }"
-                    required
                   ></textarea>
                 </div>
               </div>
               <div class="row">
-                <!-- <div class="col-md-6">
-                  <div class="form-group has-validation">
+                <div class="col-md-6">
+                  <div class="form-group">
                     <label for="date">Fecha en que se realiza:</label>
-                    <b-form-datepicker
-                      placeholder=""
-                      :min="min"
-                      :max="max"
+                    <date-picker
                       v-model="newReport.date"
                       class="form-control shadow-none"
-                      :date-format-options="{
-                        day: 'numeric',
-                        month: 'numeric',
-                        year: 'numeric',
-                      }"
-                      locale="es"
+                      :clearable="true"
                       id="date"
-                    ></b-form-datepicker>
+                    />
                   </div>
-                </div> -->
+                </div>
                 <div class="col-md-6">
-                  <div class="form-group has-validation">
+                  <div class="form-group">
                     <label for="hours">Duración en horas:</label>
                     <input
-                      type="number"
                       v-model="newReport.hours"
+                      type="number"
                       class="form-control shadow-none"
                       id="hours"
-                      @input="validateField(newReport.hours)"
-                      :class="{
-                        'is-valid': fieldValidation.hours,
-                        'is-invalid': !fieldValidation.hours,
-                      }"
-                      required
+                      min="0"
                     />
                   </div>
                 </div>
               </div>
-              <!-- <div class="row">
-                <div class="total-row form-group has-validation">
+              <div class="row">
+                <div class="total-row form-group">
                   <label for="project">Nombre del proyecto:</label>
-                  <vue-bootstrap-autocomplete
+                  <vue3-simple-typeahead
                     v-model="newReport.project"
-                    class="shadow-none"
-                    :minMatchingChars="1"
-                    inputClass="shadow-none project-input"
+                    class="form-control shadow-none"
+                    :minInputLength="1"
                     id="project"
-                    :data="projectlist"
-                    required
+                    :items="['One', 'Two', 'Tree']"
                   />
                 </div>
-              </div> -->
+              </div>
               <div class="row">
-                <div class="total-row form-group has-validation">
+                <div class="total-row form-group">
                   <label for="stage">Seleccione una etapa:</label>
                   <select
                     v-model="newReport.stage"
                     class="form-select shadow-none"
-                    aria-label="Default select example"
                     id="stage"
-                    required
                   >
-                    <option v-for="stage in stagelist" v-bind:key="stage">
-                      {{ stage }}
+                    <option value="default">Seleccionar</option>
+                    <option
+                      v-for="activity in activitylist"
+                      v-bind:key="activity.id"
+                    >
+                      {{ activity.name }}
                     </option>
                   </select>
                 </div>
@@ -125,42 +98,35 @@
                 type="button"
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"
-                @click="resetcrud()"
               >
                 Cerrar
               </button>
-              <button
-                type="submit"
-                class="btn btn-primary"
-                data-bs-dismiss="modal"
-                @click="processcrud()"
-              >
-                Guardar
+              <button type="submit" class="btn btn-primary">
+                Guardar cambios
               </button>
             </div>
           </form>
         </div>
       </div>
     </div>
+    <div class="maintitle px-4 mt-3">
+      <h1>Reporte de actividades</h1>
+    </div>
     <div class="d-flex">
       <div class="left-options">
         <button
-          type="submit"
+          type="button"
           class="btn btn-primary btn-create"
           data-bs-toggle="modal"
           data-bs-target="#activityModal"
           v-on:click="opccrud = 'Creación'"
         >
-          <i class="fa-solid fa-plus"></i> Crear actividad
+          <font-awesome-icon icon="plus" /> Crear actividad
         </button>
       </div>
       <div class="right-search nav">
         <form class="d-flex" role="search" v-on:click.prevent="">
-          <input
-            class="form-control me-2 shadow-none"
-            type="search"
-            aria-label="Search"
-          />
+          <input class="form-control me-2 shadow-none" type="search" />
           <button
             class="btn btn-primary"
             type="submit"
@@ -186,7 +152,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(report, index) in reportlist" v-bind:key="index">
+          <tr v-for="report in reportlist" v-bind:key="report.id">
             <td>{{ report.date }}</td>
             <td>{{ report.description }}</td>
             <td>{{ report.hours }}</td>
@@ -198,29 +164,14 @@
                 href="#"
                 data-bs-toggle="modal"
                 data-bs-target="#activityModal"
-                v-on:click.prevent="datedit(report)"
-              >
-                <i class="fa-solid fa-pen"></i>
-              </a>
-            </td>
-            <td>
-              <a href="#" v-on:click.prevent="deletereport(report)">
-                <i class="fa-solid fa-trash"></i>
-              </a>
-            </td>
-            <td>
-              <a
-                href="#"
-                data-bs-toggle="modal"
-                data-bs-target="#activityModal"
                 v-on:click.prevent=""
               >
-                <i class="fa-solid fa-pen"></i>
+                <font-awesome-icon icon="pen" />
               </a>
             </td>
             <td>
               <a href="#" v-on:click.prevent="">
-                <i class="fa-solid fa-trash"></i>
+                <font-awesome-icon icon="trash" />
               </a>
             </td>
           </tr>
@@ -231,109 +182,36 @@
 </template>
 
 <script lang="ts">
+import controllers from "@/controllers/RequestController";
+import type { activity, report } from "@/registerDataType";
 import { Vue } from "vue-class-component";
-import $ from "jquery";
-
-const today = new Date();
-const mindate = new Date(today);
-mindate.setDate(mindate.getDate() - 3);
 
 export default class ReportCrud extends Vue {
-  min = mindate;
-  max = today;
-  newReport = {
+  newReport: report = {
+    id: 0,
     title: "",
     description: "",
     date: "",
-    hours: "",
+    hours: NaN,
     project: "",
     stage: "",
   };
-
-  actualReport!: number;
-  reportlist = [this.newReport];
+  activitylist!: activity[];
+  reportlist!: report[];
   opccrud!: string;
-  stagelist = ["Desarrollo", "Pruebas"];
-  pageitemlist!: Array<string>;
-  projectlist = ["Ampliacion de cargos fijos"];
-  fieldValidation: Record<string, boolean> = {
-    title: false,
-    description: false,
-    date: false,
-    hours: false,
-    project: false,
-    stage: false,
-  };
 
-  resetcrud() {
-    this.newReport = {
-      title: "",
-      description: "",
-      date: "",
-      hours: "",
-      project: "",
-      stage: "",
+  async beforeMount() {
+    this.activitylist = (await controllers.getActivities()) || [];
+    this.reportlist = (await controllers.getReports(1)) || [];
+  }
+
+  data() {
+    return {
+      activitylist: this.activitylist,
+      opccrud: this.opccrud,
+      reportlist: this.reportlist,
+      newReport: this.newReport,
     };
-    // Restablece todos los estados de validación a falso
-    for (const field in this.fieldValidation) {
-      this.fieldValidation[field] = false;
-    }
-    this.actualReport = NaN;
-  }
-  // Valida que no esté vacío
-  validateField(fieldName: string) {
-    switch (fieldName) {
-      case "title":
-        this.fieldValidation.title = fieldName.length > 0;
-        break;
-      case "description":
-        this.fieldValidation.description = fieldName.length > 5;
-        break;
-      case "hours":
-        this.fieldValidation.hours =
-          fieldName.length > 0 &&
-          Number(fieldName) <= 9 &&
-          Number(fieldName) > 0;
-        break;
-      case "date":
-        this.fieldValidation.date = fieldName.length > 0;
-        break;
-      case "stage":
-        this.fieldValidation.stage = fieldName.length > 0;
-        break;
-      case "project":
-        this.fieldValidation.project = fieldName.length > 0;
-        break;
-    }
-  }
-
-  deletereport(report: any) {
-    this.reportlist.splice(this.reportlist.indexOf(report), 1);
-  }
-  datedit(report: any) {
-    this.opccrud = "Modificación";
-    this.newReport = { ...report };
-    this.actualReport = this.reportlist.indexOf(report);
-  }
-
-  processcrud() {
-    // Validar que ningun campo esté vacío
-    this.validateField(this.newReport.title);
-    this.validateField(this.newReport.description);
-    this.validateField(this.newReport.hours);
-    this.validateField(this.newReport.date);
-    this.validateField(this.newReport.stage);
-    this.validateField(this.newReport.project);
-    const isValid = Object.values(this.fieldValidation).every((valid) => valid);
-    if (isValid) {
-      if (this.opccrud == "Creación") {
-        this.reportlist.push({ ...this.newReport });
-      } else if (this.opccrud == "Modificación") {
-        this.reportlist[this.actualReport] = { ...this.newReport };
-      }
-      $("#activityModal").modal("hide");
-      this.resetcrud();
-    }
   }
 }
 </script>

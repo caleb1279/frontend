@@ -6,7 +6,7 @@ import type { user } from "@/registerDataType";
 const storage = useStorage();
 
 const request = axios.create({
-  baseURL: "http://192.168.1.28:8082",
+  baseURL: process.env.BaseURL,
   withCredentials: false,
   headers: {
     Accept: "application/json",
@@ -21,9 +21,11 @@ request.interceptors.response.use(
     return Promise.resolve(response);
   },
   (error) => {
-    const { status } = error.response;
-    if (status == 403) router.push("/error404");
-    return Promise.reject(error);
+    if (error.response) {
+      const { status } = error.response;
+      if (status == 403) router.push("/error404");
+      return Promise.reject(error);
+    }
   }
 );
 
@@ -31,10 +33,31 @@ export default {
   Login(json: user) {
     return request.post("/login", json);
   },
-  getActivities() {
-    return request.get("/activities");
+  async getActivities() {
+    try {
+      const data = await request.get("/activities");
+      return data.data.activities;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   },
-  getProjects(user: number) {
-    return request.get("/projects/" + user);
+  async getProjects(user: number) {
+    try {
+      const data = await request.get("/projects/" + user);
+      return data.data.projects;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  },
+  async getReports(user: number) {
+    try {
+      const data = await request.get("/activityreports/" + user);
+      return data.data.reports;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   },
 };

@@ -18,6 +18,8 @@ $hover-dark-color: #141b27;
 $hover-light-color: #dadada;
 $border-light-color: #dbdbdb;
 $light-color: #f8f9fa;
+$create-color: #11a688;
+$create-dark-color: #0f9278;
 
 /* 1. RESET */
 * {
@@ -112,7 +114,7 @@ img {
   object-fit: cover;
 }
 
-input {
+input, select, textarea {
   width: 100%;
   min-height: 30px;
   border-radius: 0 !important;
@@ -154,6 +156,11 @@ figure {
   text-align: left;
 }
 
+div.v3dp__clearable {
+  left: 95px;
+  bottom: 28px;
+}
+
 /* 5. PARTS OF WEB */
 
 /* buttons */
@@ -170,6 +177,13 @@ figure {
   border: 1px solid $border-light-color;
   border-radius: 0;
 }
+.btn-create {
+  background-color: $create-color;
+}
+
+.btn-create:hover, .btn-create:active {
+  background-color: $create-dark-color !important;
+}
 /* end buttons */
 
 /* login */
@@ -185,6 +199,16 @@ figure {
   max-width: 380px;
 }
 /* end login */
+
+/* modal form */
+.modal-form label {
+  text-align: left;
+}
+
+.modal-form .form-group {
+  margin-bottom: 12px;
+}
+/* end form */
 
 /* sidebar */
 .sidebar {

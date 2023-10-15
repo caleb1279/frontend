@@ -12,8 +12,18 @@ export type project = {
   id: string | number;
   projectId: string;
   name: string;
-  labDate: number;
-  proDate: number;
+  labDate: string;
+  proDate: string;
   source: string;
-  status: boolean;
+  status: string;
+};
+
+export type report = {
+  id: string | number;
+  date: string;
+  description: string;
+  hours: number;
+  title: string;
+  stage: string;
+  project: string;
 };
