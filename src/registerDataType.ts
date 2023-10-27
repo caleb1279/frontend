@@ -24,6 +24,6 @@ export type report = {
   detail: string;
   hours: number;
   title: string;
-  activity: activity | null;
-  project: project | null;
+  activity: activity;
+  project: project;
 };

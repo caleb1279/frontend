@@ -61,7 +61,7 @@
                       v-model="newProject.labDate"
                       class="form-control shadow-none"
                       id="labdate"
-                      inputFormat="dd/MM/yyyy"
+                      inputFormat="yyyy/MM/dd"
                       :class="{
                         'is-valid': validFields.includes('labdate'),
                         'is-invalid': !validFields.includes('labdate'),
@@ -79,7 +79,7 @@
                       v-model="newProject.proDate"
                       class="form-control shadow-none"
                       id="prodate"
-                      inputFormat="dd/MM/yyyy"
+                      inputFormat="yyyy/MM/dd"
                       :class="{
                         'is-valid': validFields.includes('prodate'),
                         'is-invalid': !validFields.includes('prodate'),

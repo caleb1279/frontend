@@ -235,19 +235,31 @@ export default class ReportCrud extends Vue {
     detail: "",
     date: null,
     hours: NaN,
-    project: null,
-    activity: null,
+    project: {
+      id: "",
+      projectId: "",
+      name: "",
+      labDate: null,
+      proDate: null,
+      source: "",
+      status: null,
+    },
+    activity: {
+      id: "",
+      name: "",
+    },
   };
   activitylist!: activity[];
   reportlist!: report[];
-  projectlist!: project[];
+  projectlist!: string[];
   validFields: string[] = [];
   opccrud!: string;
 
   async beforeMount() {
     this.activitylist = (await controllers.getActivities()) || [];
     this.reportlist = (await controllers.getReports()) || [];
-    this.projectlist = (await controllers.getProjects(1)) || [];
+    let projects: project[] = (await controllers.getProjects(1)) || [];
+    this.projectlist = projects.map((item) => item.name);
   }
 
   data() {
@@ -257,9 +269,7 @@ export default class ReportCrud extends Vue {
       reportlist: this.reportlist,
       newReport: this.newReport,
       validFields: this.validFields,
-      projectlist: this.projectlist.map((item) => {
-        return item.name;
-      }), //.map((item) => item.name),
+      projectlist: this.projectlist,
     };
   }
 

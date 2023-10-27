@@ -45,7 +45,6 @@ export default {
   async getProjects(user: number) {
     try {
       const data = await request.get("/projects/" + user);
-      console.log(data);
       return data.data.projects;
     } catch (error) {
       console.log(error);
