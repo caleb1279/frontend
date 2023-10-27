@@ -61,7 +61,7 @@
                       v-model="newProject.labDate"
                       class="form-control shadow-none"
                       id="labdate"
-                      inputFormat="dd-MM-yyyy"
+                      inputFormat="dd/MM/yyyy"
                       :class="{
                         'is-valid': validFields.includes('labdate'),
                         'is-invalid': !validFields.includes('labdate'),
@@ -79,7 +79,7 @@
                       v-model="newProject.proDate"
                       class="form-control shadow-none"
                       id="prodate"
-                      inputFormat="dd-MM-yyyy"
+                      inputFormat="dd/MM/yyyy"
                       :class="{
                         'is-valid': validFields.includes('prodate'),
                         'is-invalid': !validFields.includes('prodate'),
@@ -120,7 +120,7 @@
                       'is-valid': validFields.includes('status'),
                       'is-invalid': !validFields.includes('status'),
                     }"
-                    @input="
+                    @change="
                       validateFields('status', newProject.status !== null)
                     "
                   >
@@ -234,6 +234,7 @@ export default class ProjectCrud extends Vue {
 
   async beforeMount() {
     this.projectlist = (await controllers.getProjects(1)) || [];
+    console.log(this.projectlist);
   }
   data() {
     return {

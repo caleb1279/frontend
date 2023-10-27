@@ -36,7 +36,7 @@
                 <div class="total-row form-group">
                   <label for="description">Descripción de la actividad:</label>
                   <textarea
-                    v-model="newReport.description"
+                    v-model="newReport.detail"
                     id="description"
                     class="form-control shadow-none"
                     :class="{
@@ -44,10 +44,7 @@
                       'is-invalid': !validFields.includes('description'),
                     }"
                     @input="
-                      validateFields(
-                        'description',
-                        newReport.description.length > 0
-                      )
+                      validateFields('description', newReport.detail.length > 0)
                     "
                   ></textarea>
                 </div>
@@ -60,7 +57,7 @@
                       v-model="newReport.date"
                       class="form-control shadow-none"
                       id="date"
-                      inputFormat="dd-MM-yyyy"
+                      inputFormat="yyyy/MM/dd"
                       :class="{
                         'is-valid': validFields.includes('date'),
                         'is-invalid': !validFields.includes('date'),
@@ -77,6 +74,7 @@
                       type="number"
                       class="form-control shadow-none"
                       id="hours"
+                      min="0"
                       :class="{
                         'is-valid': validFields.includes('hours'),
                         'is-invalid': !validFields.includes('hours'),
@@ -90,7 +88,7 @@
                 <div class="total-row form-group">
                   <label for="project">Nombre del proyecto:</label>
                   <vue3-simple-typeahead
-                    v-model="newReport.project"
+                    v-model="newReport.project.name"
                     class="form-control shadow-none"
                     :minInputLength="1"
                     id="project"
@@ -100,7 +98,10 @@
                       'is-invalid': !validFields.includes('project'),
                     }"
                     @input="
-                      validateFields('project', newReport.project.length > 0)
+                      validateFields(
+                        'project',
+                        newReport.project.name.length > 0
+                      )
                     "
                   />
                 </div>
@@ -109,14 +110,20 @@
                 <div class="total-row form-group">
                   <label for="stage">Seleccione una etapa:</label>
                   <select
-                    v-model="newReport.stage"
+                    v-model="newReport.activity"
                     class="form-select shadow-none"
                     id="stage"
                     :class="{
                       'is-valid': validFields.includes('stage'),
                       'is-invalid': !validFields.includes('stage'),
                     }"
-                    @input="validateFields('stage', newReport.stage.length > 0)"
+                    @change="
+                      validateFields(
+                        'stage',
+                        newReport.activity !== null &&
+                          newReport.activity.name.length > 0
+                      )
+                    "
                   >
                     <option
                       v-for="activity in activitylist"
@@ -189,11 +196,11 @@
         <tbody>
           <tr v-for="report in reportlist" v-bind:key="report.id">
             <td>{{ report.date }}</td>
-            <td>{{ report.description }}</td>
+            <td>{{ report.detail }}</td>
             <td>{{ report.hours }}</td>
             <td>{{ report.title }}</td>
-            <td>{{ report.stage }}</td>
-            <td>{{ report.project }}</td>
+            <td>{{ report.activity !== null ? report.activity.name : "" }}</td>
+            <td>{{ report.project !== null ? report.project.name : "" }}</td>
             <td>
               <a
                 href="#"
@@ -225,11 +232,11 @@ export default class ReportCrud extends Vue {
   newReport: report = {
     id: 0,
     title: "",
-    description: "",
+    detail: "",
     date: null,
     hours: NaN,
-    project: "",
-    stage: "",
+    project: null,
+    activity: null,
   };
   activitylist!: activity[];
   reportlist!: report[];
@@ -239,7 +246,7 @@ export default class ReportCrud extends Vue {
 
   async beforeMount() {
     this.activitylist = (await controllers.getActivities()) || [];
-    this.reportlist = (await controllers.getReports(1)) || [];
+    this.reportlist = (await controllers.getReports()) || [];
     this.projectlist = (await controllers.getProjects(1)) || [];
   }
 
@@ -250,18 +257,21 @@ export default class ReportCrud extends Vue {
       reportlist: this.reportlist,
       newReport: this.newReport,
       validFields: this.validFields,
-      projectlist: this.projectlist.map((item) => item.name),
+      projectlist: this.projectlist.map((item) => {
+        return item.name;
+      }), //.map((item) => item.name),
     };
   }
 
   validateFields(fieldName: string, condition: boolean) {
-    if (condition) {
-      if (!this.validFields.includes(fieldName))
+    const field = document.getElementById(fieldName) as HTMLInputElement;
+    if (condition && field !== null) {
+      if (!this.validFields.includes(fieldName) && field.checkValidity())
         this.validFields.push(fieldName);
     } else {
       const index = this.validFields.indexOf(fieldName);
       if (this.validFields.includes(fieldName))
-        this.validFields.splice(index, 0);
+        this.validFields.splice(index, 1);
     }
   }
 }

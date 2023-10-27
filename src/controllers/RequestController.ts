@@ -6,7 +6,7 @@ import type { user } from "@/registerDataType";
 const storage = useStorage();
 
 const request = axios.create({
-  baseURL: process.env.BaseURL,
+  baseURL: "https://c025-186-84-89-185.ngrok-free.app",
   withCredentials: false,
   headers: {
     Accept: "application/json",
@@ -45,15 +45,16 @@ export default {
   async getProjects(user: number) {
     try {
       const data = await request.get("/projects/" + user);
+      console.log(data);
       return data.data.projects;
     } catch (error) {
       console.log(error);
       return null;
     }
   },
-  async getReports(user: number) {
+  async getReports() {
     try {
-      const data = await request.get("/activityreports/" + user);
+      const data = await request.get("/reports");
       return data.data.reports;
     } catch (error) {
       console.log(error);

@@ -23,7 +23,13 @@
               type="email"
               id="username"
               v-model="uname"
+              name="username"
               placeholder="johndoe@example.com"
+              @input="validateFields('username')"
+              :class="{
+                'is-valid': validFields.includes('username'),
+                'is-invalid': !validFields.includes('username'),
+              }"
               required
             />
           </div>
@@ -34,7 +40,13 @@
               type="password"
               id="password"
               v-model="passwd"
+              name="password"
               placeholder="**********"
+              @input="validateFields('password')"
+              :class="{
+                'is-valid': validFields.includes('password'),
+                'is-invalid': !validFields.includes('password'),
+              }"
               required
             />
             <span
@@ -73,9 +85,14 @@ import { AxiosError, AxiosResponse } from "axios"; */
 
 export default class LoginForm extends Vue {
   msg = "";
+  passwordIcon = "eye";
   uname!: string;
   passwd!: string;
-  passwordIcon = "eye";
+  validFields: string[] = [];
+
+  data() {
+    return { validFields: this.validFields };
+  }
 
   login() {
     session.Login("auth-1234");
@@ -104,6 +121,20 @@ export default class LoginForm extends Vue {
     if (password) {
       password.type = password.type === "text" ? "password" : "text";
       this.passwordIcon = password.type === "text" ? "eye" : "eye-slash";
+    }
+  }
+
+  validateFields(input: string) {
+    const field = document.getElementById(input) as HTMLInputElement;
+    if (field === null) return;
+
+    if (field.checkValidity()) {
+      if (!this.validFields.includes(input)) this.validFields.push(input);
+    } else {
+      if (this.validFields.includes(input)) {
+        const index = this.validFields.indexOf(input);
+        this.validFields.splice(index, 1);
+      }
     }
   }
 }
