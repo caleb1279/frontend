@@ -13,7 +13,9 @@
                 class="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
-              ></button>
+                v-on:click="clearModal()"
+              ></button
+              ><!-- cdc: se añade la funcion clearModal para limpiar el modal al cerrar con x -->
             </div>
             <div class="modal-body">
               <div class="row">
@@ -26,10 +28,18 @@
                     id="title"
                     :class="{
                       'is-valid': validFields.includes('title'),
-                      'is-invalid': !validFields.includes('title'),
+                      'is-invalid':
+                        !validFields.includes('title') &&
+                        validatedFields.includes('title'), // cdc: otro array para saber si lo ha validado
                     }"
                     @input="validateFields('title', newReport.title.length > 0)"
                   />
+                  <!-- cdc: mensaje de campo valido -->
+                  <div class="valid-feedback text-left">¡Se ve bien!</div>
+                  <!-- cdc: mensaje de campo no valido -->
+                  <div class="invalid-feedback text-left">
+                    Por favor diligencia este campo
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -41,7 +51,9 @@
                     class="form-control shadow-none"
                     :class="{
                       'is-valid': validFields.includes('description'),
-                      'is-invalid': !validFields.includes('description'),
+                      'is-invalid':
+                        !validFields.includes('description') &&
+                        validatedFields.includes('description'), // cdc otro array para saber si lo ha validado
                     }"
                     @input="
                       validateFields('description', newReport.detail.length > 0)
@@ -60,7 +72,9 @@
                       inputFormat="yyyy/MM/dd"
                       :class="{
                         'is-valid': validFields.includes('date'),
-                        'is-invalid': !validFields.includes('date'),
+                        'is-invalid':
+                          !validFields.includes('date') &&
+                          validatedFields.includes('date'), // cdc otro array para saber si lo ha validado
                       }"
                       @closed="validateFields('date', newReport.date !== null)"
                     />
@@ -77,7 +91,9 @@
                       min="0"
                       :class="{
                         'is-valid': validFields.includes('hours'),
-                        'is-invalid': !validFields.includes('hours'),
+                        'is-invalid':
+                          !validFields.includes('hours') &&
+                          validatedFields.includes('hours'), // cdc otro array para saber si lo ha validado
                       }"
                       @input="validateFields('hours', newReport.hours > 0)"
                     />
@@ -95,7 +111,9 @@
                     :items="projectlist"
                     :class="{
                       'is-valid': validFields.includes('project'),
-                      'is-invalid': !validFields.includes('project'),
+                      'is-invalid':
+                        !validFields.includes('project') &&
+                        validatedFields.includes('project'), // cdc otro array para saber si lo ha validado
                     }"
                     @input="
                       validateFields(
@@ -115,13 +133,14 @@
                     id="stage"
                     :class="{
                       'is-valid': validFields.includes('stage'),
-                      'is-invalid': !validFields.includes('stage'),
+                      'is-invalid':
+                        !validFields.includes('stage') &&
+                        validatedFields.includes('stage'), // cdc otro array para saber si lo ha validado
                     }"
                     @change="
                       validateFields(
                         'stage',
-                        newReport.activity !== null &&
-                          newReport.activity.name.length > 0
+                        newReport.activity !== null // cdc: solo se necesita validar que haya algo debido al for de abajo
                       )
                     "
                   >
@@ -140,7 +159,9 @@
                 type="button"
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"
+                v-on:click="clearModal()"
               >
+                <!-- cdc: se añade clearModal para el boton cerrar para no dejar datos -->
                 Cerrar
               </button>
               <button type="submit" class="btn btn-primary">
@@ -253,10 +274,21 @@ export default class ReportCrud extends Vue {
   reportlist!: report[];
   projectlist!: string[];
   validFields: string[] = [];
+  validatedFields: string[] = []; // cdc: nuevo arreglo para saber si ha sido validado un campo
   opccrud!: string;
 
   async beforeMount() {
-    this.activitylist = (await controllers.getActivities()) || [];
+    this.activitylist = (await controllers.getActivities()) || [
+      // cdc: datos de prueba aqui: actividades o stages de prueba
+      {
+        id: 1,
+        name: "Desarrollo",
+      },
+      {
+        id: 2,
+        name: "Pruebas",
+      },
+    ];
     this.reportlist = (await controllers.getReports()) || [];
     let projects: project[] = (await controllers.getProjects(1)) || [];
     this.projectlist = projects.map((item) => item.name);
@@ -274,6 +306,8 @@ export default class ReportCrud extends Vue {
   }
 
   validateFields(fieldName: string, condition: boolean) {
+    if (!this.validatedFields.includes(fieldName))
+      this.validatedFields.push(fieldName); // cdc: cuando el campo llama a esta funcion es porque se ha digitado algo, entonces al validarlo se añade el campo a este array para mostrar error
     const field = document.getElementById(fieldName) as HTMLInputElement;
     if (condition && field !== null) {
       if (!this.validFields.includes(fieldName) && field.checkValidity())
@@ -283,6 +317,32 @@ export default class ReportCrud extends Vue {
       if (this.validFields.includes(fieldName))
         this.validFields.splice(index, 1);
     }
+  }
+
+  clearModal() {
+    // cdc: para limpiar los campos y arreglos al cancelar
+    this.validatedFields = [];
+    this.validFields = [];
+    this.newReport = {
+      id: 0,
+      title: "",
+      detail: "",
+      date: null,
+      hours: NaN,
+      project: {
+        id: "",
+        projectId: "",
+        name: "",
+        labDate: null,
+        proDate: null,
+        source: "",
+        status: null,
+      },
+      activity: {
+        id: "",
+        name: "",
+      },
+    };
   }
 }
 </script>
@@ -301,6 +361,11 @@ export default class ReportCrud extends Vue {
 .left-options {
   margin: auto 25px;
   width: 100%;
+  text-align: left;
+}
+
+.text-left {
+  // cdc: para alinear el texto a la izquierda
   text-align: left;
 }
 </style>
