@@ -105,7 +105,7 @@
                 <div class="total-row form-group">
                   <label for="project">Nombre del proyecto:</label>
                   <vue3-simple-typeahead
-                    v-model="newReport.project.name"
+                    v-model="newReport.project"
                     class="form-control shadow-none"
                     :minInputLength="1"
                     id="project"
@@ -207,7 +207,7 @@
           <tr>
             <th scope="col">Fecha creaci&oacute;n</th>
             <th scope="col">Descripci&oacute;n</th>
-            <th scope="col">horas</th>
+            <th scope="col">Horas</th>
             <th scope="col">Actividad</th>
             <th scope="col">Etapa</th>
             <th scope="col">Proyecto</th>
@@ -218,11 +218,15 @@
         <tbody>
           <tr v-for="report in reportlist" v-bind:key="report.id">
             <td>{{ report.date }}</td>
-            <td>{{ report.detail }}</td>
+            <td class="tableTextLeft">{{ report.detail }}</td>
             <td>{{ report.hours }}</td>
-            <td>{{ report.title }}</td>
-            <td>{{ report.activity !== null ? report.activity.name : "" }}</td>
-            <td>{{ report.project !== null ? report.project.name : "" }}</td>
+            <td class="tableTextLeft">{{ report.title }}</td>
+            <td class="tableTextLeft">
+              {{ report.activity !== null ? report.activity.name : "" }}
+            </td>
+            <td class="tableTextLeft">
+              {{ report.project !== null ? report.project.name : "" }}
+            </td>
             <td>
               <a
                 href="#"
@@ -352,6 +356,10 @@ export default class ReportCrud extends Vue {
 .table-contain {
   overflow: auto;
   max-height: 380px;
+}
+
+.tableTextLeft {
+  text-align: left;
 }
 
 .right-search {
