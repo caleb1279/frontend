@@ -121,6 +121,7 @@
                     <label for="project">Nombre del proyecto:</label>
                     <vue3-simple-typeahead
                       v-model="newReport.project.name"
+                      :modelvalue="newReport.project.name"
                       class="form-control shadow-none"
                       :minInputLength="1"
                       id="project"
@@ -153,7 +154,7 @@
                 <div class="total-row form-group">
                   <label for="stage">Seleccione una etapa:</label>
                   <select
-                    v-model="newReport.activity"
+                    v-bind:value="newReport.activity"
                     class="form-select shadow-none"
                     id="stage"
                     :class="{
@@ -165,7 +166,8 @@
                     @change="
                       validateFields(
                         'stage',
-                        newReport.activity !== null // cdc: solo se necesita validar que haya algo debido al for de abajo
+                        newReport.activity !== null &&
+                          newReport.activity.name.length > 0
                       )
                     "
                   >
@@ -208,6 +210,7 @@
           data-bs-toggle="modal"
           data-bs-target="#activityModal"
           v-on:click="opccrud = 'Creación'"
+          v-on:click.prevent=""
         >
           <font-awesome-icon icon="plus" /> Crear actividad
         </button>
@@ -256,13 +259,20 @@
                 href="#"
                 data-bs-toggle="modal"
                 data-bs-target="#activityModal"
-                v-on:click.prevent=""
+                v-on:click="opccrud = 'Edicion'"
+                v-on:click.prevent="editActivity(report)"
               >
                 <font-awesome-icon icon="pen" />
               </a>
             </td>
             <td>
-              <a href="#" v-on:click.prevent="">
+              <a
+                href="#"
+                data-bs-toggle="modal"
+                data-bs-target="#activityModal"
+                v-on:click="opccrud = 'Eliminacion'"
+                v-on:click.prevent=""
+              >
                 <font-awesome-icon icon="trash" />
               </a>
             </td>
@@ -279,18 +289,19 @@ import type { activity, project, report } from "@/registerDataType";
 import { Vue } from "vue-class-component";
 
 export default class ReportCrud extends Vue {
+  nomProyecto = "";
   newReport: report = {
     id: 0,
     title: "",
     detail: "",
-    date: null,
+    date: "",
     hours: NaN,
     project: {
       id: "",
       projectId: "",
       name: "",
-      labDate: null,
-      proDate: null,
+      labDate: "",
+      proDate: "",
       source: "",
       status: null,
     },
@@ -395,8 +406,8 @@ export default class ReportCrud extends Vue {
         id: "",
         projectId: "",
         name: "",
-        labDate: null,
-        proDate: null,
+        labDate: "",
+        proDate: "",
         source: "",
         status: null,
       },

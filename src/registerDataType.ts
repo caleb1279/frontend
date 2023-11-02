@@ -12,15 +12,15 @@ export type project = {
   id: string | number;
   projectId: string;
   name: string;
-  labDate: Date | null;
-  proDate: Date | null;
+  labDate: Date | string;
+  proDate: Date | string;
   source: string;
   status: boolean | null;
 };
 
 export type report = {
   id: string | number;
-  date: Date | null;
+  date: Date | string;
   detail: string;
   hours: number;
   title: string;
