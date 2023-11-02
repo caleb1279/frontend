@@ -271,7 +271,6 @@ export default class ProjectCrud extends Vue {
     this.newProject.projectId = project.projectId;
     this.newProject.source = project.source;
     this.newProject.status = project.status;
-    console.log(project.labDate);
   }
 
   validateFields(fieldName: string, condition: boolean) {

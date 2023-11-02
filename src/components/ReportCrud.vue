@@ -87,7 +87,8 @@
                 <div class="total-row form-group">
                   <label for="project">Nombre del proyecto:</label>
                   <vue3-simple-typeahead
-                    v-bind:value="nomProyecto"
+                    v-model="nomProyecto"
+                    :modelvalue="nomProyecto"
                     class="form-control shadow-none"
                     :minInputLength="1"
                     id="project"
@@ -295,6 +296,15 @@ export default class ReportCrud extends Vue {
         labDate: null,
         proDate: null,
         source: "fmca046390",
+        status: true,
+      },
+      {
+        id: 2,
+        projectId: "proy0238",
+        name: "desombolsos digitales",
+        labDate: null,
+        proDate: null,
+        source: "fmca07782",
         status: true,
       },
     ];
