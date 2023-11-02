@@ -58,7 +58,14 @@
                     @input="
                       validateFields('description', newReport.detail.length > 0)
                     "
+                    
                   ></textarea>
+                  <!-- cdc: mensaje de campo valido -->
+                  <div class="valid-feedback text-left">¡Se ve bien!</div>
+                  <!-- cdc: mensaje de campo no valido -->
+                  <div class="invalid-feedback text-left">
+                    Por favor diligencia este campo
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -72,12 +79,13 @@
                       inputFormat="yyyy/MM/dd"
                       :class="{
                         'is-valid': validFields.includes('date'),
-                        'is-invalid':
-                          !validFields.includes('date') &&
+                        'is-invalid':!validFields.includes('date') &&
                           validatedFields.includes('date'), // cdc otro array para saber si lo ha validado
                       }"
                       @blur="validateFields('date', newReport.date !== null)"
                     />
+                    <div class="valid-feedback">¡Se ve bien!</div>
+                    <div class="invalid-feedback">Por favor diligencia este campo</div>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -98,33 +106,43 @@
                       }"
                       @input="validateFields('hours', newReport.hours > 0)"
                     />
+                    <div class="valid-feedback" id="hrs">¡Se ve bien!</div>
+                    <div class="invalid-feedback">Por favor diligencia este campo</div>
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="total-row form-group">
-                  <label for="project">Nombre del proyecto:</label>
-                  <vue3-simple-typeahead
-                    v-model="newReport.project"
-                    class="form-control shadow-none"
-                    :minInputLength="1"
-                    id="project"
-                    :items="projectlist"
-                    :class="{
-                      'is-valid': validFields.includes('project'),
-                      'is-invalid':
-                        !validFields.includes('project') &&
-                        validatedFields.includes('project'), // cdc otro array para saber si lo ha validado
-                    }"
-                    @input="
-                      validateFields(
-                        'project',
-                        newReport.project.name.length > 0
-                      )
-                    "
-                  />
-                </div>
-              </div>
+
+  <div>
+    <!-- ... otro contenido ... -->
+    <div class="feedback-container">
+      <div class="valid-feedback">¡Se ve bien!</div>
+      <div class="invalid-feedback">Por favor diligencia este campo</div>
+    </div>
+
+    <div class="row">
+      <div class="total-row form-group">
+        <label for="project">Nombre del proyecto:</label>
+        <vue3-simple-typeahead
+          v-model="newReport.project.name"
+          class="form-control shadow-none"
+          :minInputLength="1"
+          id="project"
+          :items="projectlist"
+          :class="{
+            'is-valid': validFields.includes('project'),
+            'is-invalid':
+              !validFields.includes('project') &&
+              validatedFields.includes('project'), // cdc otro array para saber si lo ha validado
+          }"
+          @input="validateFields('project', newReport.project.name.length > 0)"
+        />
+        <div class="valid-feedback text-left">¡Se ve bien!</div>
+        <div class="invalid-feedback">Por favor diligencia este campo</div>
+      </div>
+      <div v-if="projectNotExists" class="text-danger">El proyecto seleccionado no existe.</div>
+    </div>
+  </div>
+
               <div class="row">
                 <div class="total-row form-group">
                   <label for="stage">Seleccione una etapa:</label>
@@ -145,6 +163,7 @@
                       )
                     "
                   >
+                  
                     <option
                       v-for="activity in activitylist"
                       v-bind:key="activity.id"
@@ -165,7 +184,7 @@
                 <!-- cdc: se añade clearModal para el boton cerrar para no dejar datos -->
                 Cerrar
               </button>
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" class="btn btn-primary" @click="submitForm">
                 Guardar cambios
               </button>
             </div>
@@ -280,9 +299,23 @@ export default class ReportCrud extends Vue {
   projectlist!: string[];
   validFields: string[] = [];
   validatedFields: string[] = []; // cdc: nuevo arreglo para saber si ha sido validado un campo
+  validatedFields: string[] = [];
+  requiredFields: string[] = ['title', 'description', 'date', 'hours', 'project']; // Lista de campos requeridos // cdc: nuevo arreglo para saber si ha sido validado un campo
   opccrud!: string;
+  projectNotExists = false;
 
   async beforeMount() {
+    this.activitylist = (await controllers.getActivities()) || [
+      // cdc: datos de prueba aqui: actividades o stages de prueba
+      {
+        id: 1,
+        name: "Desarrollo",
+      },
+      {
+        id: 2,
+        name: "Pruebas",
+      },
+    ];
     this.activitylist = (await controllers.getActivities()) || [
       // cdc: datos de prueba aqui: actividades o stages de prueba
       {
@@ -301,6 +334,7 @@ export default class ReportCrud extends Vue {
 
   data() {
     return {
+      requiredFields: ['title', 'description', 'date', 'hours', 'project'],
       activitylist: this.activitylist,
       opccrud: this.opccrud,
       reportlist: this.reportlist,
@@ -313,6 +347,8 @@ export default class ReportCrud extends Vue {
   validateFields(fieldName: string, condition: boolean) {
     if (!this.validatedFields.includes(fieldName))
       this.validatedFields.push(fieldName); // cdc: cuando el campo llama a esta funcion es porque se ha digitado algo, entonces al validarlo se añade el campo a este array para mostrar error
+    if (!this.validatedFields.includes(fieldName))
+      this.validatedFields.push(fieldName); // cdc: cuando el campo llama a esta funcion es porque se ha digitado algo, entonces al validarlo se añade el campo a este array para mostrar error
     const field = document.getElementById(fieldName) as HTMLInputElement;
     if (condition && field !== null) {
       if (!this.validFields.includes(fieldName) && field.checkValidity())
@@ -323,7 +359,19 @@ export default class ReportCrud extends Vue {
         this.validFields.splice(index, 1);
     }
   }
-
+   submitForm() {
+    // Validar que todos los campos requeridos estén diligenciados
+    if (
+      this.requiredFields.every(field => this.validFields.includes(field))
+    ) {
+      // Todos los campos requeridos están diligenciados, puedes proceder a guardar los cambios.
+      // Agrega tu lógica para guardar los cambios aquí.
+    } else {
+      // Muestra un mensaje de error o realiza alguna acción si no se han diligenciado todos los campos.
+      alert("Por favor diligencie todos los campos requeridos.");
+    }
+  }
+  
   clearModal() {
     // cdc: para limpiar los campos y arreglos al cancelar
     this.validatedFields = [];
@@ -376,5 +424,18 @@ export default class ReportCrud extends Vue {
 .text-left {
   // cdc: para alinear el texto a la izquierda
   text-align: left;
+}
+
+.feedback-container {
+  display: flex;
+  align-items: flex-start;
+  /* Alinea al inicio de forma predeterminada */
+}
+
+.valid-feedback,
+.invalid-feedback {
+  display: flex;
+  align-items: flex-start; /* Alinea al inicio */
+  /* Otras reglas de estilo para los mensajes de retroalimentación */
 }
 </style>
