@@ -88,7 +88,7 @@
                 <div class="total-row form-group">
                   <label for="project">Nombre del proyecto:</label>
                   <vue3-simple-typeahead
-                    v-model="newReport.project.name"
+                    v-model="newReport.project"
                     class="form-control shadow-none"
                     :minInputLength="1"
                     id="project"
@@ -100,7 +100,7 @@
                     @input="
                       validateFields(
                         'project',
-                        newReport.project.name.length > 0
+                        newReport.project.length > 0
                       )
                     "
                   />
@@ -185,7 +185,7 @@
           <tr>
             <th scope="col">Fecha creaci&oacute;n</th>
             <th scope="col">Descripci&oacute;n</th>
-            <th scope="col">horas</th>
+            <th scope="col">Horas</th>
             <th scope="col">Actividad</th>
             <th scope="col">Etapa</th>
             <th scope="col">Proyecto</th>
@@ -196,11 +196,11 @@
         <tbody>
           <tr v-for="report in reportlist" v-bind:key="report.id">
             <td>{{ report.date }}</td>
-            <td>{{ report.detail }}</td>
+            <td class="tableTextLeft">{{ report.detail }}</td>
             <td>{{ report.hours }}</td>
-            <td>{{ report.title }}</td>
-            <td>{{ report.activity !== null ? report.activity.name : "" }}</td>
-            <td>{{ report.project !== null ? report.project.name : "" }}</td>
+            <td class="tableTextLeft">{{ report.title }}</td>
+            <td class="tableTextLeft">{{ report.activity !== null ? report.activity.stage : "" }}</td>
+            <td class="tableTextLeft">{{ report.project !== null ? report.project.name : "" }}</td>
             <td>
               <a
                 href="#"
@@ -246,7 +246,17 @@ export default class ReportCrud extends Vue {
 
   async beforeMount() {
     this.activitylist = (await controllers.getActivities()) || [];
-    this.reportlist = (await controllers.getReports()) || [];
+    this.reportlist = (await controllers.getReports()) || [
+    {
+    id: 101,
+    title: "Nombre programa",
+    detail: "Detalle alineado a la izquierda",
+    date: "20231027",
+    hours: "8",
+    project: {name: "Leasing"},
+    activity: {stage: "Desarrollo"},
+  } ,
+    ];
     this.projectlist = (await controllers.getProjects(1)) || [];
   }
 
@@ -257,9 +267,9 @@ export default class ReportCrud extends Vue {
       reportlist: this.reportlist,
       newReport: this.newReport,
       validFields: this.validFields,
-      projectlist: this.projectlist.map((item) => {
+      /*projectlist: this.projectlist.map((item) => {
         return item.name;
-      }), //.map((item) => item.name),
+      }), //.map((item) => item.name),*/
     };
   }
 
@@ -281,6 +291,10 @@ export default class ReportCrud extends Vue {
 .table-contain {
   overflow: auto;
   max-height: 380px;
+}
+
+.tableTextLeft {
+  text-align: left;
 }
 
 .right-search {
