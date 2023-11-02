@@ -89,6 +89,7 @@
                       class="form-control shadow-none"
                       id="hours"
                       min="0"
+                      step="0.5"
                       :class="{
                         'is-valid': validFields.includes('hours'),
                         'is-invalid':
