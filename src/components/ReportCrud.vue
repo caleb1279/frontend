@@ -76,7 +76,7 @@
                           !validFields.includes('date') &&
                           validatedFields.includes('date'), // cdc otro array para saber si lo ha validado
                       }"
-                      @closed="validateFields('date', newReport.date !== null)"
+                      @blur="validateFields('date', newReport.date !== null)"
                     />
                   </div>
                 </div>
