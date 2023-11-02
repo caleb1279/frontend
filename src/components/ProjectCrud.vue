@@ -27,8 +27,9 @@
                     id="projectid"
                     :class="{
                       'is-valid': validFields.includes('projectid'),
-                      'is-invalid': !validFields.includes('projectid') &&
-                      validatedFields.includes('projectid'), // Corregido a 'projectId'
+                      'is-invalid':
+                        !validFields.includes('projectid') &&
+                        validatedFields.includes('projectid'), // Corregido a 'projectId'
                     }"
                     @input="
                       validateFields(
@@ -38,7 +39,9 @@
                     "
                   />
                   <div class="valid-feedback text-left">¡Se ve bien!</div>
-                  <div class="invalid-feedback text-left">Por favor diligencia este campo</div>
+                  <div class="invalid-feedback text-left">
+                    Por favor diligencia este campo
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -51,13 +54,18 @@
                     id="project"
                     :class="{
                       'is-valid': validFields.includes('project'),
-                      'is-invalid': !validFields.includes('project') &&
-                                    validatedFields.includes('project'),
+                      'is-invalid':
+                        !validFields.includes('project') &&
+                        validatedFields.includes('project'),
                     }"
-                    @input="validateFields('project', newProject.name.length > 0)"
+                    @input="
+                      validateFields('project', newProject.name.length > 0)
+                    "
                   />
                   <div class="valid-feedback text-left">¡Se ve bien!</div>
-                  <div class="invalid-feedback text-left">Por favor diligencia este campo</div>
+                  <div class="invalid-feedback text-left">
+                    Por favor diligencia este campo
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -71,15 +79,18 @@
                       inputFormat="yyyy/MM/dd"
                       :class="{
                         'is-valid': validFields.includes('labdate'),
-                        'is-invalid': !validFields.includes('labdate') &&
-                          validatedFields.includes('labdate'), 
+                        'is-invalid':
+                          !validFields.includes('labdate') &&
+                          validatedFields.includes('labdate'),
                       }"
-                      @closed="
+                      @blur="
                         validateFields('labdate', newProject.labDate !== null)
                       "
                     />
                     <div class="valid-feedback">¡Se ve bien!</div>
-                    <div class="invalid-feedback">Por favor diligencia este campo</div>
+                    <div class="invalid-feedback">
+                      Por favor diligencia este campo
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -92,15 +103,18 @@
                       inputFormat="yyyy/MM/dd"
                       :class="{
                         'is-valid': validFields.includes('prodate'),
-                        'is-invalid': !validFields.includes('prodate') &&
+                        'is-invalid':
+                          !validFields.includes('prodate') &&
                           validatedFields.includes('prodate'),
                       }"
-                      @closed="
+                      @blur="
                         validateFields('prodate', newProject.proDate !== null)
                       "
                     />
                     <div class="valid-feedback">¡Se ve bien!</div>
-                    <div class="invalid-feedback">Por favor diligencia este campo</div>
+                    <div class="invalid-feedback">
+                      Por favor diligencia este campo
+                    </div>
                   </div>
                 </div>
               </div>
@@ -114,7 +128,8 @@
                     class="form-control shadow-none"
                     :class="{
                       'is-valid': validFields.includes('source'),
-                      'is-invalid': !validFields.includes('source') &&
+                      'is-invalid':
+                        !validFields.includes('source') &&
                         validatedFields.includes('source'),
                     }"
                     @input="
@@ -136,16 +151,18 @@
                     id="status"
                     :class="{
                       'is-valid': validFields.includes('status'),
-                      'is-invalid': !validFields.includes('status') &&
+                      'is-invalid':
+                        !validFields.includes('status') &&
                         validatedFields.includes('status'),
                     }"
                     @change="
                       validateFields('status', newProject.status !== null)
                     "
                   >
-                  <div class="valid-feedback text-left">¡Se ve bien!</div>
-                  <div class="invalid-feedback text-left">
-                    Por favor diligencia este campo </div>
+                    <div class="valid-feedback text-left">¡Se ve bien!</div>
+                    <div class="invalid-feedback text-left">
+                      Por favor diligencia este campo
+                    </div>
                     <option :value="false">Inactivo</option>
                     <option :value="true">Activo</option>
                   </select>
@@ -254,20 +271,27 @@ export default class ProjectCrud extends Vue {
   projectlist!: project[];
   validFields: string[] = [];
   validatedFields: string[] = [];
-  requiredFields: string[] = ['projectid', 'project', 'labdate', 'source', 'status']; // Lista de campos requeridos
+  requiredFields: string[] = [
+    "projectid",
+    "project",
+    "labdate",
+    "source",
+    "status",
+  ]; // Lista de campos requeridos
   opccrud!: string;
 
   async beforeMount() {
-    this.projectlist = (await controllers.getProjects(1)) || [
-      // cdc: datos de prueba aqui: actividades o stages de prueba
+    this.projectlist =
+      (await controllers.getProjects(1)) ||
+      [
+        // cdc: datos de prueba aqui: actividades o stages de prueba
       ];
     this.projectlist = (await controllers.getProjects(1)) || [];
-    let projects: project[] = (await controllers.getProjects(1)) || [];
   }
 
   data() {
     return {
-      requiredFields: ['projectid', 'project', 'labdate', 'source', 'status'],
+      requiredFields: ["projectid", "project", "labdate", "source", "status"],
       projectlist: this.projectlist,
       opccrud: this.opccrud,
       newProject: this.newProject,
@@ -291,7 +315,7 @@ export default class ProjectCrud extends Vue {
   submitForm() {
     // Validar que todos los campos requeridos estén diligenciados
     if (
-      this.requiredFields.every(field => this.validFields.includes(field))
+      this.requiredFields.every((field) => this.validFields.includes(field))
     ) {
       // Todos los campos requeridos están diligenciados, puedes proceder a guardar los cambios.
       // Agrega tu lógica para guardar los cambios aquí.
@@ -301,19 +325,19 @@ export default class ProjectCrud extends Vue {
     }
   }
   clearModal() {
-  // cdc: para limpiar los campos y arreglos al cancelar
-  this.validatedFields = [];
-  this.validFields = [];
-  this.newProject = {
-    id: 0, // Cambiado a 0
-    projectId: "",
-    name: "",
-    labDate: null,
-    proDate: null,
-    source: "",
-    status: null,
-  };
- }
+    // cdc: para limpiar los campos y arreglos al cancelar
+    this.validatedFields = [];
+    this.validFields = [];
+    this.newProject = {
+      id: 0, // Cambiado a 0
+      projectId: "",
+      name: "",
+      labDate: null,
+      proDate: null,
+      source: "",
+      status: null,
+    };
+  }
 }
 </script>
 
@@ -346,7 +370,8 @@ export default class ProjectCrud extends Vue {
   /* Alinea al inicio de forma predeterminada */
 }
 
-.valid-feedback, .invalid-feedback {
+.valid-feedback,
+.invalid-feedback {
   display: flex;
   align-items: flex-start; /* Alinea al inicio */
   /* Otras reglas de estilo para los mensajes de retroalimentación */
