@@ -20,10 +20,10 @@ export type project = {
 
 export type report = {
   id: string | number;
-  date: Date | null;
-  description: string;
+  date: Date | string;
+  detail: string;
   hours: number;
   title: string;
-  stage: string;
-  project: string;
+  activity: activity;
+  project: project;
 };

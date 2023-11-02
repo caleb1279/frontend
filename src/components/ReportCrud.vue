@@ -36,7 +36,7 @@
                 <div class="total-row form-group">
                   <label for="description">Descripción de la actividad:</label>
                   <textarea
-                    v-model="newReport.description"
+                    v-model="newReport.detail"
                     id="description"
                     class="form-control shadow-none"
                     :class="{
@@ -44,10 +44,7 @@
                       'is-invalid': !validFields.includes('description'),
                     }"
                     @input="
-                      validateFields(
-                        'description',
-                        newReport.description.length > 0
-                      )
+                      validateFields('description', newReport.detail.length > 0)
                     "
                   ></textarea>
                 </div>
@@ -60,7 +57,7 @@
                       v-model="newReport.date"
                       class="form-control shadow-none"
                       id="date"
-                      inputFormat="dd-MM-yyyy"
+                      inputFormat="yyyy/MM/dd"
                       :class="{
                         'is-valid': validFields.includes('date'),
                         'is-invalid': !validFields.includes('date'),
@@ -90,7 +87,7 @@
                 <div class="total-row form-group">
                   <label for="project">Nombre del proyecto:</label>
                   <vue3-simple-typeahead
-                    v-model="newReport.project"
+                    v-bind:value="nomProyecto"
                     class="form-control shadow-none"
                     :minInputLength="1"
                     id="project"
@@ -99,9 +96,7 @@
                       'is-valid': validFields.includes('project'),
                       'is-invalid': !validFields.includes('project'),
                     }"
-                    @input="
-                      validateFields('project', newReport.project.length > 0)
-                    "
+                    @input="validateFields('project', nomProyecto.length > 0)"
                   />
                 </div>
               </div>
@@ -109,14 +104,20 @@
                 <div class="total-row form-group">
                   <label for="stage">Seleccione una etapa:</label>
                   <select
-                    v-model="newReport.stage"
+                    v-bind:value="newReport.activity"
                     class="form-select shadow-none"
                     id="stage"
                     :class="{
                       'is-valid': validFields.includes('stage'),
                       'is-invalid': !validFields.includes('stage'),
                     }"
-                    @input="validateFields('stage', newReport.stage.length > 0)"
+                    @change="
+                      validateFields(
+                        'stage',
+                        newReport.activity !== null &&
+                          newReport.activity.name.length > 0
+                      )
+                    "
                   >
                     <option
                       v-for="activity in activitylist"
@@ -155,6 +156,7 @@
           data-bs-toggle="modal"
           data-bs-target="#activityModal"
           v-on:click="opccrud = 'Creación'"
+          v-on:click.prevent=""
         >
           <font-awesome-icon icon="plus" /> Crear actividad
         </button>
@@ -189,23 +191,32 @@
         <tbody>
           <tr v-for="report in reportlist" v-bind:key="report.id">
             <td>{{ report.date }}</td>
-            <td>{{ report.description }}</td>
+            <td>{{ report.detail }}</td>
             <td>{{ report.hours }}</td>
             <td>{{ report.title }}</td>
-            <td>{{ report.stage }}</td>
-            <td>{{ report.project }}</td>
+            <td>{{ report.activity != null ? report.activity.name : "" }}</td>
+            <td>
+              {{ report.project.name !== null ? report.project.name : "" }}
+            </td>
             <td>
               <a
                 href="#"
                 data-bs-toggle="modal"
                 data-bs-target="#activityModal"
-                v-on:click.prevent=""
+                v-on:click="opccrud = 'Edicion'"
+                v-on:click.prevent="editActivity(report)"
               >
                 <font-awesome-icon icon="pen" />
               </a>
             </td>
             <td>
-              <a href="#" v-on:click.prevent="">
+              <a
+                href="#"
+                data-bs-toggle="modal"
+                data-bs-target="#activityModal"
+                v-on:click="opccrud = 'Eliminacion'"
+                v-on:click.prevent=""
+              >
                 <font-awesome-icon icon="trash" />
               </a>
             </td>
@@ -222,26 +233,99 @@ import type { activity, project, report } from "@/registerDataType";
 import { Vue } from "vue-class-component";
 
 export default class ReportCrud extends Vue {
+  nomProyecto = "";
   newReport: report = {
     id: 0,
     title: "",
-    description: "",
-    date: null,
+    detail: "",
+    date: "",
     hours: NaN,
-    project: "",
-    stage: "",
+    project: {
+      id: "",
+      projectId: "",
+      name: "",
+      labDate: null,
+      proDate: null,
+      source: "",
+      status: null,
+    },
+    activity: {
+      id: "",
+      name: "",
+    },
   };
   activitylist!: activity[];
   reportlist!: report[];
-  projectlist!: project[];
+  projectlist!: string[];
   validFields: string[] = [];
   opccrud!: string;
 
   async beforeMount() {
-    this.activitylist = (await controllers.getActivities()) || [];
-    this.reportlist = (await controllers.getReports(1)) || [];
-    this.projectlist = (await controllers.getProjects(1)) || [];
+    this.activitylist = (await controllers.getActivities()) || [
+      {
+        id: 1,
+        name: "desarrollo",
+      },
+    ];
+    this.reportlist = (await controllers.getReports(1)) || [
+      {
+        id: 123,
+        title: "PAD123",
+        detail: "se modifica el pad",
+        date: "2023/10/10",
+        hours: 2,
+        project: {
+          id: 1,
+          projectId: "proy0245",
+          name: "ampliacion cargos fijos",
+          labDate: null,
+          proDate: null,
+          source: "fmca046390",
+          status: true,
+        },
+
+        activity: "desarrollo",
+      },
+    ];
+    let projects: project[] = (await controllers.getProjects(1)) || [
+      {
+        id: 1,
+        projectId: "proy0245",
+        name: "ampliacion cargos fijos",
+        labDate: null,
+        proDate: null,
+        source: "fmca046390",
+        status: true,
+      },
+    ];
+    //this.projectlist = (await controllers.getProjects(1)) || [];
+    this.projectlist = projects.map((project) => project.name);
   }
+
+  editActivity(report: report) {
+    this.opccrud = "Edicion";
+    this.newReport.id = report.id;
+    this.newReport.title = report.title;
+    this.newReport.detail = report.detail;
+    this.newReport.date = new Date(report.date);
+    this.newReport.hours = report.hours;
+    this.nomProyecto = report.project.name;
+    this.newReport.activity = report.activity;
+    console.log(this.newReport.activity);
+  }
+
+  /* deleteActivity(report: report) {
+    if (confirm("¿Está seguro de que desea eliminar el registro?")) {
+      // Elimina el registro de la base de datos
+      controllers.deleteActivity(report.id);
+
+      // Mostrar un mensaje de éxito al usuario
+      this.$toast.success("El registro se eliminó correctamente.");
+    } else {
+      // Mostrar un mensaje de error al usuario
+      this.$toast.error("El registro no se pudo eliminar.");
+    }
+  } */
 
   data() {
     return {
@@ -250,18 +334,20 @@ export default class ReportCrud extends Vue {
       reportlist: this.reportlist,
       newReport: this.newReport,
       validFields: this.validFields,
-      projectlist: this.projectlist.map((item) => item.name),
+      projectlist: this.projectlist,
+      nomProyecto: this.nomProyecto,
     };
   }
 
   validateFields(fieldName: string, condition: boolean) {
-    if (condition) {
-      if (!this.validFields.includes(fieldName))
+    const field = document.getElementById(fieldName) as HTMLInputElement;
+    if (condition && field !== null) {
+      if (!this.validFields.includes(fieldName) && field.checkValidity())
         this.validFields.push(fieldName);
     } else {
       const index = this.validFields.indexOf(fieldName);
       if (this.validFields.includes(fieldName))
-        this.validFields.splice(index, 0);
+        this.validFields.splice(index, 1);
     }
   }
 }
