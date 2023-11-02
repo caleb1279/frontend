@@ -244,8 +244,8 @@ export default class ReportCrud extends Vue {
       id: "",
       projectId: "",
       name: "",
-      labDate: null,
-      proDate: null,
+      labDate: "",
+      proDate: "",
       source: "",
       status: null,
     },
@@ -311,7 +311,6 @@ export default class ReportCrud extends Vue {
     this.newReport.hours = report.hours;
     this.nomProyecto = report.project.name;
     this.newReport.activity = report.activity;
-    console.log(this.newReport.activity);
   }
 
   /* deleteActivity(report: report) {

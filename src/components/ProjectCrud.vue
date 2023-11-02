@@ -61,13 +61,13 @@
                       v-model="newProject.labDate"
                       class="form-control shadow-none"
                       id="labdate"
-                      inputFormat="dd-MM-yyyy"
+                      inputFormat="yyyy/MM/dd"
                       :class="{
                         'is-valid': validFields.includes('labdate'),
                         'is-invalid': !validFields.includes('labdate'),
                       }"
                       @closed="
-                        validateFields('labdate', newProject.labDate !== null)
+                        validateFields('labdate', newProject.labDate !== '')
                       "
                     />
                   </div>
@@ -79,7 +79,7 @@
                       v-model="newProject.proDate"
                       class="form-control shadow-none"
                       id="prodate"
-                      inputFormat="dd-MM-yyyy"
+                      inputFormat="yyyy/MM/dd"
                       :class="{
                         'is-valid': validFields.includes('prodate'),
                         'is-invalid': !validFields.includes('prodate'),
@@ -113,7 +113,7 @@
                 <div class="total-row form-group has-validation">
                   <label for="status">Seleccione un estado:</label>
                   <select
-                    v-model="newProject.status"
+                    v-bind:value="newProject.status"
                     class="form-select shadow-none"
                     id="status"
                     :class="{
@@ -157,6 +157,7 @@
           data-bs-toggle="modal"
           data-bs-target="#projectModal"
           v-on:click="opccrud = 'Creación'"
+          v-on:click.prevent=""
         >
           <font-awesome-icon icon="plus" /> Crear Proyecto
         </button>
@@ -191,19 +192,26 @@
             <td>{{ project.labDate }}</td>
             <td>{{ project.proDate }}</td>
             <td>{{ project.source }}</td>
-            <td>{{ project.status }}</td>
+            <td>{{ project.status ? "Activo" : "Inactivo" }}</td>
             <td>
               <a
                 href="#"
                 data-bs-toggle="modal"
                 data-bs-target="#projectModal"
-                v-on:click.prevent=""
+                v-on:click="opccrud = 'Edicion'"
+                v-on:click.prevent="editProject(project)"
               >
-                <i class="fa-solid fa-pen"></i>
+                <font-awesome-icon icon="pen" />
               </a>
             </td>
             <td>
-              <a href="#" v-on:click.prevent="">
+              <a
+                href="#"
+                data-bs-toggle="modal"
+                data-bs-target="#activityModal"
+                v-on:click="opccrud = 'Eliminacion'"
+                v-on:click.prevent=""
+              >
                 <i class="fa-solid fa-trash"></i>
               </a>
             </td>
@@ -221,9 +229,9 @@ import type { project } from "@/registerDataType";
 export default class ProjectCrud extends Vue {
   newProject: project = {
     id: NaN,
-    labDate: null,
+    labDate: "",
     name: "",
-    proDate: null,
+    proDate: "",
     projectId: "",
     source: "",
     status: null,
@@ -233,7 +241,17 @@ export default class ProjectCrud extends Vue {
   opccrud!: string;
 
   async beforeMount() {
-    this.projectlist = (await controllers.getProjects(1)) || [];
+    this.projectlist = (await controllers.getProjects(1)) || [
+      {
+        id: 2,
+        labDate: "2023/10/10",
+        name: "ampliacion cargos fijos",
+        proDate: "2023/10/10",
+        projectId: "proy0245",
+        source: "fmca046390",
+        status: true,
+      },
+    ];
   }
   data() {
     return {
@@ -242,6 +260,18 @@ export default class ProjectCrud extends Vue {
       newProject: this.newProject,
       validFields: this.validFields,
     };
+  }
+
+  editProject(project: project) {
+    this.opccrud = "Edicion";
+    this.newProject.id = project.id;
+    this.newProject.labDate = new Date(project.labDate);
+    this.newProject.name = project.name;
+    this.newProject.proDate = new Date(project.proDate);
+    this.newProject.projectId = project.projectId;
+    this.newProject.source = project.source;
+    this.newProject.status = project.status;
+    console.log(project.labDate);
   }
 
   validateFields(fieldName: string, condition: boolean) {
