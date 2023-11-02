@@ -115,16 +115,7 @@
                   </div>
                 </div>
               </div>
-
               <div>
-                <!-- ... otro contenido ... -->
-                <div class="feedback-container">
-                  <div class="valid-feedback">¡Se ve bien!</div>
-                  <div class="invalid-feedback">
-                    Por favor diligencia este campo
-                  </div>
-                </div>
-
                 <div class="row">
                   <div class="total-row form-group">
                     <label for="project">Nombre del proyecto:</label>
@@ -438,18 +429,5 @@ export default class ReportCrud extends Vue {
 .text-left {
   // cdc: para alinear el texto a la izquierda
   text-align: left;
-}
-
-.feedback-container {
-  display: flex;
-  align-items: flex-start;
-  /* Alinea al inicio de forma predeterminada */
-}
-
-.valid-feedback,
-.invalid-feedback {
-  display: flex;
-  align-items: flex-start; /* Alinea al inicio */
-  /* Otras reglas de estilo para los mensajes de retroalimentación */
 }
 </style>

@@ -362,18 +362,3 @@ export default class ProjectCrud extends Vue {
   text-align: left;
 }
 </style>
-
-<style>
-.feedback-container {
-  display: flex;
-  align-items: flex-start;
-  /* Alinea al inicio de forma predeterminada */
-}
-
-.valid-feedback,
-.invalid-feedback {
-  display: flex;
-  align-items: flex-start; /* Alinea al inicio */
-  /* Otras reglas de estilo para los mensajes de retroalimentación */
-}
-</style>
