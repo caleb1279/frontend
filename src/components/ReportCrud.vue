@@ -289,7 +289,6 @@ import type { activity, project, report } from "@/registerDataType";
 import { Vue } from "vue-class-component";
 
 export default class ReportCrud extends Vue {
-  nomProyecto = "";
   newReport: report = {
     id: 0,
     title: "",
@@ -400,7 +399,7 @@ export default class ReportCrud extends Vue {
       id: 0,
       title: "",
       detail: "",
-      date: null,
+      date: "",
       hours: NaN,
       project: {
         id: "",
