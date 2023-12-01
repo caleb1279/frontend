@@ -38,10 +38,6 @@
                       )
                     "
                   />
-                  <div class="valid-feedback text-left">¡Se ve bien!</div>
-                  <div class="invalid-feedback text-left">
-                    Por favor diligencia este campo
-                  </div>
                 </div>
               </div>
               <div class="row">
@@ -62,10 +58,6 @@
                       validateFields('project', newProject.name.length > 0)
                     "
                   />
-                  <div class="valid-feedback text-left">¡Se ve bien!</div>
-                  <div class="invalid-feedback text-left">
-                    Por favor diligencia este campo
-                  </div>
                 </div>
               </div>
               <div class="row">
@@ -87,10 +79,6 @@
                         validateFields('labdate', newProject.labDate !== '')
                       "
                     />
-                    <div class="valid-feedback">¡Se ve bien!</div>
-                    <div class="invalid-feedback">
-                      Por favor diligencia este campo
-                    </div>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -111,10 +99,6 @@
                         validateFields('prodate', newProject.proDate !== '')
                       "
                     />
-                    <div class="valid-feedback">¡Se ve bien!</div>
-                    <div class="invalid-feedback">
-                      Por favor diligencia este campo
-                    </div>
                   </div>
                 </div>
               </div>
@@ -136,17 +120,13 @@
                       validateFields('source', newProject.source.length > 0)
                     "
                   />
-                  <div class="valid-feedback text-left">¡Se ve bien!</div>
-                  <div class="invalid-feedback text-left">
-                    Por favor diligencia este campo
-                  </div>
                 </div>
               </div>
               <div class="row">
                 <div class="total-row form-group has-validation">
                   <label for="status">Seleccione un estado:</label>
                   <select
-                    v-bind:value="newProject.status"
+                    v-model="newProject.status"
                     class="form-select shadow-none"
                     id="status"
                     :class="{
@@ -241,11 +221,7 @@
               </a>
             </td>
             <td>
-              <a
-                href="#"
-                v-on:click="opccrud = 'Eliminacion'"
-                v-on:click.prevent=""
-              >
+              <a href="#" v-on:click.prevent="">
                 <font-awesome-icon icon="trash" />
               </a>
             </td>
@@ -260,6 +236,7 @@
 import { Vue } from "vue-class-component";
 import controllers from "@/controllers/RequestController";
 import type { project } from "@/registerDataType";
+
 export default class ProjectCrud extends Vue {
   newProject: project = {
     id: NaN,
@@ -298,14 +275,6 @@ export default class ProjectCrud extends Vue {
 
   data() {
     return {
-      requiredFields: [
-        "projectid",
-        "project",
-        "labdate",
-        "prodate",
-        "source",
-        "status",
-      ],
       projectlist: this.projectlist,
       opccrud: this.opccrud,
       newProject: this.newProject,
@@ -337,6 +306,7 @@ export default class ProjectCrud extends Vue {
         this.validFields.splice(index, 1);
     }
   }
+
   submitForm() {
     this.validateFields("projectid", this.newProject.projectId.length > 0);
     this.validateFields("project", this.newProject.name.length > 0);
@@ -352,9 +322,9 @@ export default class ProjectCrud extends Vue {
       // Agrega tu lógica para guardar los cambios aquí.
     } else {
       // Muestra un mensaje de error o realiza alguna acción si no se han diligenciado todos los campos.
-      alert("Por favor diligencie todos los campos requeridos.");
     }
   }
+
   clearModal() {
     // cdc: para limpiar los campos y arreglos al cancelar
     this.validatedFields = [];

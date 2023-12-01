@@ -113,7 +113,7 @@
                   type: 'circle',
                 },
                 size: {
-                  random: false,
+                  random: true,
                   value: 5,
                 },
               },
@@ -140,7 +140,7 @@ export default class ErrorNotFound extends Vue {
     await loadFull(engine);
   };
 
-  particlesLoaded = async (container: any) => {
+  particlesLoaded = async (container: unknown) => {
     console.log("Particles container loaded", container);
   };
 
