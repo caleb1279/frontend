@@ -28,7 +28,9 @@
               @input="validateFields('username')"
               :class="{
                 'is-valid': validFields.includes('username'),
-                'is-invalid': !validFields.includes('username'),
+                'is-invalid':
+                  !validFields.includes('username') &&
+                  validatedFields.includes('username'),
               }"
               required
             />
@@ -45,7 +47,9 @@
               @input="validateFields('password')"
               :class="{
                 'is-valid': validFields.includes('password'),
-                'is-invalid': !validFields.includes('password'),
+                'is-invalid':
+                  !validFields.includes('password') &&
+                  validatedFields.includes('password'),
               }"
               required
             />
@@ -89,6 +93,7 @@ export default class LoginForm extends Vue {
   uname!: string;
   passwd!: string;
   validFields: string[] = [];
+  validatedFields: string[] = [];
 
   data() {
     return { validFields: this.validFields };
@@ -125,6 +130,7 @@ export default class LoginForm extends Vue {
   }
 
   validateFields(input: string) {
+    if (!this.validatedFields.includes(input)) this.validatedFields.push(input);
     const field = document.getElementById(input) as HTMLInputElement;
     if (field === null) return;
 

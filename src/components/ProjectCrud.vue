@@ -84,7 +84,7 @@
                           validatedFields.includes('labdate'),
                       }"
                       @blur="
-                        validateFields('labdate', newProject.labDate !== null)
+                        validateFields('labdate', newProject.labDate !== '')
                       "
                     />
                     <div class="valid-feedback">¡Se ve bien!</div>
@@ -108,7 +108,7 @@
                           validatedFields.includes('prodate'),
                       }"
                       @blur="
-                        validateFields('prodate', newProject.proDate !== null)
+                        validateFields('prodate', newProject.proDate !== '')
                       "
                     />
                     <div class="valid-feedback">¡Se ve bien!</div>
@@ -159,10 +159,6 @@
                       validateFields('status', newProject.status !== null)
                     "
                   >
-                    <div class="valid-feedback text-left">¡Se ve bien!</div>
-                    <div class="invalid-feedback text-left">
-                      Por favor diligencia este campo
-                    </div>
                     <option :value="false">Inactivo</option>
                     <option :value="true">Activo</option>
                   </select>
@@ -212,7 +208,7 @@
       </div>
     </div>
     <div class="table-contain">
-      <table class="table">
+      <table class="table text-left">
         <thead>
           <tr>
             <th scope="col">N&uacute;mero de proyecto</th>
@@ -247,12 +243,10 @@
             <td>
               <a
                 href="#"
-                data-bs-toggle="modal"
-                data-bs-target="#activityModal"
                 v-on:click="opccrud = 'Eliminacion'"
                 v-on:click.prevent=""
               >
-                <i class="fa-solid fa-trash"></i>
+                <font-awesome-icon icon="trash" />
               </a>
             </td>
           </tr>
@@ -304,7 +298,14 @@ export default class ProjectCrud extends Vue {
 
   data() {
     return {
-      requiredFields: ["projectid", "project", "labdate", "source", "status"],
+      requiredFields: [
+        "projectid",
+        "project",
+        "labdate",
+        "prodate",
+        "source",
+        "status",
+      ],
       projectlist: this.projectlist,
       opccrud: this.opccrud,
       newProject: this.newProject,
@@ -337,6 +338,12 @@ export default class ProjectCrud extends Vue {
     }
   }
   submitForm() {
+    this.validateFields("projectid", this.newProject.projectId.length > 0);
+    this.validateFields("project", this.newProject.name.length > 0);
+    this.validateFields("labdate", this.newProject.labDate !== "");
+    this.validateFields("prodate", this.newProject.proDate !== "");
+    this.validateFields("source", this.newProject.source.length > 0);
+    this.validateFields("status", this.newProject.status !== null);
     // Validar que todos los campos requeridos estén diligenciados
     if (
       this.requiredFields.every((field) => this.validFields.includes(field))

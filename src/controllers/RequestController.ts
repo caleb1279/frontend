@@ -51,9 +51,18 @@ export default {
       return null;
     }
   },
-  async getReports() {
+  async getReports(user: number, date: Date) {
     try {
-      const data = await request.get("/reports");
+      const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+      const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+      const data = await request.get(
+        "/reports/" +
+          user +
+          "/" +
+          firstDay.toISOString() +
+          "/" +
+          lastDay.toISOString()
+      );
       return data.data.reports;
     } catch (error) {
       console.log(error);

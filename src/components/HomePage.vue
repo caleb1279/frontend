@@ -73,10 +73,53 @@
       </div>
 
       <div class="container-dock">
-        <div class="figure-content d-flex">
-          <figure>
-            <img src="/img/decorador.png" />
-          </figure>
+        <div id="particles-js">
+          <vue-particles
+            id="tsparticles"
+            :particlesInit="particlesInit"
+            :particlesLoaded="particlesLoaded"
+            :options="{
+              fpsLimit: 60,
+              particles: {
+                color: {
+                  value: '#ffffff',
+                },
+                links: {
+                  color: '#ffffff',
+                  distance: 150,
+                  enable: true,
+                  opacity: 0.5,
+                  width: 1,
+                },
+                move: {
+                  direction: 'none',
+                  enable: true,
+                  outMode: 'bounce',
+                  random: false,
+                  speed: 1,
+                  straight: false,
+                },
+                number: {
+                  density: {
+                    enable: true,
+                    area: 800,
+                  },
+                  value: 80,
+                },
+                opacity: {
+                  value: 0.1,
+                },
+                shape: {
+                  type: 'circle',
+                },
+                size: {
+                  random: false,
+                  value: 5,
+                },
+              },
+              detectRetina: false,
+            }"
+          />
         </div>
         <router-view></router-view>
       </div>
@@ -87,8 +130,26 @@
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import session from "@/controllers/SessionController";
+import { loadFull } from "tsparticles";
+import { Engine } from "tsparticles-engine";
+
 export default class ErrorNotFound extends Vue {
   logout = session.Logout;
+
+  particlesInit = async (engine: Engine) => {
+    await loadFull(engine);
+  };
+
+  particlesLoaded = async (container: any) => {
+    console.log("Particles container loaded", container);
+  };
+
+  data() {
+    return {
+      particlesInit: this.particlesInit,
+      particlesLoaded: this.particlesLoaded,
+    };
+  }
 }
 </script>
 

@@ -9,7 +9,7 @@ STYLES GUIDE
 */
 
 /* 0. VARIABLES */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
 
 $alert-color: #dd0000;
 $dark-color: #1E293B;
@@ -28,6 +28,7 @@ $create-dark-color: #0f9278;
   box-sizing: border-box;
   border: 0;
 	vertical-align: baseline;
+  font-family: 'Poppins', sans-serif;
 }
 
 article, aside, details, figcaption, figure, 
@@ -84,7 +85,6 @@ table {
 
 /* 3. GENERIC ITEMS */
 html, body {
-  font-family: "Noto Sans", sans-serif;
   text-align: center;
 }
 
@@ -215,8 +215,13 @@ figure {
   border-right: 1px solid $border-light-color;
 }
 
+.sidebar ul {
+  width: 100%;
+}
+
 .sidebar ul li {
-  padding: 10px 5px;
+  padding: 10px 35px;
+  text-align: left;
 }
 
 .sidebar-item:hover {
@@ -225,4 +230,13 @@ figure {
 /* end sidebar */
 .modal-backdrop {
   display: none;
+}
+
+#particles-js{
+  width: 100%;
+  height: 95px;
+  background: linear-gradient(45deg, rgba(0,0,0,0.4), #11016FAA, #01102DAA), rgb(0, 0, 94);
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
 }
