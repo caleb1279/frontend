@@ -34,12 +34,6 @@
                     }"
                     @input="validateFields('title', newReport.title.length > 0)"
                   />
-                  <!-- cdc: mensaje de campo valido -->
-                  <div class="valid-feedback text-left">¡Se ve bien!</div>
-                  <!-- cdc: mensaje de campo no valido -->
-                  <div class="invalid-feedback text-left">
-                    Por favor diligencia este campo
-                  </div>
                 </div>
               </div>
               <div class="row">
@@ -77,7 +71,7 @@
                           validatedFields.includes('date'), // cdc otro array para saber si lo ha validado
                       }"
                       @blur="validateFields('date', newReport.date !== null)"
-                    />
+                    ></date-picker>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -106,7 +100,7 @@
                   <label for="project">Nombre del proyecto:</label>
                   <vue3-simple-typeahead
                     v-model="nomproject"
-@selectItem="
+                    @selectItem="
                       (item: string) => {
                         nomproject = item;
                       }
@@ -122,7 +116,7 @@
                         validatedFields.includes('project'), // cdc otro array para saber si lo ha validado
                     }"
                     @input="validateFields('project', nomproject.length > 0)"
-                  />
+                  ></vue3-simple-typeahead>
                 </div>
               </div>
               <div class="row">
@@ -302,9 +296,9 @@ export default class ReportCrud extends Vue {
     let projects: project[] = (await controllers.getProjects(1)) || [
       {
         id: 2,
-        labDate: "2023/10/10",
+        labDate: new Date("2023-10-10"),
         name: "ampliacion cargos fijos",
-        proDate: "2023/10/10",
+        proDate: new Date("2023-10-10"),
         projectId: "proy0245",
         source: "fmca046390",
         status: true,
@@ -346,7 +340,6 @@ export default class ReportCrud extends Vue {
     this.nomproject = report.project.name;
     this.newReport.date = report.date;
     this.newReport.activity = report.activity;
-    console.log(this.nomproject);
   }
 
   submitForm() {

@@ -1,10 +1,20 @@
 export type user = {
-  email: string;
-  userName: string;
   userId: string | number;
+  email: string; //correo empresarial
+  perEmail: string; // correo personal
+  userName: string;
   rol: string;
   status: string;
-  minDate: Date | string;
+  minDate: Date | string; // fecha minima para reportar actividades
+  initialDate: Date | string; // fecha de ingreso
+  phone1: number;
+  phone2: number;
+  phone3: number;
+  contact: string; //nombre contacto de emergencia
+  birthday: Date | string; //cumpleaños
+  adress: string; //dirección
+  position: string; //cargo en la empresa
+  profileimage: string; // imagen de perfil
 };
 
 export type activity = {
