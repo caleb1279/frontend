@@ -1,9 +1,12 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+
 import LoginForm from "@/components/LoginForm.vue";
 import ErrorNotFound from "@/components/ErrorNotFound.vue";
 import HomePage from "@/components/HomePage.vue";
 import ReportCrud from "@/components/ReportCrud.vue";
 import ProjectCrud from "@/components/ProjectCrud.vue";
+import DashboardPage from "@/components/DashboardPage.vue";
+
 import session from "@/controllers/SessionController";
 
 const authExceptions: Array<string> = ["ErrorNotFound", "Login"];
@@ -14,6 +17,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "HomePage",
     component: HomePage,
     children: [
+      {
+        path: "/",
+        name: "Dashboard",
+        component: DashboardPage,
+      },
       {
         path: "/report",
         name: "ReportCrud",

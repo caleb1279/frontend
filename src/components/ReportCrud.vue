@@ -106,7 +106,7 @@
                   <label for="project">Nombre del proyecto:</label>
                   <vue3-simple-typeahead
                     v-model="nomproject"
-                    @selectItem="
+@selectItem="
                       (item: string) => {
                         nomproject = item;
                       }
@@ -121,12 +121,7 @@
                         !validFields.includes('project') &&
                         validatedFields.includes('project'), // cdc otro array para saber si lo ha validado
                     }"
-                    @input="
-                      validateFields(
-                        'project',
-                        newReport.project.name.length > 0
-                      )
-                    "
+                    @input="validateFields('project', nomproject.length > 0)"
                   />
                 </div>
               </div>
@@ -222,7 +217,7 @@
         </thead>
         <tbody>
           <tr v-for="report in reportlist" :key="report.id">
-            <td>{{ report.date.toISOString().substr(0, 10) }}</td>
+            <td>{{ report.date.toISOString().substr(0, 10) || "" }}</td>
             <td>{{ report.detail }}</td>
             <td>{{ report.hours }}</td>
             <td>{{ report.title }}</td>
