@@ -78,6 +78,16 @@
                     Proyectos
                   </li>
                 </a>
+                <a
+                  href=""
+                  v-on:click.prevent="$router.push('/admin')"
+                  id="admin"
+                >
+                  <li class="sidebar-item">
+                    <font-awesome-icon icon="users"></font-awesome-icon>
+                    Usuarios
+                  </li>
+                </a>
               </div>
             </div>
           </div>

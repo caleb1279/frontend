@@ -299,7 +299,7 @@
             </div>
 
             <!--Días habilitados para reportar actividades-->
-            <div class="row">
+            <div class="row diaHabilitado">
               <p class="titulo">
                 <span>Días habilitados para reportar actividades</span>
               </p>
@@ -329,11 +329,11 @@
               <!--fecha limite-->
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="minDate">Fecha máxima:</label>
+                  <label for="maxDate">Fecha máxima:</label>
                   <date-picker
-                    :value="new Date().toISOString().substring(0, 10)"
+                    v-model="maxDate"
                     class="form-control shadow-none"
-                    id=""
+                    id="maxDate"
                     inputFormat="yyyy/MM/dd"
                     :disabled="true"
                   />
@@ -393,17 +393,43 @@
     <table class="table text-left">
       <thead>
         <tr>
+          <th></th>
           <th scope="col">Usuarios</th>
           <th scope="col">Email</th>
+          <th scope="col">Telefono</th>
+          <th scope="col">Cargo</th>
           <th scope="col">Rol</th>
           <th scope="col">Estado</th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody v-for="user in userList" :key="user.userId">
+        <td>
+          <img
+            class="avatar-rounded"
+            with="40"
+            height="40"
+            :src="getImage(userList.indexOf(user))"
+          />
+        </td>
         <td>{{ user.userName }}</td>
         <td>{{ user.email }}</td>
+        <td>{{ user.phone1 }}</td>
+        <td>{{ user.position }}</td>
         <td>{{ user.rol }}</td>
         <td>{{ user.status }}</td>
+        <td>
+          <a
+            href="#"
+            data-bs-toggle="modal"
+            data-bs-target="#userModal"
+            v-on:click="opccrud = 'visualizacion'"
+            v-on:click.prevent="viewUser(user)"
+          >
+            <font-awesome-icon icon="eye" />
+          </a>
+        </td>
         <td>
           <a
             href="#"
@@ -434,15 +460,16 @@ export default class userCrud extends Vue {
     rol: "",
     status: "",
     initialDate: "", // fecha de ingreso
-    phone1: 0,
-    phone2: 0,
-    phone3: 0, // contacto de emergencia
+    phone1: "",
+    phone2: "",
+    phone3: "", // contacto de emergencia
     birthday: "", //cumpleaños
     address: "", //dirección
     position: "", //cargo en la empresa
     contact: "", //nombre contacto de emergencia
+    profileimage: "",
   };
-
+  maxDate!: Date;
   userList!: user[];
   validFields: string[] = [];
   validatedFields: string[] = [];
@@ -465,6 +492,8 @@ export default class userCrud extends Vue {
         address: "calle 1 # 10 - 10",
         position: "Director",
         contact: "Julian Rosa",
+        profileimage:
+          "https://img.freepik.com/foto-gratis/primer-disparo-flor-morada_181624-25863.jpg",
       },
     ];
   }
@@ -474,7 +503,16 @@ export default class userCrud extends Vue {
       opccrud: this.opccrud,
       newUser: this.newUser,
       validFields: this.validFields,
+      maxDate: new Date(),
     };
+  }
+  getImage(user: number) {
+    let image = this.userList[user].profileimage;
+    console.log(image);
+    if (!image) return "";
+    else {
+      return image;
+    }
   }
 
   editUser(user: user) {
@@ -493,6 +531,57 @@ export default class userCrud extends Vue {
     this.newUser.phone3 = user.phone3;
     this.newUser.address = user.address;
     this.newUser.position = user.position;
+    const diaHabilitado = document.querySelector(
+      ".diaHabilitado"
+    ) as HTMLElement;
+    diaHabilitado.classList.add("show");
+  }
+  viewUser(user: user) {
+    this.opccrud = "visualizacion";
+    this.newUser.userId = user.userId;
+    this.newUser.minDate = new Date(user.minDate);
+    this.newUser.birthday = new Date(user.birthday);
+    this.newUser.userName = user.userName;
+    this.newUser.rol = user.rol;
+    this.newUser.status = user.status;
+    this.newUser.email = user.email;
+    this.newUser.perEmail = user.perEmail;
+    this.newUser.contact = user.contact;
+    this.newUser.phone1 = user.phone1;
+    this.newUser.phone2 = user.phone2;
+    this.newUser.phone3 = user.phone3;
+    this.newUser.address = user.address;
+    this.newUser.position = user.position;
+    const diaHabilitado = document.querySelector(
+      ".diaHabilitado"
+    ) as HTMLElement;
+    diaHabilitado.classList.add("show");
+    const minDate = document.getElementById("minDate") as HTMLInputElement;
+    minDate.disabled = true;
+    const birthday = document.getElementById("birthday") as HTMLInputElement;
+    birthday.disabled = true;
+    const email = document.getElementById("email") as HTMLInputElement;
+    email.disabled = true;
+    const perEmail = document.getElementById("perEmail") as HTMLInputElement;
+    perEmail.disabled = true;
+    const contact = document.getElementById("contact") as HTMLInputElement;
+    contact.disabled = true;
+    const phone1 = document.getElementById("phone1") as HTMLInputElement;
+    phone1.disabled = true;
+    const phone2 = document.getElementById("phone2") as HTMLInputElement;
+    phone2.disabled = true;
+    const phone3 = document.getElementById("phone3") as HTMLInputElement;
+    phone3.disabled = true;
+    const address = document.getElementById("address") as HTMLTextAreaElement;
+    address.disabled = true;
+    const position = document.getElementById("position") as HTMLSelectElement;
+    position.disabled = true;
+    const rol = document.getElementById("rol") as HTMLSelectElement;
+    rol.disabled = true;
+    const status = document.getElementById("status") as HTMLSelectElement;
+    status.disabled = true;
+    const userName = document.getElementById("userName") as HTMLSelectElement;
+    userName.disabled = true;
   }
   validateFields(fieldName: string, condition: boolean) {
     if (!this.validatedFields.includes(fieldName))
@@ -512,6 +601,7 @@ export default class userCrud extends Vue {
     this.validateFields("name", this.newUser.userName.length > 0);
     this.validateFields("minDate", this.newUser.minDate !== "");
     this.validateFields("rol", this.newUser.rol.length > 0);
+    this.validateFields("position", this.newUser.position.length > 0);
     this.validateFields("status", this.newUser.status !== null);
     // Validar que todos los campos requeridos estén diligenciados
     if (
@@ -538,14 +628,47 @@ export default class userCrud extends Vue {
       rol: "",
       status: "",
       initialDate: "", // fecha de ingreso
-      phone1: 0,
-      phone2: 0,
-      phone3: 0, // contacto de emergencia
+      phone1: "",
+      phone2: "",
+      phone3: "", // contacto de emergencia
       birthday: "", //cumpleaños
       address: "", //dirección
       position: "", //cargo en la empresa
       contact: "", //nombre contacto de emergencia
+      profileimage: "",
     };
+    const diaHabilitado = document.querySelector(
+      ".diaHabilitado"
+    ) as HTMLElement;
+    if (diaHabilitado.classList.contains("show")) {
+      diaHabilitado.classList.remove("show");
+    }
+    const minDate = document.getElementById("minDate") as HTMLInputElement;
+    minDate.disabled = false;
+    const birthday = document.getElementById("birthday") as HTMLInputElement;
+    birthday.disabled = false;
+    const email = document.getElementById("email") as HTMLInputElement;
+    email.disabled = false;
+    const perEmail = document.getElementById("perEmail") as HTMLInputElement;
+    perEmail.disabled = false;
+    const contact = document.getElementById("contact") as HTMLInputElement;
+    contact.disabled = false;
+    const phone1 = document.getElementById("phone1") as HTMLInputElement;
+    phone1.disabled = false;
+    const phone2 = document.getElementById("phone2") as HTMLInputElement;
+    phone2.disabled = false;
+    const phone3 = document.getElementById("phone3") as HTMLInputElement;
+    phone3.disabled = false;
+    const address = document.getElementById("address") as HTMLTextAreaElement;
+    address.disabled = false;
+    const position = document.getElementById("position") as HTMLSelectElement;
+    position.disabled = false;
+    const rol = document.getElementById("rol") as HTMLSelectElement;
+    rol.disabled = false;
+    const status = document.getElementById("status") as HTMLSelectElement;
+    status.disabled = false;
+    const userName = document.getElementById("userName") as HTMLSelectElement;
+    userName.disabled = false;
   }
 }
 </script>
@@ -572,7 +695,7 @@ export default class userCrud extends Vue {
   z-index: 1;
 }
 .titulo:before {
-  border-top: 2px solid yellow;
+  border-top: 2px solid #141b27;
   content: "";
   margin: 0 auto;
   position: absolute;
@@ -586,5 +709,14 @@ export default class userCrud extends Vue {
 .titulo span {
   background: #fff;
   padding: 0 15px;
+}
+.modal-header {
+  border-bottom: 1px solid #141b27;
+}
+.diaHabilitado {
+  display: none;
+}
+.diaHabilitado.show {
+  display: flex;
 }
 </style>

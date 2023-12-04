@@ -129,7 +129,7 @@ export default class LoginForm extends Vue {
           phone3: 317247222,
           contact: "Maria Teresa (Madre)",
           birthday: new Date("2003-05-08"),
-          adress: "Velasquez St. No 80, Madrid",
+          address: "Velasquez St. No 80, Madrid",
           position: "OPs Developer",
           profileimage:
             "https://i.pinimg.com/550x/8d/e7/fa/8de7fa2af12330350613ede63532c4fb.jpg",
