@@ -12,7 +12,7 @@ export type user = {
   phone3: number;
   contact: string; //nombre contacto de emergencia
   birthday: Date | string; //cumpleaños
-  adress: string; //dirección
+  address: string; //dirección
   position: string; //cargo en la empresa
 };
 

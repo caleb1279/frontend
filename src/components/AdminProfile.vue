@@ -16,8 +16,9 @@
             ></button>
           </div>
           <div class="modal-body">
-            <p>Datos personales</p>
-            <hr />
+            <p class="titulo">
+              <span>Datos Personales</span>
+            </p>
             <!--Nombre de usuario-->
             <div class="row">
               <div class="total-row form-group">
@@ -125,8 +126,32 @@
                 </div>
               </div>
             </div>
-            <p>Contacto de emergencia</p>
-            <hr />
+            <!--Direccioón-->
+            <div class="row">
+              <div class="total-row form-group">
+                <label for="address">Dirección:</label>
+                <input
+                  v-model="newUser.address"
+                  class="form-control shadow-none"
+                  type="text"
+                  id="address"
+                  :class="{
+                    'is-valid': validFields.includes('address'),
+                    'is-invalid':
+                      !validFields.includes('address') &&
+                      validatedFields.includes('address'),
+                  }"
+                  @input="validateFields('address', newUser.address.length > 0)"
+                />
+                <div class="valid-feedback text-left">¡Se ve bien!</div>
+                <div class="invalid-feedback text-left">
+                  Por favor diligencia este campo
+                </div>
+              </div>
+            </div>
+            <p class="titulo">
+              <span>Contacto de Emergencia</span>
+            </p>
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -175,8 +200,9 @@
                 </div>
               </div>
             </div>
-            <p>Datos empresariales</p>
-            <hr />
+            <p class="titulo">
+              <span>Datos Empresariales</span>
+            </p>
             <!--Email empresarial-->
             <div class="row">
               <div class="total-row form-group">
@@ -274,10 +300,9 @@
 
             <!--Días habilitados para reportar actividades-->
             <div class="row">
-              <div class="titulo">
-                <p>Días habilitados para reportar actividades</p>
-                <hr />
-              </div>
+              <p class="titulo">
+                <span>Días habilitados para reportar actividades</span>
+              </p>
 
               <div class="col-md-6">
                 <div class="form-group">
@@ -413,7 +438,7 @@ export default class userCrud extends Vue {
     phone2: 0,
     phone3: 0, // contacto de emergencia
     birthday: "", //cumpleaños
-    adress: "", //dirección
+    address: "", //dirección
     position: "", //cargo en la empresa
     contact: "", //nombre contacto de emergencia
   };
@@ -427,12 +452,19 @@ export default class userCrud extends Vue {
     this.userList = (await controllers.getUser()) || [
       {
         userId: "39393939",
-        userName: "esteban rosa",
+        userName: "Esteban Rosa",
         rol: "Administrador",
         minDate: "2023/11/11",
         status: "Disponible",
         email: "estebanrosa@empresa.com",
         perEmail: "estebanrosa@personal.com",
+        phone1: 3103030303,
+        phone2: 3104040404,
+        phone3: 3105050505,
+        birthday: "1987/06/11",
+        address: "calle 1 # 10 - 10",
+        position: "Director",
+        contact: "Julian Rosa",
       },
     ];
   }
@@ -449,11 +481,18 @@ export default class userCrud extends Vue {
     this.opccrud = "Edición";
     this.newUser.userId = user.userId;
     this.newUser.minDate = new Date(user.minDate);
+    this.newUser.birthday = new Date(user.birthday);
     this.newUser.userName = user.userName;
     this.newUser.rol = user.rol;
     this.newUser.status = user.status;
     this.newUser.email = user.email;
     this.newUser.perEmail = user.perEmail;
+    this.newUser.contact = user.contact;
+    this.newUser.phone1 = user.phone1;
+    this.newUser.phone2 = user.phone2;
+    this.newUser.phone3 = user.phone3;
+    this.newUser.address = user.address;
+    this.newUser.position = user.position;
   }
   validateFields(fieldName: string, condition: boolean) {
     if (!this.validatedFields.includes(fieldName))
@@ -503,7 +542,7 @@ export default class userCrud extends Vue {
       phone2: 0,
       phone3: 0, // contacto de emergencia
       birthday: "", //cumpleaños
-      adress: "", //dirección
+      address: "", //dirección
       position: "", //cargo en la empresa
       contact: "", //nombre contacto de emergencia
     };
@@ -528,9 +567,24 @@ export default class userCrud extends Vue {
   width: 100%;
   text-align: left;
 }
-.titulo hr {
-  z-index: 1;
-  margin-bottom: 12px;
+.titulo {
   position: relative;
+  z-index: 1;
+}
+.titulo:before {
+  border-top: 2px solid yellow;
+  content: "";
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 95%;
+  z-index: -1;
+}
+.titulo span {
+  background: #fff;
+  padding: 0 15px;
 }
 </style>
