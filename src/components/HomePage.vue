@@ -103,6 +103,12 @@
             :particlesInit="particlesInit"
             :particlesLoaded="particlesLoaded"
             :options="{
+              zIndex: {
+                value: 99,
+              },
+              fullScreen: {
+                enable: false,
+              },
               fpsLimit: 60,
               particles: {
                 color: {
@@ -126,22 +132,19 @@
                 number: {
                   density: {
                     enable: true,
-                    area: 800,
+                    area: 500,
                   },
-                  value: 80,
+                  value: 100,
                 },
                 opacity: {
                   value: 0.1,
-                },
-                shape: {
-                  type: 'circle',
                 },
                 size: {
                   random: true,
                   value: 5,
                 },
               },
-              detectRetina: false,
+              detectRetina: true,
             }"
           />
         </div>
