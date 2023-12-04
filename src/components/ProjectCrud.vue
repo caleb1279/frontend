@@ -19,7 +19,7 @@
             <div class="modal-body">
               <div class="row">
                 <div class="total-row form-group">
-                  <label for="projectid">Número del proyecto:</label>
+                  <label for="projectid">Número</label>
                   <input
                     v-model="newProject.projectId"
                     class="form-control shadow-none"
@@ -146,7 +146,7 @@
                 <div class="total-row form-group has-validation">
                   <label for="status">Seleccione un estado:</label>
                   <select
-                    v-bind:value="newProject.status"
+                    v-model="newProject.status"
                     class="form-select shadow-none"
                     id="status"
                     :class="{
@@ -211,12 +211,12 @@
       <table class="table text-left">
         <thead>
           <tr>
-            <th scope="col">N&uacute;mero de proyecto</th>
+            <th scope="col">N&uacute;mero</th>
             <th scope="col">Nombre del proyecto</th>
             <th scope="col">Fecha laboratorio</th>
             <th scope="col">Fecha producci&oacute;n</th>
             <th scope="col">Fuente</th>
-            <th scope="col">Estado del proyecto</th>
+            <th scope="col">Estado</th>
             <th></th>
             <th></th>
           </tr>
