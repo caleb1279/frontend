@@ -1,6 +1,10 @@
 export type user = {
   email: string;
-  password: string;
+  userName: string;
+  userId: string | number;
+  rol: string;
+  status: string;
+  minDate: Date | string;
 };
 
 export type activity = {

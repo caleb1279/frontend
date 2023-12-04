@@ -1,7 +1,6 @@
 import router from "@/router";
 import axios from "axios";
 import { useStorage } from "vue3-storage";
-import type { user } from "@/registerDataType";
 
 const storage = useStorage();
 
@@ -30,7 +29,7 @@ request.interceptors.response.use(
 );
 
 export default {
-  Login(json: user) {
+  Login(json: { email: string; password: string }) {
     return request.post("/login", json);
   },
   async getActivities() {
@@ -46,6 +45,15 @@ export default {
     try {
       const data = await request.get("/projects/" + user);
       return data.data.projects;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  },
+  async getUser() {
+    try {
+      const data = await request.get("/users/");
+      return data.data.user;
     } catch (error) {
       console.log(error);
       return null;

@@ -224,7 +224,7 @@ figure {
   text-align: left;
 }
 
-.sidebar-item:hover {
+.sidebar-item:hover, .sidebar-item>*:hover {
   background-color: $hover-light-color;
 }
 /* end sidebar */

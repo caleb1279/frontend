@@ -51,12 +51,47 @@
               Actividades
             </li>
           </a>
-          <a href="" v-on:click.prevent="$router.push('/project')">
+          <a href="#" v-on:click.prevent="">
             <li class="sidebar-item">
-              <font-awesome-icon icon="list-check"></font-awesome-icon>
-              Proyectos
+              <button
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseWidthExample"
+                aria-expanded="false"
+                aria-controls="collapseWidthExample"
+              >
+                <font-awesome-icon icon="gears"></font-awesome-icon>
+                Administrar
+              </button>
             </li>
           </a>
+
+          <div style="min-height: 120px">
+            <div class="collapse" id="collapseWidthExample">
+              <div class="card">
+                <a
+                  href=""
+                  v-on:click.prevent="$router.push('/project')"
+                  id="admin"
+                >
+                  <li class="sidebar-item">
+                    <font-awesome-icon icon="list-check"></font-awesome-icon>
+                    Proyectos
+                  </li>
+                </a>
+                <a
+                  href=""
+                  v-on:click.prevent="$router.push('/admin')"
+                  id="admin"
+                >
+                  <li class="sidebar-item">
+                    <font-awesome-icon icon="users"></font-awesome-icon>
+                    Usuarios
+                  </li>
+                </a>
+              </div>
+            </div>
+          </div>
         </ul>
         <div class="logout">
           <ul>
@@ -161,5 +196,12 @@ export default class ErrorNotFound extends Vue {
 
 .logout * {
   margin: 0 auto;
+}
+.dropdown-menu.show {
+  display: contents;
+}
+#admin {
+  padding: 1px 3px;
+  text-align: left;
 }
 </style>

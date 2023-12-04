@@ -24,6 +24,7 @@ import {
   faTrash,
   faPlus,
   faUsers,
+  faGears,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "vue3-simple-typeahead/dist/vue3-simple-typeahead.css";
@@ -43,7 +44,8 @@ library.add(
   faPen,
   faTrash,
   faPlus,
-  faUsers
+  faUsers,
+  faGears
 );
 
 app.use(BootstrapVue3);

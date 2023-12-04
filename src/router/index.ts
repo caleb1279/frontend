@@ -1,12 +1,14 @@
+//ruta
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 
+//componentes
 import LoginForm from "@/components/LoginForm.vue";
 import ErrorNotFound from "@/components/ErrorNotFound.vue";
 import HomePage from "@/components/HomePage.vue";
 import ReportCrud from "@/components/ReportCrud.vue";
 import ProjectCrud from "@/components/ProjectCrud.vue";
-import DashboardPage from "@/components/DashboardPage.vue";
-
+import AdminProfile from "@/components/AdminProfile.vue";
+//sesiones
 import session from "@/controllers/SessionController";
 
 const authExceptions: Array<string> = ["ErrorNotFound", "Login"];
@@ -31,6 +33,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/project",
         name: "ProjectCrud",
         component: ProjectCrud,
+      },
+      {
+        path: "/admin",
+        name: "AdminProfile",
+        component: AdminProfile,
       },
     ],
   },
