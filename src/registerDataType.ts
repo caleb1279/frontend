@@ -12,8 +12,9 @@ export type user = {
   phone3: number;
   contact: string; //nombre contacto de emergencia
   birthday: Date | string; //cumpleaños
-  address: string; //dirección
+  adress: string; //dirección
   position: string; //cargo en la empresa
+  profileimage: string; // imagen de perfil
 };
 
 export type activity = {

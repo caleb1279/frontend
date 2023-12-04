@@ -26,7 +26,7 @@
           <a class="navbar-brand">
             <img
               class="avatar-rounded"
-              src="/img/avatar.jpg"
+              :src="avatarimage"
               width="40"
               height="40"
             />
@@ -51,18 +51,17 @@
               Actividades
             </li>
           </a>
-          <a href="#" v-on:click.prevent="">
+          <a
+            href="#"
+            v-on:click.prevent=""
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseWidthExample"
+            aria-expanded="false"
+            aria-controls="collapseWidthExample"
+          >
             <li class="sidebar-item">
-              <button
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseWidthExample"
-                aria-expanded="false"
-                aria-controls="collapseWidthExample"
-              >
-                <font-awesome-icon icon="gears"></font-awesome-icon>
-                Administrar
-              </button>
+              <font-awesome-icon icon="gears"></font-awesome-icon>
+              Administrar
             </li>
           </a>
 
@@ -72,21 +71,11 @@
                 <a
                   href=""
                   v-on:click.prevent="$router.push('/project')"
-                  id="admin"
+                  id="project"
                 >
                   <li class="sidebar-item">
                     <font-awesome-icon icon="list-check"></font-awesome-icon>
                     Proyectos
-                  </li>
-                </a>
-                <a
-                  href=""
-                  v-on:click.prevent="$router.push('/admin')"
-                  id="admin"
-                >
-                  <li class="sidebar-item">
-                    <font-awesome-icon icon="users"></font-awesome-icon>
-                    Usuarios
                   </li>
                 </a>
               </div>
@@ -114,6 +103,12 @@
             :particlesInit="particlesInit"
             :particlesLoaded="particlesLoaded"
             :options="{
+              zIndex: {
+                value: 99,
+              },
+              fullScreen: {
+                enable: false,
+              },
               fpsLimit: 60,
               particles: {
                 color: {
@@ -137,22 +132,19 @@
                 number: {
                   density: {
                     enable: true,
-                    area: 800,
+                    area: 500,
                   },
-                  value: 80,
+                  value: 100,
                 },
                 opacity: {
                   value: 0.1,
                 },
-                shape: {
-                  type: 'circle',
-                },
                 size: {
-                  random: false,
+                  random: true,
                   value: 5,
                 },
               },
-              detectRetina: false,
+              detectRetina: true,
             }"
           />
         </div>
@@ -170,17 +162,23 @@ import { Engine } from "tsparticles-engine";
 
 export default class ErrorNotFound extends Vue {
   logout = session.Logout;
+  avatarimage!: string;
 
   particlesInit = async (engine: Engine) => {
     await loadFull(engine);
   };
 
-  particlesLoaded = async (container: any) => {
+  particlesLoaded = async (container: unknown) => {
     console.log("Particles container loaded", container);
   };
 
+  beforeMount() {
+    this.avatarimage = session.getUserData().profileimage;
+  }
+
   data() {
     return {
+      avatarimage: this.avatarimage,
       particlesInit: this.particlesInit,
       particlesLoaded: this.particlesLoaded,
     };
@@ -197,11 +195,18 @@ export default class ErrorNotFound extends Vue {
 .logout * {
   margin: 0 auto;
 }
+
 .dropdown-menu.show {
   display: contents;
 }
+
 #admin {
   padding: 1px 3px;
   text-align: left;
+}
+
+#collapseWidthExample > * {
+  background-color: inherit;
+  border: none;
 }
 </style>

@@ -84,8 +84,8 @@
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import session from "@/controllers/SessionController";
-/* import RequestController from "@/controllers/RequestController";
-import { AxiosError, AxiosResponse } from "axios"; */
+import RequestController from "@/controllers/RequestController";
+import { AxiosError, AxiosResponse } from "axios";
 
 export default class LoginForm extends Vue {
   msg = "";
@@ -100,8 +100,7 @@ export default class LoginForm extends Vue {
   }
 
   login() {
-    session.Login("auth-1234");
-    /*RequestController.Login({ email: this.uname, password: this.passwd })
+    RequestController.Login({ email: this.uname, password: this.passwd })
       .then((data: AxiosResponse) => {
         if (data.data.status === "200") {
           this.$storage.setStorageSync(
@@ -116,7 +115,26 @@ export default class LoginForm extends Vue {
       })
       .catch((error: AxiosError) => {
         this.msg = error.message;
-      }); */
+        session.Login("auth-123", {
+          userId: 1,
+          email: "johndoe@colnexsi.com.co",
+          perEmail: "usco.doe@example.com",
+          userName: "John Doe",
+          rol: "Administrador",
+          status: "Disponible",
+          minDate: new Date(),
+          initialDate: new Date(),
+          phone1: 123456789,
+          phone2: 79716834,
+          phone3: 317247222,
+          contact: "Maria Teresa (Madre)",
+          birthday: new Date("2003-05-08"),
+          adress: "Velasquez St. No 80, Madrid",
+          position: "OPs Developer",
+          profileimage:
+            "https://i.pinimg.com/550x/8d/e7/fa/8de7fa2af12330350613ede63532c4fb.jpg",
+        });
+      });
   }
 
   viewPassword() {
