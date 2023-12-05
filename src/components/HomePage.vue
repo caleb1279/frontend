@@ -105,7 +105,7 @@
           </ul>
         </div>
       </div>
-
+      <!--panel de particulas-->
       <div class="container-dock">
         <div id="particles-js">
           <vue-particles
@@ -206,17 +206,18 @@ export default class ErrorNotFound extends Vue {
   margin: 0 auto;
 }
 
-.dropdown-menu.show {
+.card .dropdown-menu.show {
   display: contents;
 }
 
 #admin {
-  padding: 1px 3px;
+  padding: 1px 0px;
   text-align: left;
 }
 
 #collapseWidthExample > * {
   background-color: inherit;
   border: none;
+  padding-left: 20px;
 }
 </style>
