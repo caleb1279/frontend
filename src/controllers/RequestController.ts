@@ -6,7 +6,7 @@ import type { report } from "@/registerDataType";
 const storage = useStorage();
 
 const request = axios.create({
-  baseURL: "https://localhost:8080",
+  baseURL: "http://localhost:8080",
   withCredentials: false,
   headers: {
     Accept: "application/json",
@@ -80,6 +80,7 @@ export default {
   },
   async sendReport(report: report) {
     try {
+      report.date = report.date.toISOString().substring(0, 10);
       console.log(report);
       const data = await request.post("/reports", report);
       console.log(data);
