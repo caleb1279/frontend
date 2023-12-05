@@ -40,4 +40,5 @@ export type report = {
   title: string;
   activity: activity;
   project: project;
+  user: user;
 };

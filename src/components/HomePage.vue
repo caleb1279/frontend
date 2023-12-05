@@ -82,18 +82,6 @@
             </div>
           </div>
         </ul>
-        <div class="logout">
-          <ul>
-            <a href="" v-on:click.prevent="logout()">
-              <li class="sidebar-item">
-                <font-awesome-icon
-                  icon="right-from-bracket"
-                ></font-awesome-icon>
-                Cerrar sesión
-              </li>
-            </a>
-          </ul>
-        </div>
       </div>
 
       <div class="container-dock">
@@ -107,7 +95,7 @@
                 value: 99,
               },
               fullScreen: {
-                enable: false,
+                enable: true,
               },
               fpsLimit: 60,
               particles: {
@@ -132,7 +120,7 @@
                 number: {
                   density: {
                     enable: true,
-                    area: 500,
+                    area: 900,
                   },
                   value: 100,
                 },
@@ -187,16 +175,7 @@ export default class ErrorNotFound extends Vue {
 </script>
 
 <style scoped lang="scss">
-.logout {
-  height: fit-content;
-  padding: 40px 0;
-}
-
-.logout * {
-  margin: 0 auto;
-}
-
-.dropdown-menu.show {
+.card .dropdown-menu.show {
   display: contents;
 }
 
@@ -208,5 +187,8 @@ export default class ErrorNotFound extends Vue {
 #collapseWidthExample > * {
   background-color: inherit;
   border: none;
+  a {
+    padding-left: 20px;
+  }
 }
 </style>

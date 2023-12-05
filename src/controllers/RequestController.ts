@@ -1,11 +1,12 @@
 import router from "@/router";
 import axios from "axios";
 import { useStorage } from "vue3-storage";
+import type { report } from "@/registerDataType";
 
 const storage = useStorage();
 
 const request = axios.create({
-  baseURL: "https://c025-186-84-89-185.ngrok-free.app",
+  baseURL: "https://localhost:8080",
   withCredentials: false,
   headers: {
     Accept: "application/json",
@@ -67,11 +68,22 @@ export default {
         "/reports/" +
           user +
           "/" +
-          firstDay.toISOString() +
+          firstDay.toISOString().substring(0, 10) +
           "/" +
-          lastDay.toISOString()
+          lastDay.toISOString().substring(0, 10)
       );
       return data.data.reports;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  },
+  async sendReport(report: report) {
+    try {
+      console.log(report);
+      const data = await request.post("/writereport", report);
+      console.log(data);
+      return data.status;
     } catch (error) {
       console.log(error);
       return null;

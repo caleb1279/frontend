@@ -205,8 +205,12 @@
           <tr v-for="project in projectlist" :key="project.id">
             <td>{{ project.projectId }}</td>
             <td>{{ project.name }}</td>
-            <td>{{ project.labDate }}</td>
-            <td>{{ project.proDate }}</td>
+            <td>
+              {{ new Date(project.labDate).toISOString().substring(0, 10) }}
+            </td>
+            <td>
+              {{ new Date(project.proDate).toISOString().substring(0, 10) }}
+            </td>
             <td>{{ project.source }}</td>
             <td>{{ project.status ? "Activo" : "Inactivo" }}</td>
             <td>
@@ -260,7 +264,7 @@ export default class ProjectCrud extends Vue {
   opccrud!: string;
 
   async beforeMount() {
-    this.projectlist = (await controllers.getProjects(1)) || [
+    this.projectlist = await controllers.getProjects(1); /*  || [
       {
         id: 2,
         labDate: "2023/10/10",
@@ -270,7 +274,7 @@ export default class ProjectCrud extends Vue {
         source: "fmca046390",
         status: true,
       },
-    ];
+    ]; */
   }
 
   data() {
@@ -346,6 +350,7 @@ export default class ProjectCrud extends Vue {
 .table-contain {
   overflow: auto;
   max-height: 380px;
+  padding: 16px;
 }
 
 .right-search {

@@ -8,7 +8,7 @@ const storage = useStorage();
 
 export default {
   Login(token: string, data: user) {
-    storage.setStorageSync("Authorization", token, 4000);
+    storage.setStorageSync("Authorization", token);
     storage.setStorageSync("userdata", data);
     router.push("/");
   },
