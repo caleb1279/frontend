@@ -120,7 +120,10 @@ export default class LoginForm extends Vue {
           email: "johndoe@colnexsi.com.co",
           perEmail: "usco.doe@example.com",
           userName: "John Doe",
-          rol: "Administrador",
+          rol: {
+            id: 1,
+            rolName: "User",
+          },
           status: "Disponible",
           minDate: new Date(),
           initialDate: new Date(),

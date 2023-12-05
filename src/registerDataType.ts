@@ -3,7 +3,7 @@ export type user = {
   email: string; //correo empresarial
   perEmail: string; // correo personal
   userName: string;
-  rol: string;
+  rol: rol;
   status: string;
   minDate: Date | string; // fecha minima para reportar actividades
   initialDate: Date | string; // fecha de ingreso
@@ -42,3 +42,8 @@ export type report = {
   project: project;
   user: user;
 };
+
+export type rol {
+  id: string | number;
+  rolName: string;
+}

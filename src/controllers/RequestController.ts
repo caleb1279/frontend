@@ -81,7 +81,7 @@ export default {
   async sendReport(report: report) {
     try {
       console.log(report);
-      const data = await request.post("/writereport", report);
+      const data = await request.post("/reports", report);
       console.log(data);
       return data.status;
     } catch (error) {
