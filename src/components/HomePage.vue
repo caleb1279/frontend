@@ -22,15 +22,45 @@
             <li class="dropdown-item">No tienes notificaciones</li>
           </ul>
         </div>
-        <div class="m-0">
-          <a class="navbar-brand">
-            <img
-              class="avatar-rounded"
-              :src="avatarimage"
-              width="40"
-              height="40"
-            />
-          </a>
+        <div class="m-0 usuario">
+          <div class="dropdown p-3">
+            <a
+              class="nav-link dropdown-toggle"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <img
+                class="avatar-rounded"
+                :src="avatarimage"
+                width="40"
+                height="40"
+              />
+            </a>
+            <ul class="dropdown-menu dropdown-menu-lg-end usuario">
+              <li>{{ user.userName }} {{ user.userLastN }}</li>
+              <li>{{ user.email }}</li>
+              <a
+                href=""
+                v-on:click.prevent="$router.push('/profile')"
+                id="profile"
+              >
+                <li class="sidebar-item">
+                  <font-awesome-icon icon="home"></font-awesome-icon>
+                  Perfil
+                </li>
+              </a>
+
+              <a href="" v-on:click.prevent="logout()">
+                <li class="sidebar-item">
+                  <font-awesome-icon
+                    icon="right-from-bracket"
+                  ></font-awesome-icon>
+                  Cerrar sesión
+                </li>
+              </a>
+            </ul>
+          </div>
         </div>
       </div>
     </nav>
@@ -92,18 +122,6 @@
             </div>
           </div>
         </ul>
-        <div class="logout">
-          <ul>
-            <a href="" v-on:click.prevent="logout()">
-              <li class="sidebar-item">
-                <font-awesome-icon
-                  icon="right-from-bracket"
-                ></font-awesome-icon>
-                Cerrar sesión
-              </li>
-            </a>
-          </ul>
-        </div>
       </div>
       <!--panel de particulas-->
       <div class="container-dock">
@@ -169,10 +187,31 @@ import { Vue } from "vue-class-component";
 import session from "@/controllers/SessionController";
 import { loadFull } from "tsparticles";
 import { Engine } from "tsparticles-engine";
+import type { user } from "@/registerDataType";
 
 export default class ErrorNotFound extends Vue {
   logout = session.Logout;
   avatarimage!: string;
+  newUser: user = {
+    userId: NaN,
+    userName: "",
+    userLastN: "", //apellidos
+    email: "", //correo empresarial
+    perEmail: "", //correo personal
+    minDate: "", // fecha minima para reportar actividades
+    rol: "",
+    status: "",
+    initialDate: "", // fecha de ingreso
+    endDate: "", //fecha de terminación de contrato
+    phone1: "",
+    phone2: "",
+    phone3: "", // contacto de emergencia
+    birthday: "", //cumpleaños
+    address: "", //dirección
+    position: "", //cargo en la empresa
+    contact: "", //nombre contacto de emergencia
+    profileimage: "",
+  };
 
   particlesInit = async (engine: Engine) => {
     await loadFull(engine);
@@ -191,7 +230,12 @@ export default class ErrorNotFound extends Vue {
       avatarimage: this.avatarimage,
       particlesInit: this.particlesInit,
       particlesLoaded: this.particlesLoaded,
+      user: this.getUserData(),
     };
+  }
+
+  getUserData() {
+    return session.getUserData();
   }
 }
 </script>
@@ -219,5 +263,9 @@ export default class ErrorNotFound extends Vue {
   background-color: inherit;
   border: none;
   padding-left: 20px;
+}
+ul li {
+  text-align: center;
+  padding-top: 8px;
 }
 </style>

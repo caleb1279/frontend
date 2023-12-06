@@ -9,6 +9,7 @@ import ReportCrud from "@/components/ReportCrud.vue";
 import ProjectCrud from "@/components/ProjectCrud.vue";
 import AdminProfile from "@/components/AdminProfile.vue";
 import DashboardPage from "@/components/DashboardPage.vue";
+import Profile from "@/components/Profile.vue";
 //sesiones
 import session from "@/controllers/SessionController";
 
@@ -39,6 +40,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/admin",
         name: "AdminProfile",
         component: AdminProfile,
+      },
+      {
+        path: "/Profile",
+        name: "Profile",
+        component: Profile,
       },
     ],
   },

@@ -473,7 +473,7 @@
             class="avatar-rounded"
             with="50"
             height="50"
-            :src="getImage(userList.indexOf(user))"
+            :src="getImage(user)"
           />
         </td>
         <td>{{ user.userName }} {{ user.userLastN }}</td>
@@ -598,12 +598,14 @@ export default class userCrud extends Vue {
       maxDate: new Date(),
     };
   }
-  getImage(user: number) {
-    let image = this.userList[user].profileimage;
-    console.log(image);
-    if (!image) return "";
-    else {
-      return image;
+  getImage(user: user): string {
+    let userimage = this.userList.filter((userin) => {
+      if (user === userin) return user;
+    });
+    if (userimage) {
+      return userimage[0].profileimage;
+    } else {
+      return "";
     }
   }
 
