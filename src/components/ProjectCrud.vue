@@ -238,10 +238,11 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-import controllers from "@/controllers/RequestController";
 import type { project } from "@/registerDataType";
 
 export default class ProjectCrud extends Vue {
+  projectlist: project[] = [];
+
   newProject: project = {
     id: NaN,
     labDate: "",
@@ -251,7 +252,6 @@ export default class ProjectCrud extends Vue {
     source: "",
     status: null,
   };
-  projectlist!: project[];
   validFields: string[] = [];
   validatedFields: string[] = [];
   requiredFields: string[] = [
@@ -263,27 +263,11 @@ export default class ProjectCrud extends Vue {
   ]; // Lista de campos requeridos
   opccrud!: string;
 
-  async beforeMount() {
-    this.projectlist = await controllers.getProjects(1); /*  || [
-      {
-        id: 2,
-        labDate: "2023/10/10",
-        name: "ampliacion cargos fijos",
-        proDate: "2023/10/10",
-        projectId: "proy0245",
-        source: "fmca046390",
-        status: true,
-      },
-    ]; */
-  }
-
-  data() {
-    return {
-      projectlist: this.projectlist,
-      opccrud: this.opccrud,
-      newProject: this.newProject,
-      validFields: this.validFields,
-    };
+  beforeMount() {
+    this.$watch("projectlist", (newList: project[]) => {
+      this.projectlist = newList;
+    });
+    console.log(this.projectlist);
   }
 
   editProject(project: project) {
@@ -345,26 +329,3 @@ export default class ProjectCrud extends Vue {
   }
 }
 </script>
-
-<style scoped lang="scss">
-.table-contain {
-  overflow: auto;
-  max-height: 380px;
-  padding: 16px;
-}
-
-.right-search {
-  width: 500px;
-  margin: 25px;
-}
-
-.left-options {
-  margin: auto 25px;
-  width: 100%;
-  text-align: left;
-}
-.text-left {
-  // cdc: para alinear el texto a la izquierda
-  text-align: left;
-}
-</style>

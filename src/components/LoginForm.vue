@@ -95,18 +95,11 @@ export default class LoginForm extends Vue {
   validFields: string[] = [];
   validatedFields: string[] = [];
 
-  data() {
-    return { validFields: this.validFields };
-  }
-
   login() {
     RequestController.Login({ email: this.uname, password: this.passwd })
       .then((data: AxiosResponse) => {
         if (data.data.status === "200") {
-          this.$storage.setStorageSync(
-            "Authorization",
-            data.data.Authorization
-          );
+          session.Login(data.data.Authorization, data.data.user);
           this.$router.push("/");
         } else {
           this.msg = data.data.message;
@@ -114,30 +107,32 @@ export default class LoginForm extends Vue {
         console.log(data);
       })
       .catch((error: AxiosError) => {
-        this.msg = error.message;
-        session.Login("auth-123", {
-          userId: 1,
-          email: "johndoe@colnexsi.com.co",
-          perEmail: "usco.doe@example.com",
-          userName: "John Doe",
-          rol: {
-            id: 1,
-            rolName: "User",
-          },
-          status: "Disponible",
-          minDate: new Date(),
-          initialDate: new Date(),
-          phone1: 123456789,
-          phone2: 79716834,
-          phone3: 317247222,
-          contact: "Maria Teresa (Madre)",
-          birthday: new Date("2003-05-08"),
-          adress: "Velasquez St. No 80, Madrid",
-          position: "OPs Developer",
-          profileimage:
-            "https://i.pinimg.com/550x/8d/e7/fa/8de7fa2af12330350613ede63532c4fb.jpg",
-        });
+        console.log(error);
+        this.msg = "Ha ocurrido un error al intentar iniciar sesión";
       });
+
+    session.Login("auth-123", {
+      userId: 1,
+      email: "johndoe@colnexsi.com.co",
+      perEmail: "usco.doe@example.com",
+      userName: "John Doe",
+      rol: {
+        id: 1,
+        rolName: "User",
+      },
+      status: "Disponible",
+      minDate: new Date(),
+      initialDate: new Date(),
+      phone1: 123456789,
+      phone2: 79716834,
+      phone3: 317247222,
+      contact: "Maria Teresa (Madre)",
+      birthday: new Date("2003-05-08"),
+      adress: "Velasquez St. No 80, Madrid",
+      position: "OPs Developer",
+      profileimage:
+        "https://i.pinimg.com/550x/8d/e7/fa/8de7fa2af12330350613ede63532c4fb.jpg",
+    });
   }
 
   viewPassword() {

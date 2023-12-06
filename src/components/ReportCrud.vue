@@ -70,6 +70,8 @@
                           !validFields.includes('date') &&
                           validatedFields.includes('date'), // cdc otro array para saber si lo ha validado
                       }"
+                      :upperLimit="new Date()"
+                      :lowerLimit="new Date(newReport.user.minDate)"
                       @blur="validateFields('date', newReport.date !== null)"
                     ></date-picker>
                   </div>
@@ -99,22 +101,24 @@
                 <div class="total-row form-group">
                   <label for="project">Nombre del proyecto:</label>
                   <vue3-simple-typeahead
-                    v-model="nomproject"
+                    v-model="newReport.project.name"
                     @selectItem="(item: string) => {
-                      nomproject = item;
+                      newReport.project.name = item;
                     }
                     "
                     class="form-control shadow-none"
                     :minInputLength="1"
                     id="project"
-                    :items="projectlist"
+                    :items="projects"
                     :class="{
                       'is-valid': validFields.includes('project'),
                       'is-invalid':
                         !validFields.includes('project') &&
                         validatedFields.includes('project'), // cdc otro array para saber si lo ha validado
                     }"
-                    @input="validateFields('project', nomproject !== '')"
+                    @input="
+                      validateFields('project', newReport.project.name !== '')
+                    "
                   ></vue3-simple-typeahead>
                 </div>
               </div>
@@ -138,12 +142,12 @@
                       )
                     "
                   >
-                    <option
+                    <!-- <option
                       v-for="activity in activitylist"
                       v-bind:key="activity.id"
                     >
                       {{ activity.name }}
-                    </option>
+                    </option> -->
                   </select>
                 </div>
               </div>
@@ -241,12 +245,6 @@
               >Previous</a
             >
           </li>
-          <!--  <li class="page-item">
-            <a class="page-link" href="#" v-on:click.prevent="">1</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#" v-on:click.prevent="">2</a>
-          </li-->
           <li class="page-item disabled">
             <a class="page-link">
               {{
@@ -279,7 +277,6 @@ import type { activity, project, report } from "@/registerDataType";
 import { Vue } from "vue-class-component";
 
 export default class ReportCrud extends Vue {
-  actualDate = new Date();
   newReport: report = {
     id: 0,
     date: "",
@@ -301,11 +298,15 @@ export default class ReportCrud extends Vue {
     },
     user: session.getUserData(),
   };
-  nomproject = "";
+  opccrud!: string;
+  projects!: string[];
+
+  actualDate!: Date;
+
   activitylist!: activity[];
   reportlist!: report[];
-  projectlist!: string[];
-  projects!: project[];
+  projectlist!: project[];
+
   validFields: string[] = [];
   validatedFields: string[] = []; // cdc: nuevo arreglo para saber si ha sido validado un campo
   requiredFields: string[] = [
@@ -316,56 +317,16 @@ export default class ReportCrud extends Vue {
     "project",
     "activity",
   ];
-  opccrud!: string;
 
-  async beforeMount() {
-    this.activitylist = await controllers.getActivities(); /* || [
-      // cdc: datos de prueba aqui: actividades o stages de prueba
-      {
-        id: 1,
-        name: "Desarrollo",
-      },
-      {
-        id: 2,
-        name: "Pruebas",
-      },
-    ]; */
-    this.projects = await controllers.getProjects(1); /* || [
-      {
-        id: 2,
-        labDate: new Date("2023-10-10"),
-        name: "ampliacion cargos fijos",
-        proDate: new Date("2023-10-10"),
-        projectId: "proy0245",
-        source: "fmca046390",
-        status: true,
-      },
-    ]; */
-    this.projectlist = this.projects.map((item) => item.name);
-    this.reportlist = await controllers.getReports(1, this.actualDate); /*  || [
-      {
-        id: 1,
-        title: "SIIL05S",
-        detail: "Se crea archivo para extensión de cargos fijos idk.",
-        date: new Date(),
-        hours: 1,
-        project: projects[0],
-        activity: this.activitylist[0],
-      },
-    ]; */
+  onMount() {
+    const date: string = session.getLocals("actualDate") || "";
+    this.actualDate = new Date(date);
+    console.log(this.actualDate);
+    console.log(this.$parent);
   }
 
-  data() {
-    return {
-      activitylist: this.activitylist,
-      opccrud: this.opccrud,
-      reportlist: this.reportlist,
-      newReport: this.newReport,
-      validFields: this.validFields,
-      projectlist: this.projectlist,
-      nomproject: this.nomproject,
-      actualDate: this.actualDate,
-    };
+  async beforeMount() {
+    //this.projects = this.projectlist.map((item) => item.name) || [];
   }
 
   editReport(report: report) {
@@ -375,18 +336,16 @@ export default class ReportCrud extends Vue {
     this.newReport.detail = report.detail;
     this.newReport.hours = report.hours;
     this.newReport.project = report.project;
-    this.nomproject = report.project.name;
     this.newReport.date = report.date;
     this.newReport.activity = report.activity;
   }
 
   async submitForm() {
-    this.newReport.project.name = this.nomproject;
     this.validateFields("title", this.newReport.title.length > 0);
     this.validateFields("detail", this.newReport.detail.length > 0);
     this.validateFields("date", this.newReport.date !== "");
     this.validateFields("hours", this.newReport.hours !== 0);
-    this.validateFields("project", this.nomproject !== "");
+    this.validateFields("project", this.newReport.project.name !== "");
     this.validateFields("activity", this.newReport.activity.name.length > 0);
     // Validar que todos los campos requeridos estén diligenciados
     if (
@@ -397,12 +356,13 @@ export default class ReportCrud extends Vue {
       let activity = this.activitylist.filter((name) => {
         if (name.name === this.newReport.activity.name) return name;
       });
-      let project = this.projects.filter((name) => {
+      let project = this.projectlist.filter((name) => {
         if (name.name === this.newReport.project.name) return name;
       });
       this.newReport.activity = activity[0];
       this.newReport.project = project[0];
       console.log(await controllers.sendReport(this.newReport));
+      this.clearModal();
     } else {
       // Muestra un mensaje de error o realiza alguna acción si no se han diligenciado todos los campos.
     }
@@ -433,7 +393,6 @@ export default class ReportCrud extends Vue {
   clearModal() {
     // cdc: para limpiar los campos y arreglos al cancelar
     this.validatedFields = [];
-    this.nomproject = "";
     this.validFields = [];
     this.newReport = {
       id: 0,
@@ -459,27 +418,3 @@ export default class ReportCrud extends Vue {
   }
 }
 </script>
-
-<style scoped lang="scss">
-.table-contain {
-  overflow: auto;
-  max-height: 380px;
-  padding: 16px;
-}
-
-.right-search {
-  width: 500px;
-  margin: 25px;
-}
-
-.left-options {
-  margin: auto 25px;
-  width: 100%;
-  text-align: left;
-}
-
-.text-left {
-  // cdc: para alinear el texto a la izquierda
-  text-align: left;
-}
-</style>

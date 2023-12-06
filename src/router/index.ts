@@ -8,6 +8,7 @@ import HomePage from "@/components/HomePage.vue";
 import ReportCrud from "@/components/ReportCrud.vue";
 import ProjectCrud from "@/components/ProjectCrud.vue";
 import DashboardPage from "@/components/DashboardPage.vue";
+
 //sesiones
 import session from "@/controllers/SessionController";
 

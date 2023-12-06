@@ -6,7 +6,7 @@ import type { report } from "@/registerDataType";
 const storage = useStorage();
 
 const request = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "https://41ac-186-84-89-185.ngrok-free.app",
   withCredentials: false,
   headers: {
     Accept: "application/json",
@@ -80,9 +80,9 @@ export default {
   },
   async sendReport(report: report) {
     try {
-      report.date = report.date.toISOString().substring(0, 10);
+      report.date = new Date(report.date).toISOString().substring(0, 10);
       console.log(report);
-      const data = await request.post("/reports", report);
+      const data = await request.post("/writereport", report);
       console.log(data);
       return data.status;
     } catch (error) {

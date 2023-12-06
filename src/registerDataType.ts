@@ -1,3 +1,8 @@
+export type rol = {
+  id: string | number;
+  rolName: string;
+};
+
 export type user = {
   userId: string | number;
   email: string; //correo empresarial
@@ -42,8 +47,3 @@ export type report = {
   project: project;
   user: user;
 };
-
-export type rol {
-  id: string | number;
-  rolName: string;
-}

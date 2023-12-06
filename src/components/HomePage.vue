@@ -145,31 +145,68 @@
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import session from "@/controllers/SessionController";
+import request from "@/controllers/RequestController";
 import { loadFull } from "tsparticles";
-import { Engine } from "tsparticles-engine";
+import { Engine, Container } from "tsparticles-engine";
+import type { activity, report, project } from "@/registerDataType";
 
-export default class ErrorNotFound extends Vue {
+export default class HomePage extends Vue {
+  user = session.getUserData();
+
+  actualDate = new Date();
+
   logout = session.Logout;
-  avatarimage!: string;
+  particlesContainer!: Container;
+  avatarimage = this.user.profileimage;
 
   particlesInit = async (engine: Engine) => {
     await loadFull(engine);
   };
 
-  particlesLoaded = async (container: unknown) => {
-    console.log("Particles container loaded", container);
+  particlesLoaded = async (container: Container) => {
+    this.particlesContainer = container;
   };
 
-  beforeMount() {
-    this.avatarimage = session.getUserData().profileimage;
+  activitylist!: activity[];
+  reportlist!: report[];
+  projectlist!: project[];
+
+  mounted() {
+    this.$emit("projectlist", this.projectlist);
   }
 
-  data() {
-    return {
-      avatarimage: this.avatarimage,
-      particlesInit: this.particlesInit,
-      particlesLoaded: this.particlesLoaded,
-    };
+  async beforeMount() {
+    let reports: report[] = await request.getReports(
+      this.user.id,
+      this.actualDate
+    );
+
+    let projects: project[] = await request.getProjects(this.user.id);
+
+    let activities: activity[] = await request.getActivities();
+
+    this.reportlist = reports !== null ? reports : [];
+    this.activitylist = activities !== null ? activities : [];
+    this.projectlist =
+      projects !== null
+        ? projects
+        : [
+            {
+              id: 0,
+              projectId: "PROY0442",
+              name: "Ampliacion de cargos fijos",
+              labDate: new Date(),
+              proDate: new Date(),
+              source: "FMCA046390",
+              status: true,
+            },
+          ];
+  }
+
+  beforeUnmount() {
+    if (this.particlesContainer) {
+      this.particlesContainer.destroy();
+    }
   }
 }
 </script>
