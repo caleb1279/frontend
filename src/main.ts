@@ -61,7 +61,7 @@ library.add(
 app.use(BootstrapVue3);
 app.use(Axios, axios);
 app.use(Particles);
-app.use(VueCookies, { expireTimes: "1H", secure: true });
+app.use(VueCookies);
 app.use(VueApexCharts);
 app.use(Vue3Storage, { namespace: "pro_", storage: StorageType.Local });
 app.component("font-awesome-icon", FontAwesomeIcon);

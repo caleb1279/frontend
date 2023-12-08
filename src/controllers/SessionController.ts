@@ -9,17 +9,20 @@ globalCookiesConfig({
 });
 
 const storage = useStorage();
-const cookies = useCookies(); // cookies.get(key) | cookies.set(key, value)
+const { cookies } = useCookies(); // cookies.get(key) | cookies.set(key, value)
 
 export default {
   Login(token: string, data: user) {
     storage.setStorageSync("Authorization", token);
-    storage.setStorageSync("userdata", data);
+    storage.setStorageSync("userdata", JSON.stringify(data));
     router.push("/");
   },
   Logout() {
     storage.removeStorageSync("Authorization");
     storage.removeStorageSync("userdata");
+    cookies.remove("projectlist");
+    cookies.remove("reportlist");
+    cookies.remove("activitylist");
     router.push("/login");
   },
   ValidateSesison() {
@@ -30,15 +33,16 @@ export default {
     }
   },
   getUserData() {
-    return storage.getStorageSync("userdata");
+    const data = storage.getStorageSync("userdata");
+    return JSON.parse(data);
   },
 
-  setLocals(key: string, value: string) {
-    if (value === "" || key === "") {
+  setLocals(key: string, value: any) {
+    if (value === null || value === undefined) {
       return;
     }
 
-    cookies.cookies.set(key, value);
+    cookies.set(key, JSON.stringify(value));
   },
 
   getLocals(key: string) {
@@ -47,8 +51,8 @@ export default {
     }
 
     try {
-      const data = cookies.cookies.get(key);
-      return data;
+      const data = cookies.get(key);
+      return JSON.parse(data);
     } catch {
       return null;
     }

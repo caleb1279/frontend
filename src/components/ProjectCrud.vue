@@ -238,6 +238,7 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
+import session from "@/controllers/SessionController";
 import type { project } from "@/registerDataType";
 
 export default class ProjectCrud extends Vue {
@@ -264,10 +265,8 @@ export default class ProjectCrud extends Vue {
   opccrud!: string;
 
   beforeMount() {
-    this.$watch("projectlist", (newList: project[]) => {
-      this.projectlist = newList;
-    });
-    console.log(this.projectlist);
+    const projects = session.getLocals("projectlist");
+    this.projectlist = projects === null ? [] : projects;
   }
 
   editProject(project: project) {

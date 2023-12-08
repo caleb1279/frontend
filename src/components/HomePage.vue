@@ -153,8 +153,6 @@ import type { activity, report, project } from "@/registerDataType";
 export default class HomePage extends Vue {
   user = session.getUserData();
 
-  actualDate = new Date();
-
   logout = session.Logout;
   particlesContainer!: Container;
   avatarimage = this.user.profileimage;
@@ -171,14 +169,10 @@ export default class HomePage extends Vue {
   reportlist!: report[];
   projectlist!: project[];
 
-  mounted() {
-    this.$emit("projectlist", this.projectlist);
-  }
-
   async beforeMount() {
     let reports: report[] = await request.getReports(
       this.user.id,
-      this.actualDate
+      new Date()
     );
 
     let projects: project[] = await request.getProjects(this.user.id);
@@ -201,6 +195,10 @@ export default class HomePage extends Vue {
               status: true,
             },
           ];
+          
+    session.setLocals("projectlist", this.projectlist);
+    session.setLocals("reportlist", this.reportlist);
+    session.setLocals("activitylist", this.activitylist);
   }
 
   beforeUnmount() {
