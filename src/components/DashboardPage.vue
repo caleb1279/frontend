@@ -4,19 +4,35 @@
   </div>
   <div class="boxes">
     <div class="box">
-      <font-awesome-icon icon="timeline"></font-awesome-icon>
-      <span class="text">Horas trabajadas</span>
-      <span class="number">1075</span>
+      <i
+        ><font-awesome-icon icon="timeline" float="left"></font-awesome-icon
+      ></i>
+
+      <div class="informacion">
+        <span class="text">Horas trabajadas</span>
+        <span class="number">1075</span>
+      </div>
     </div>
     <div class="box">
-      <font-awesome-icon icon="arrow-trend-up"></font-awesome-icon>
-      <span class="text">Porcentaje de avance</span>
-      <span class="number">71</span>
+      <i><font-awesome-icon icon="arrow-trend-up"></font-awesome-icon></i>
+      <div class="informacion">
+        <span class="text">Porcentaje de avance</span>
+        <span class="number">71%</span>
+      </div>
     </div>
     <div class="box">
-      <font-awesome-icon icon="users-gear"></font-awesome-icon>
-      <span class="text">Porcentaje de adherencia</span>
-      <span class="number">45</span>
+      <i><font-awesome-icon icon="users-gear"></font-awesome-icon></i>
+      <div class="informacion">
+        <span class="text">Adherencia</span>
+        <span class="number">45%</span>
+      </div>
+    </div>
+    <div class="box">
+      <i><font-awesome-icon icon="calendar"></font-awesome-icon></i>
+      <div class="informacion">
+        <span class="text">Mes</span>
+        <span class="number">Diciembre</span>
+      </div>
     </div>
   </div>
   <div class="charts">
@@ -24,6 +40,17 @@
       width="500"
       type="bar"
       :options="{
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            borderRadius: '8',
+            borderRariusWhenStacked: 'last',
+            columnWidth: '20%',
+          },
+        },
+        dataLabels: {
+          enabled: false,
+        },
         theme: {
           monochrome: {
             enabled: true,
@@ -126,14 +153,17 @@ export default class DashboardPage extends Vue {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  width: 90%;
+  margin: auto;
 }
 
 .boxes .box {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  align-items: right;
+  justify-content: space-between;
   border-radius: 12px;
-  width: calc((100% / 3) - 15px);
+  width: calc((90% / 4) - 15px);
   padding: 15px 20px;
   background: linear-gradient(45deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6))
     #000083;
@@ -141,21 +171,27 @@ export default class DashboardPage extends Vue {
 }
 
 .boxes .box i {
-  font-size: 45px;
+  font-size: 130%;
+  margin: auto 0;
 }
 
 .boxes .box .text {
   white-space: nowrap;
-  font-size: 18px;
+  font-size: 80%;
   font-weight: 500;
-  margin: 12px;
+  margin: 3%;
 }
 
 .boxes .box .number {
-  font-size: 40px;
+  font-size: 160%;
   font-weight: 500;
 }
 
+.informacion {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
 .charts {
   display: flex;
   flex-wrap: wrap;

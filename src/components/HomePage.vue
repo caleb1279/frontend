@@ -22,15 +22,45 @@
             <li class="dropdown-item">No tienes notificaciones</li>
           </ul>
         </div>
-        <div class="m-0">
-          <a class="navbar-brand">
-            <img
-              class="avatar-rounded"
-              :src="avatarimage"
-              width="40"
-              height="40"
-            />
-          </a>
+        <div class="m-0 usuario">
+          <div class="dropdown p-3">
+            <a
+              class="nav-link dropdown-toggle"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <img
+                class="avatar-rounded"
+                :src="avatarimage"
+                width="40"
+                height="40"
+              />
+            </a>
+            <ul class="dropdown-menu dropdown-menu-lg-end usuario">
+              <li>{{ user.userName }} {{ user.userLastN }}</li>
+              <li>{{ user.email }}</li>
+              <a
+                href=""
+                v-on:click.prevent="$router.push('/profile')"
+                id="profile"
+              >
+                <li class="sidebar-item">
+                  <font-awesome-icon icon="home"></font-awesome-icon>
+                  Perfil
+                </li>
+              </a>
+
+              <a href="" v-on:click.prevent="logout()">
+                <li class="sidebar-item">
+                  <font-awesome-icon
+                    icon="right-from-bracket"
+                  ></font-awesome-icon>
+                  Cerrar sesión
+                </li>
+              </a>
+            </ul>
+          </div>
         </div>
       </div>
     </nav>
@@ -78,12 +108,22 @@
                     Proyectos
                   </li>
                 </a>
+                <a
+                  href=""
+                  v-on:click.prevent="$router.push('/admin')"
+                  id="admin"
+                >
+                  <li class="sidebar-item">
+                    <font-awesome-icon icon="users"></font-awesome-icon>
+                    Usuarios
+                  </li>
+                </a>
               </div>
             </div>
           </div>
         </ul>
       </div>
-
+      <!--panel de particulas-->
       <div class="container-dock">
         <div id="particles-js">
           <vue-particles
@@ -206,24 +246,39 @@ export default class HomePage extends Vue {
       this.particlesContainer.destroy();
     }
   }
+
+  getUserData() {
+    return session.getUserData();
+  }
 }
 </script>
 
 <style scoped lang="scss">
+.logout {
+  height: fit-content;
+  padding: 40px 0;
+}
+
+.logout * {
+  margin: 0 auto;
+}
+
 .card .dropdown-menu.show {
   display: contents;
 }
 
 #admin {
-  padding: 1px 3px;
+  padding: 1px 0px;
   text-align: left;
 }
 
 #collapseWidthExample > * {
   background-color: inherit;
   border: none;
-  a {
-    padding-left: 20px;
-  }
+  padding-left: 20px;
+}
+ul li {
+  text-align: center;
+  padding-top: 8px;
 }
 </style>

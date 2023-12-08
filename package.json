@@ -27,7 +27,10 @@
     "vue-class-component": "^8.0.0-0",
     "vue-router": "^4.0.3",
     "vue3-apexcharts": "^1.4.4",
+<<<<<<< HEAD
     "vue3-cookies": "^1.0.6",
+=======
+>>>>>>> origin/stephany
     "vue3-datepicker": "^0.4.0",
     "vue3-particles": "^2.12.0",
     "vue3-simple-typeahead": "^1.0.11",

@@ -8,16 +8,18 @@ export type user = {
   email: string; //correo empresarial
   perEmail: string; // correo personal
   userName: string;
-  rol: rol;
+  userLastN: string; //apellidos
+  rol: string;
   status: string;
   minDate: Date | string; // fecha minima para reportar actividades
   initialDate: Date | string; // fecha de ingreso
-  phone1: number;
-  phone2: number;
-  phone3: number;
+  endDate: Date | string; // fecha de terminacion de contrato
+  phone1: string | number;
+  phone2: string | number;
+  phone3: string | number; //telefono contacto de emergencia
   contact: string; //nombre contacto de emergencia
   birthday: Date | string; //cumpleaños
-  adress: string; //dirección
+  address: string; //dirección
   position: string; //cargo en la empresa
   profileimage: string; // imagen de perfil
 };

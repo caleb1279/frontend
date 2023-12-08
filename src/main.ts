@@ -29,8 +29,9 @@ import {
   faUsers,
   faGears,
   faArrowTrendUp,
-  faUsersGear,
   faTimeline,
+  faUsersGear,
+  faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "vue3-simple-typeahead/dist/vue3-simple-typeahead.css";
@@ -54,8 +55,10 @@ library.add(
   faPlus,
   faUsers,
   faGears,
+  faTimeline,
   faUsersGear,
-  faTimeline
+  faArrowTrendUp,
+  faCalendar
 );
 
 app.use(BootstrapVue3);
@@ -67,5 +70,5 @@ app.use(Vue3Storage, { namespace: "pro_", storage: StorageType.Local });
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.component("date-picker", Datepicker);
 app.component("vue3-simple-typeahead", SimpleTypeahead);
-
+app.use(VueApexCharts);
 app.use(router).mount("#app");
