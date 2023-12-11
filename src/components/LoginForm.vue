@@ -1,7 +1,11 @@
 <template>
   <div>
     <div class="column-left">
-      <form class="login-form needs-validation" id="form" v-on:submit.prevent="login">
+      <form
+        class="login-form needs-validation"
+        id="form"
+        v-on:submit.prevent="login"
+      >
         <div class="children-login-form">
           <div class="image-logo text-center">
             <img src="/img/logo.png" />
@@ -14,28 +18,55 @@
             <label class="col-form-label" for="username">
               Correo Electrónico:
             </label>
-            <input class="form-control shadow-none" type="email" id="username" v-model="uname" name="username"
-              placeholder="johndoe@example.com" @input="validateFields('username')" :class="{
+            <input
+              class="form-control shadow-none"
+              type="email"
+              id="username"
+              v-model="uname"
+              name="username"
+              placeholder="johndoe@example.com"
+              @input="validateFields('username')"
+              :class="{
                 'is-valid': validFields.includes('username'),
                 'is-invalid':
                   !validFields.includes('username') &&
                   validatedFields.includes('username'),
-              }" required />
+              }"
+              required
+            />
           </div>
           <div class="input-group has-validation">
             <label class="col-form-label" for="password">Contraseña:</label>
-            <input class="form-control shadow-none" type="password" id="password" v-model="passwd" name="password"
-              placeholder="**********" @input="validateFields('password')" :class="{
+            <input
+              class="form-control shadow-none"
+              type="password"
+              id="password"
+              v-model="passwd"
+              name="password"
+              placeholder="**********"
+              @input="validateFields('password')"
+              :class="{
                 'is-valid': validFields.includes('password'),
                 'is-invalid':
                   !validFields.includes('password') &&
                   validatedFields.includes('password'),
-              }" required />
-            <span class="btn btn-outline-secondary" v-on:click.prevent="viewPassword">
+              }"
+              required
+            />
+            <span
+              class="btn btn-outline-secondary"
+              v-on:click.prevent="viewPassword"
+            >
               <font-awesome-icon :icon="passwordIcon" class="password-icon" />
             </span>
           </div>
-          <input class="btn btn-primary" type="submit" id="submit" name="login" value="login" />
+          <input
+            class="btn btn-primary"
+            type="submit"
+            id="submit"
+            name="login"
+            value="login"
+          />
           <div class="text-center p-3">
             <a href="#" v-on:click.prevent="">
               <b>¿Olvidó su contraseña?</b>
@@ -55,6 +86,7 @@ import { Vue } from "vue-class-component";
 import session from "@/controllers/SessionController";
 import RequestController from "@/controllers/RequestController";
 import { AxiosError, AxiosResponse } from "axios";
+import CryptoJS from "crypto-js";
 
 export default class LoginForm extends Vue {
   msg = "";
@@ -65,7 +97,10 @@ export default class LoginForm extends Vue {
   validatedFields: string[] = [];
 
   login() {
-    RequestController.Login({ email: this.uname, password: this.passwd })
+    RequestController.Login({
+      email: this.uname,
+      password: CryptoJS.SHA256(this.passwd).toString(CryptoJS.enc.Hex),
+    })
       .then((data: AxiosResponse) => {
         if (data.data.status === "200") {
           session.Login(data.data.Authorization, data.data.user);

@@ -31,6 +31,7 @@ request.interceptors.response.use(
 
 export default {
   Login(json: { email: string; password: string }) {
+    console.log(json);
     return request.post("/login", json);
   },
   async getActivities() {
@@ -81,9 +82,7 @@ export default {
   async sendReport(report: report) {
     try {
       report.date = new Date(report.date).toISOString().substring(0, 10);
-      console.log(report);
       const data = await request.post("/writereport", report);
-      console.log(data);
       return data.status;
     } catch (error) {
       console.log(error);
