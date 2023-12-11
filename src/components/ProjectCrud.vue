@@ -285,7 +285,7 @@ export default class ProjectCrud extends Vue {
       this.validatedFields.push(fieldName); // cdc: cuando el campo llama a esta funcion es porque se ha digitado algo, entonces al validarlo se añade el campo a este array para mostrar error
     const field = document.getElementById(fieldName) as HTMLInputElement;
     if (condition && field !== null) {
-      if (!this.validFields.includes(fieldName) && field.checkValidity())
+      if (!this.validFields.includes(fieldName))
         this.validFields.push(fieldName);
     } else {
       const index = this.validFields.indexOf(fieldName);

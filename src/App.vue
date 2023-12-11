@@ -4,7 +4,11 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-export default class App extends Vue {}
+export default class App extends Vue {
+  created() {
+    document.title = "Reporte de Actividades";
+  }
+}
 </script>
 
 <style lang="scss">

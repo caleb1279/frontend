@@ -38,16 +38,19 @@
               />
             </a>
             <ul class="dropdown-menu dropdown-menu-lg-end usuario">
-              <li>{{ user.userName }} {{ user.userLastN }}</li>
-              <li>{{ user.email }}</li>
+              <li class="userbrand">
+                {{ user.userName }} {{ user.userLastN }}
+                <span>{{ user.email }}</span>
+              </li>
+              <li class="dropdown-divider"></li>
               <a
                 href=""
                 v-on:click.prevent="$router.push('/profile')"
                 id="profile"
               >
                 <li class="sidebar-item">
-                  <font-awesome-icon icon="home"></font-awesome-icon>
-                  Perfil
+                  <font-awesome-icon icon="pen"></font-awesome-icon>
+                  Editar Perfil
                 </li>
               </a>
 
@@ -188,17 +191,19 @@ import session from "@/controllers/SessionController";
 import request from "@/controllers/RequestController";
 import { loadFull } from "tsparticles";
 import { Engine, Container } from "tsparticles-engine";
-import type { activity, report, project } from "@/registerDataType";
+import type { activity, report, project, user } from "@/registerDataType";
 
 export default class HomePage extends Vue {
   user = session.getUserData();
 
   logout = session.Logout;
   particlesContainer!: Container;
-  avatarimage = this.user.profileimage;
+  avatarimage = this.user === null ? "" : this.user.profileimage;
 
   particlesInit = async (engine: Engine) => {
-    await loadFull(engine);
+    if (session.ValidateSesison() === true) {
+      await loadFull(engine);
+    }
   };
 
   particlesLoaded = async (container: Container) => {
@@ -211,30 +216,17 @@ export default class HomePage extends Vue {
 
   async beforeMount() {
     let reports: report[] = await request.getReports(
-      this.user.id,
+      this.user.userId,
       new Date()
     );
 
-    let projects: project[] = await request.getProjects(this.user.id);
+    let projects: project[] = await request.getProjects(this.user.userId);
 
     let activities: activity[] = await request.getActivities();
 
     this.reportlist = reports !== null ? reports : [];
     this.activitylist = activities !== null ? activities : [];
-    this.projectlist =
-      projects !== null
-        ? projects
-        : [
-            {
-              id: 0,
-              projectId: "PROY0442",
-              name: "Ampliacion de cargos fijos",
-              labDate: new Date(),
-              proDate: new Date(),
-              source: "FMCA046390",
-              status: true,
-            },
-          ];
+    this.projectlist = projects !== null ? projects : [];
           
     session.setLocals("projectlist", this.projectlist);
     session.setLocals("reportlist", this.reportlist);
@@ -245,10 +237,6 @@ export default class HomePage extends Vue {
     if (this.particlesContainer) {
       this.particlesContainer.destroy();
     }
-  }
-
-  getUserData() {
-    return session.getUserData();
   }
 }
 </script>
@@ -279,6 +267,15 @@ export default class HomePage extends Vue {
 }
 ul li {
   text-align: center;
-  padding-top: 8px;
+  padding: 4px;
+}
+
+.userbrand {
+  padding: 6px;
+  display: block;
+}
+
+.userbrand span {
+  font-size: 0.8rem;
 }
 </style>

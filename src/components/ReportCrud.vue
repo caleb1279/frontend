@@ -1,6 +1,6 @@
 <template>
   <div class="border-top">
-    <div class="modal fade" id="activityModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="activityModal" tabindex="-1" aria-hidden="true" ref="settingsModalUpdatePass">
       <div class="modal-dialog">
         <div class="modal-content">
           <form class="modal-form" v-on:submit.prevent="" novalidate>
@@ -66,7 +66,7 @@
               <div class="row">
                 <div class="total-row form-group">
                   <label for="project">Nombre del proyecto:</label>
-                  <vue3-simple-typeahead v-model="newReport.project.name" @selectItem="(item: string) => {
+                  <vue3-simple-typeahead v-bind:value="newReport.project.name" @selectItem="(item: string) => {
                     newReport.project.name = item;
                   }
                     " class="form-control shadow-none" :minInputLength="1" id="project" :items="projects" :class="{
@@ -152,8 +152,8 @@
             <td>{{ report.detail }}</td>
             <td>{{ report.hours }}</td>
             <td>{{ report.title }}</td>
-            <td>{{ report.activity !== null ? report.activity.name : "" }}</td>
-            <td>{{ report.project !== null ? report.project.name : "" }}</td>
+            <td>{{ report.activity === null ? "" : report.activity.name }}</td>
+            <td>{{ report.project === null ? "" : report.project.name }}</td>
             <td>
               <a href="#" data-bs-toggle="modal" data-bs-target="#activityModal" v-on:click.prevent="editReport(report)">
                 <font-awesome-icon icon="pen" />
@@ -205,7 +205,7 @@ import { Vue } from "vue-class-component";
 export default class ReportCrud extends Vue {
   newReport: report = {
     id: 0,
-    date: "",
+    date: new Date(),
     hours: NaN,
     detail: "",
     title: "",
@@ -245,10 +245,18 @@ export default class ReportCrud extends Vue {
   ];
 
   async beforeMount() {
-    //this.projects = this.projectlist.map((item) => item.name) || [];
     this.projectlist = session.getLocals("projectlist");
     this.activitylist = session.getLocals("activitylist");
     this.reportlist = session.getLocals("reportlist");
+    this.projects = this.projectlist.map((item) => item.name) || [];
+  }
+
+  data() {
+    return {
+      activitylist: this.activitylist,
+      reportlist: this.reportlist,
+      projectlist: this.projectlist,
+    }
   }
 
   editReport(report: report) {
@@ -294,8 +302,8 @@ export default class ReportCrud extends Vue {
     this.reportlist = [];
     let date = new Date(this.actualDate);
     this.actualDate = new Date(date.getFullYear(), date.getMonth() + dir, 1);
-    this.reportlist = await controllers.getReports(1, this.actualDate) || [];
-    console.log(this.actualDate);
+    this.reportlist = await controllers.getReports(1, this.actualDate);
+    console.log(this.reportlist);
   }
 
   validateFields(fieldName: string, condition: boolean) {
@@ -320,7 +328,7 @@ export default class ReportCrud extends Vue {
       id: 0,
       title: "",
       detail: "",
-      date: "",
+      date: new Date(),
       hours: NaN,
       project: {
         id: "",

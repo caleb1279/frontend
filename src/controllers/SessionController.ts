@@ -34,7 +34,12 @@ export default {
   },
   getUserData() {
     const data = storage.getStorageSync("userdata");
-    return JSON.parse(data);
+
+    if (data !== undefined && data !== null) {
+      return JSON.parse(data);
+    } else {
+      return null;
+    }
   },
 
   setLocals(key: string, value: any) {

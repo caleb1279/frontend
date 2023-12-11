@@ -1,6 +1,6 @@
 <template>
   <div class="maintitle px-4 mt-3">
-    <h1>Dashboard {{ username }}</h1>
+    <h1>Dashboard de {{ username }}</h1>
   </div>
   <div class="boxes">
     <div class="box">
@@ -9,14 +9,14 @@
       ></i>
 
       <div class="informacion">
-        <span class="text">Horas trabajadas</span>
+        <span class="text">Horas totales</span>
         <span class="number">1075</span>
       </div>
     </div>
     <div class="box">
       <i><font-awesome-icon icon="arrow-trend-up"></font-awesome-icon></i>
       <div class="informacion">
-        <span class="text">Porcentaje de avance</span>
+        <span class="text">Avance</span>
         <span class="number">71%</span>
       </div>
     </div>
@@ -30,8 +30,8 @@
     <div class="box">
       <i><font-awesome-icon icon="calendar"></font-awesome-icon></i>
       <div class="informacion">
-        <span class="text">Mes</span>
-        <span class="number">Diciembre</span>
+        <span class="text">Mes actual</span>
+        <span class="number">Dic</span>
       </div>
     </div>
   </div>
@@ -135,7 +135,7 @@ import session from "@/controllers/SessionController";
 export default class DashboardPage extends Vue {
   username!: string;
   beforeMount() {
-    this.username = session.getUserData().userName;
+    this.username = session.getUserData() === null ? "" : session.getUserData().userName;
   }
 
   data() {
@@ -183,7 +183,7 @@ export default class DashboardPage extends Vue {
 }
 
 .boxes .box .number {
-  font-size: 160%;
+  font-size: 150%;
   font-weight: 500;
 }
 

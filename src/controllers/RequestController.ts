@@ -6,7 +6,7 @@ import type { report } from "@/registerDataType";
 const storage = useStorage();
 
 const request = axios.create({
-  baseURL: "https://41ac-186-84-89-185.ngrok-free.app",
+  baseURL: "https://3cc1-191-156-176-63.ngrok-free.app",
   withCredentials: false,
   headers: {
     Accept: "application/json",
