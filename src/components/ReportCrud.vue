@@ -99,10 +99,11 @@
                 <div class="total-row form-group">
                   <label for="project">Nombre del proyecto:</label>
                   <vue3-simple-typeahead
-                    v-model="nomproject"
+                    v-bind:value="nomproject"
                     @selectItem="
                       (item: string) => {
                       nomproject = item;
+                      validateFields('project', nomproject.length > 0);
                     }
                     "
                     class="form-control shadow-none"
@@ -242,12 +243,7 @@
               >Previous</a
             >
           </li>
-          <!--  <li class="page-item">
-            <a class="page-link" href="#" v-on:click.prevent="">1</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#" v-on:click.prevent="">2</a>
-          </li-->
+
           <li class="page-item disabled">
             <a class="page-link">
               {{
@@ -343,7 +339,10 @@ export default class ReportCrud extends Vue {
       },
     ]; */
     this.projectlist = this.projects.map((item) => item.name);
-    this.reportlist = await controllers.getReports(1, this.actualDate); /*  || [
+    this.reportlist = await controllers.getReports(1, this.actualDate);
+    this.reportlist.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    ); /*  || [
       {
         id: 1,
         title: "SIIL05S",
@@ -404,9 +403,12 @@ export default class ReportCrud extends Vue {
       this.newReport.activity = activity[0];
       this.newReport.project = project[0];
       console.log(await controllers.sendReport(this.newReport));
+      this.updateRecords(0);
+      (document.querySelector(".btn-close") as HTMLButtonElement).click();
     } else {
       // Muestra un mensaje de error o realiza alguna acción si no se han diligenciado todos los campos.
     }
+    console.log(this.nomproject);
   }
 
   async updateRecords(dir: number) {
@@ -415,6 +417,9 @@ export default class ReportCrud extends Vue {
     this.actualDate = new Date(date.getFullYear(), date.getMonth() + dir, 1);
     this.reportlist = await controllers.getReports(1, this.actualDate);
     console.log(this.actualDate);
+    this.reportlist.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
   }
 
   validateFields(fieldName: string, condition: boolean) {

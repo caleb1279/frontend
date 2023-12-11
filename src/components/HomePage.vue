@@ -38,7 +38,8 @@
               />
             </a>
             <ul class="dropdown-menu dropdown-menu-lg-end usuario">
-              <li>{{ user.userName }} {{ user.userLastN }}</li>
+              <li>{{ user.fullName }}</li>
+              <!-- <li>{{ user.userName }} {{ user.userLastN }}</li> -->
               <li>{{ user.email }}</li>
               <a
                 href=""
@@ -192,26 +193,7 @@ import type { user } from "@/registerDataType";
 export default class ErrorNotFound extends Vue {
   logout = session.Logout;
   avatarimage!: string;
-  newUser: user = {
-    userId: NaN,
-    userName: "",
-    userLastN: "", //apellidos
-    email: "", //correo empresarial
-    perEmail: "", //correo personal
-    minDate: "", // fecha minima para reportar actividades
-    rol: "",
-    status: "",
-    initialDate: "", // fecha de ingreso
-    endDate: "", //fecha de terminación de contrato
-    phone1: "",
-    phone2: "",
-    phone3: "", // contacto de emergencia
-    birthday: "", //cumpleaños
-    address: "", //dirección
-    position: "", //cargo en la empresa
-    contact: "", //nombre contacto de emergencia
-    profileimage: "",
-  };
+  user = session.getUserData();
 
   particlesInit = async (engine: Engine) => {
     await loadFull(engine);

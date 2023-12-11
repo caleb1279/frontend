@@ -400,7 +400,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<!-- <script lang="ts">
 import controllers from "@/controllers/RequestController";
 import session from "@/controllers/SessionController";
 import { Vue } from "vue-class-component";
@@ -512,7 +512,7 @@ export default class userCrud extends Vue {
     }
   }
 }
-</script>
+</script> -->
 
 <!--Estilos-->
 <style scoped lang="scss">
