@@ -1,5 +1,6 @@
 import router from "@/router";
 import axios from "axios";
+import type { report } from "@/registerDataType";
 import { useStorage } from "vue3-storage";
 
 const storage = useStorage();
@@ -72,6 +73,16 @@ export default {
           lastDay.toISOString()
       );
       return data.data.reports;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  },
+  async sendReport(report: report) {
+    try {
+      const data = await request.post("/writereport", report);
+      console.log(data);
+      return data.data;
     } catch (error) {
       console.log(error);
       return null;

@@ -102,8 +102,8 @@
                     v-model="nomproject"
                     @selectItem="
                       (item: string) => {
-                        nomproject = item;
-                      }
+                      nomproject = item;
+                    }
                     "
                     class="form-control shadow-none"
                     :minInputLength="1"
@@ -211,7 +211,7 @@
         </thead>
         <tbody>
           <tr v-for="report in reportlist" :key="report.id">
-            <td>{{ report.date.toISOString().substr(0, 10) || "" }}</td>
+            <td>{{ new Date(report.date).toISOString().substring(0, 10) }}</td>
             <td>{{ report.detail }}</td>
             <td>{{ report.hours }}</td>
             <td>{{ report.title }}</td>
@@ -235,22 +235,62 @@
           </tr>
         </tbody>
       </table>
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-end">
+          <li class="page-item">
+            <a class="page-link" href="#" v-on:click.prevent="updateRecords(-1)"
+              >Previous</a
+            >
+          </li>
+          <!--  <li class="page-item">
+            <a class="page-link" href="#" v-on:click.prevent="">1</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#" v-on:click.prevent="">2</a>
+          </li-->
+          <li class="page-item disabled">
+            <a class="page-link">
+              {{
+                actualDate.toLocaleString("default", {
+                  month: "long",
+                })
+              }}</a
+            >
+          </li>
+          <li
+            class="page-item"
+            :class="{
+              disabled: actualDate.getMonth() === new Date().getMonth(),
+            }"
+          >
+            <a class="page-link" href="#" v-on:click.prevent="updateRecords(1)"
+              >Next</a
+            >
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import controllers from "@/controllers/RequestController";
+import session from "@/controllers/SessionController";
 import type { activity, project, report } from "@/registerDataType";
 import { Vue } from "vue-class-component";
 
 export default class ReportCrud extends Vue {
+  actualDate = new Date();
   newReport: report = {
     id: 0,
-    title: "",
-    detail: "",
     date: "",
     hours: NaN,
+    detail: "",
+    title: "",
+    activity: {
+      id: "",
+      name: "",
+    },
     project: {
       id: "",
       projectId: "",
@@ -260,15 +300,13 @@ export default class ReportCrud extends Vue {
       source: "",
       status: null,
     },
-    activity: {
-      id: "",
-      name: "",
-    },
+    user: session.getUserData(),
   };
   nomproject = "";
   activitylist!: activity[];
   reportlist!: report[];
   projectlist!: string[];
+  projects!: project[];
   validFields: string[] = [];
   validatedFields: string[] = []; // cdc: nuevo arreglo para saber si ha sido validado un campo
   requiredFields: string[] = [
@@ -282,7 +320,7 @@ export default class ReportCrud extends Vue {
   opccrud!: string;
 
   async beforeMount() {
-    this.activitylist = (await controllers.getActivities()) || [
+    this.activitylist = await controllers.getActivities(); /* || [
       // cdc: datos de prueba aqui: actividades o stages de prueba
       {
         id: 1,
@@ -292,8 +330,8 @@ export default class ReportCrud extends Vue {
         id: 2,
         name: "Pruebas",
       },
-    ];
-    let projects: project[] = (await controllers.getProjects(1)) || [
+    ]; */
+    this.projects = await controllers.getProjects(1); /* || [
       {
         id: 2,
         labDate: new Date("2023-10-10"),
@@ -303,9 +341,9 @@ export default class ReportCrud extends Vue {
         source: "fmca046390",
         status: true,
       },
-    ];
-    this.projectlist = projects.map((item) => item.name);
-    this.reportlist = (await controllers.getReports(1, new Date())) || [
+    ]; */
+    this.projectlist = this.projects.map((item) => item.name);
+    this.reportlist = await controllers.getReports(1, this.actualDate); /*  || [
       {
         id: 1,
         title: "SIIL05S",
@@ -315,7 +353,7 @@ export default class ReportCrud extends Vue {
         project: projects[0],
         activity: this.activitylist[0],
       },
-    ];
+    ]; */
   }
 
   data() {
@@ -327,6 +365,7 @@ export default class ReportCrud extends Vue {
       validFields: this.validFields,
       projectlist: this.projectlist,
       nomproject: this.nomproject,
+      actualDate: this.actualDate,
     };
   }
 
@@ -342,7 +381,7 @@ export default class ReportCrud extends Vue {
     this.newReport.activity = report.activity;
   }
 
-  submitForm() {
+  async submitForm() {
     this.newReport.project.name = this.nomproject;
     this.validateFields("title", this.newReport.title.length > 0);
     this.validateFields("detail", this.newReport.detail.length > 0);
@@ -356,9 +395,26 @@ export default class ReportCrud extends Vue {
     ) {
       // Todos los campos requeridos están diligenciados, puedes proceder a guardar los cambios.
       // Agrega tu lógica para guardar los cambios aquí.
+      let activity = this.activitylist.filter((name) => {
+        if (name.name === this.newReport.activity.name) return name;
+      });
+      let project = this.projects.filter((name) => {
+        if (name.name === this.newReport.project.name) return name;
+      });
+      this.newReport.activity = activity[0];
+      this.newReport.project = project[0];
+      console.log(await controllers.sendReport(this.newReport));
     } else {
       // Muestra un mensaje de error o realiza alguna acción si no se han diligenciado todos los campos.
     }
+  }
+
+  async updateRecords(dir: number) {
+    this.reportlist = [];
+    let date = this.actualDate;
+    this.actualDate = new Date(date.getFullYear(), date.getMonth() + dir, 1);
+    this.reportlist = await controllers.getReports(1, this.actualDate);
+    console.log(this.actualDate);
   }
 
   validateFields(fieldName: string, condition: boolean) {
@@ -399,6 +455,7 @@ export default class ReportCrud extends Vue {
         id: "",
         name: "",
       },
+      user: session.getUserData(),
     };
   }
 }
@@ -408,6 +465,7 @@ export default class ReportCrud extends Vue {
 .table-contain {
   overflow: auto;
   max-height: 380px;
+  padding: 16px;
 }
 
 .right-search {
