@@ -86,6 +86,7 @@ import { Vue } from "vue-class-component";
 import session from "@/controllers/SessionController";
 import RequestController from "@/controllers/RequestController";
 import { AxiosError, AxiosResponse } from "axios";
+import CryptoJS from "crypto-js";
 
 export default class LoginForm extends Vue {
   msg = "";
@@ -96,7 +97,10 @@ export default class LoginForm extends Vue {
   validatedFields: string[] = [];
 
   login() {
-    RequestController.Login({ email: this.uname, password: this.passwd })
+    RequestController.Login({
+      email: this.uname,
+      password: CryptoJS.SHA256(this.passwd).toString(CryptoJS.enc.Hex),
+    })
       .then((data: AxiosResponse) => {
         if (data.data.status === "200") {
           session.Login(data.data.Authorization, data.data.user);
