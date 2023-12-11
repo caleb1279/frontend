@@ -227,7 +227,7 @@ export default class HomePage extends Vue {
     this.reportlist = reports !== null ? reports : [];
     this.activitylist = activities !== null ? activities : [];
     this.projectlist = projects !== null ? projects : [];
-          
+
     session.setLocals("projectlist", this.projectlist);
     session.setLocals("reportlist", this.reportlist);
     session.setLocals("activitylist", this.activitylist);

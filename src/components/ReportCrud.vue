@@ -20,8 +20,7 @@
                 data-bs-dismiss="modal"
                 aria-label="Close"
                 v-on:click="clearModal()"
-              ></button
-              ><!-- cdc: se añade la funcion clearModal para limpiar el modal al cerrar con x -->
+              ></button>
             </div>
             <div class="modal-body">
               <div class="row">
@@ -77,7 +76,7 @@
                           validatedFields.includes('date'), // cdc otro array para saber si lo ha validado
                       }"
                       :upperLimit="new Date()"
-                      :lowerLimit="new Date(newReport.user.minDate)"
+                      :lowerLimit="new Date()"
                       @blur="validateFields('date', newReport.date !== null)"
                     ></date-picker>
                   </div>
@@ -170,7 +169,6 @@
                 data-bs-dismiss="modal"
                 v-on:click="clearModal()"
               >
-                <!-- cdc: se añade clearModal para el boton cerrar para no dejar datos -->
                 Cerrar
               </button>
               <button type="submit" class="btn btn-primary" @click="submitForm">
@@ -191,7 +189,10 @@
           class="btn btn-primary btn-create"
           data-bs-toggle="modal"
           data-bs-target="#activityModal"
-          v-on:click="opccrud = 'Creación'"
+          v-on:click.prevent="
+            opccrud = 'Creación';
+            clearModal();
+          "
         >
           <font-awesome-icon icon="plus" /> Crear actividad
         </button>
@@ -328,11 +329,9 @@ export default class ReportCrud extends Vue {
   };
   opccrud!: string;
   projects!: string[];
-
   activitylist!: activity[];
   reportlist!: report[];
   projectlist!: project[];
-
   validFields: string[] = [];
   validatedFields: string[] = []; // cdc: nuevo arreglo para saber si ha sido validado un campo
   requiredFields: string[] = [
@@ -348,7 +347,9 @@ export default class ReportCrud extends Vue {
     this.projectlist = session.getLocals("projectlist");
     this.activitylist = session.getLocals("activitylist");
     this.reportlist = session.getLocals("reportlist");
-    this.projects = this.projectlist.map((item) => item.name) || [];
+    if (this.reportlist !== undefined)
+      this.projects = this.projectlist.map((item) => item.name);
+    else this.projects = [];
     this.reportlist.sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
@@ -359,6 +360,7 @@ export default class ReportCrud extends Vue {
       activitylist: this.activitylist,
       reportlist: this.reportlist,
       projectlist: this.projectlist,
+      opccrud: this.opccrud,
     };
   }
 

@@ -1,3 +1,5 @@
+adminProfile
+
 <template>
   <div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
@@ -105,7 +107,7 @@
                         !validFields.includes('phone1') &&
                         validatedFields.includes('phone1'),
                     }"
-                    @input="validateFields('phone1', newUser.phone1.length > 0)"
+                    @input="validateFields('phone1', newUser.phone1 > 0)"
                   />
                   <div class="valid-feedback text-left">¡Se ve bien!</div>
                   <div class="invalid-feedback text-left">
@@ -201,24 +203,42 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="phone3">Telefono :</label>
+                  <label for="relatedTo">Parentesco:</label>
                   <input
-                    v-model="newUser.phone3"
+                    v-model="newUser.relatedTo"
                     class="form-control shadow-none"
                     type="text"
-                    id="phone3"
+                    id="relatedTo"
                     :class="{
-                      'is-valid': validFields.includes('phone3'),
+                      'is-valid': validFields.includes('relatedTo'),
                       'is-invalid':
-                        !validFields.includes('phone3') &&
-                        validatedFields.includes('phone3'),
+                        !validFields.includes('relatedTo') &&
+                        validatedFields.includes('relatedTo'),
                     }"
-                    @input="validateFields('phone1', newUser.phone3.length > 0)"
+                    @input="
+                      validateFields('relatedTo', newUser.relatedTo.length > 0)
+                    "
                   />
-                  <div class="valid-feedback text-left">¡Se ve bien!</div>
-                  <div class="invalid-feedback text-left">
-                    Por favor diligencia este campo
-                  </div>
+                </div>
+              </div>
+              <div class="total-row">
+                <label for="phone3">Telefono :</label>
+                <input
+                  v-model="newUser.phone3"
+                  class="form-control shadow-none"
+                  type="text"
+                  id="phone3"
+                  :class="{
+                    'is-valid': validFields.includes('phone3'),
+                    'is-invalid':
+                      !validFields.includes('phone3') &&
+                      validatedFields.includes('phone3'),
+                  }"
+                  @input="validateFields('phone1', newUser.phone3 > 0)"
+                />
+                <div class="valid-feedback text-left">¡Se ve bien!</div>
+                <div class="invalid-feedback text-left">
+                  Por favor diligencia este campo
                 </div>
               </div>
             </div>
@@ -310,7 +330,9 @@
                         !validFields.includes('rol') &&
                         validatedFields.includes('rol'),
                     }"
-                    @change="validateFields('rol', newUser.rol.length > 0)"
+                    @change="
+                      validateFields('rol', newUser.rol.rolName.length > 0)
+                    "
                   >
                     <option>Administrador</option>
                     <option>Usuario</option>
@@ -325,20 +347,23 @@
             </p>
             <div class="row">
               <div class="col-md-6 form-group">
-                <label for="initialDate">Fecha de ingreso:</label>
+                <label for="startContract">Fecha de ingreso:</label>
                 <date-picker
-                  v-model="newUser.initialDate"
+                  v-model="newUser.startContract"
                   class="form-control shadow-none"
-                  id="initialDate"
+                  id="startContract"
                   inputFormat="yyyy/MM/dd"
                   :class="{
-                    'is-valid': validFields.includes('initialDate'),
+                    'is-valid': validFields.includes('startContract'),
                     'is-invalid':
-                      !validFields.includes('initialDate') &&
-                      validatedFields.includes('initialDate'), // cdc otro array para saber si lo ha validado
+                      !validFields.includes('startContract') &&
+                      validatedFields.includes('startContract'), // cdc otro array para saber si lo ha validado
                   }"
                   @blur="
-                    validateFields('initialDate', newUser.initialDate !== null)
+                    validateFields(
+                      'startContract',
+                      newUser.startContract !== null
+                    )
                   "
                 ></date-picker>
                 <div class="valid-feedback">¡Se ve bien!</div>
@@ -347,11 +372,11 @@
                 </div>
               </div>
               <div class="col-md-6 form-group">
-                <label for="endDate">Fecha de terminación:</label>
+                <label for="finshContract">Fecha de terminación:</label>
                 <date-picker
-                  v-model="newUser.endDate"
+                  v-model="newUser.finshContract"
                   class="form-control shadow-none"
-                  id="endDate"
+                  id="finshContract"
                   inputFormat="yyyy/MM/dd"
                 ></date-picker>
               </div>
@@ -467,7 +492,7 @@
           <th></th>
         </tr>
       </thead>
-      <tbody v-for="user in userList" :key="user.userId">
+      <tbody v-for="user in userList" :key="user.id">
         <td>
           <img
             class="avatar-rounded"
@@ -513,24 +538,29 @@ import { Vue } from "vue-class-component";
 import type { user } from "@/registerDataType";
 export default class userCrud extends Vue {
   newUser: user = {
-    userId: NaN,
+    id: NaN,
     userName: "",
     userLastN: "", //apellidos
     email: "", //correo empresarial
     perEmail: "", //correo personal
     minDate: "", // fecha minima para reportar actividades
-    rol: "",
+    rol: { id: 0, rolName: "" },
     status: "",
-    initialDate: "", // fecha de ingreso
-    endDate: "", //fecha de terminación de contrato
-    phone1: "",
-    phone2: "",
-    phone3: "", // contacto de emergencia
+    startContract: "", // fecha de ingreso
+    finshContract: "", //fecha de terminación de contrato
+    phone1: 0,
+    phone2: 0,
+    phone3: 0, // contacto de emergencia
     birthday: "", //cumpleaños
     address: "", //dirección
     position: "", //cargo en la empresa
     contact: "", //nombre contacto de emergencia
     profileimage: "",
+    vacationDays: 0,
+    password: "",
+    relatedTo: "",
+    tipId: 0,
+    numId: 0,
   };
   maxDate!: Date;
   userList!: user[];
@@ -540,7 +570,7 @@ export default class userCrud extends Vue {
     "email",
     "rol",
     "status",
-    "initialDate",
+    "startContract",
     "position",
   ]; // Lista de campos requeridos
   opccrud!: string;
@@ -564,8 +594,9 @@ export default class userCrud extends Vue {
         contact: "Julian Rosa",
         profileimage:
           "https://www.imagenesbonitasname.com/covers/preview/fondo-de-perfil-watsapp-flor-rosa.jpg",
-        initialDate: "2023/08/09",
-        endDate: "2024/08/09",
+        startContract: "2023/08/09",
+        finshContract: "2024/08/09",
+        relatedTo: "Padre",
       },
       {
         userId: "39393938",
@@ -585,7 +616,8 @@ export default class userCrud extends Vue {
         contact: "Julian Rosa",
         profileimage:
           "https://www.imagenesbonitasname.com/covers/preview/fondo-de-perfil-watsapp-flor-rosa.jpg",
-        initialDate: "2023/06/09",
+        startContract: "2023/06/09",
+        relatedTo: "Padre",
       },
     ];
   }
@@ -611,15 +643,16 @@ export default class userCrud extends Vue {
 
   editUser(user: user) {
     this.opccrud = "Edición";
+    this.hideOptions();
     this.requiredFields = [
       "email",
       "rol",
       "status",
-      "initialDate",
+      "startContract",
       "position",
       "minDate",
     ]; // Lista de campos requeridos
-    this.newUser.userId = user.userId;
+    this.newUser.id = user.id;
     /* 
     this.newUser.birthday = new Date(user.birthday);
     this.newUser.userName = user.userName; 
@@ -633,9 +666,9 @@ export default class userCrud extends Vue {
     this.newUser.status = user.status;
     this.newUser.email = user.email;
     this.newUser.position = user.position;
-    this.newUser.initialDate = new Date(user.initialDate);
+    this.newUser.startContract = new Date(user.startContract);
     this.newUser.minDate = new Date(user.minDate);
-    this.newUser.endDate = new Date(user.endDate);
+    this.newUser.finshContract = new Date(user.finshContract);
     const diaHabilitado = document.querySelector(
       ".diaHabilitado"
     ) as HTMLElement;
@@ -643,9 +676,9 @@ export default class userCrud extends Vue {
   }
   viewUser(user: user) {
     this.opccrud = "Visualización";
-    this.newUser.userId = user.userId;
+    this.newUser.id = user.id;
     this.newUser.minDate = new Date(user.minDate);
-    this.newUser.endDate = new Date(user.endDate);
+    this.newUser.finshContract = new Date(user.finshContract);
     this.newUser.birthday = new Date(user.birthday);
     this.newUser.userName = user.userName;
     this.newUser.userLastN = user.userLastN;
@@ -659,7 +692,8 @@ export default class userCrud extends Vue {
     this.newUser.phone3 = user.phone3;
     this.newUser.address = user.address;
     this.newUser.position = user.position;
-    this.newUser.initialDate = new Date(user.initialDate);
+    this.newUser.relatedTo = user.relatedTo;
+    this.newUser.startContract = new Date(user.startContract);
     const btnGuardar = document.querySelector(".btnGuardar") as HTMLElement;
     btnGuardar.classList.add("hide");
     const diaHabilitado = document.querySelector(
@@ -668,8 +702,10 @@ export default class userCrud extends Vue {
     diaHabilitado.classList.add("show");
     const minDate = document.getElementById("minDate") as HTMLInputElement;
     minDate.disabled = true;
-    const endDate = document.getElementById("endDate") as HTMLInputElement;
-    endDate.disabled = true;
+    const finshContract = document.getElementById(
+      "finshContract"
+    ) as HTMLInputElement;
+    finshContract.disabled = true;
     const birthday = document.getElementById("birthday") as HTMLInputElement;
     birthday.disabled = true;
     const email = document.getElementById("email") as HTMLInputElement;
@@ -696,10 +732,12 @@ export default class userCrud extends Vue {
     userName.disabled = true;
     const userLastN = document.getElementById("userLastN") as HTMLSelectElement;
     userLastN.disabled = true;
-    const initialDate = document.getElementById(
-      "initialDate"
+    const relatedTo = document.getElementById("relatedTo") as HTMLSelectElement;
+    relatedTo.disabled = true;
+    const startContract = document.getElementById(
+      "startContract"
     ) as HTMLInputElement;
-    initialDate.disabled = true;
+    startContract.disabled = true;
     const datosPersonales = document.querySelectorAll(".datosPersonales");
     datosPersonales.forEach((element) => {
       element.classList.add("show");
@@ -723,8 +761,8 @@ export default class userCrud extends Vue {
     this.validateFields("name", this.newUser.userName.length > 0);
     this.validateFields("lastN", this.newUser.userLastN.length > 0);
     this.validateFields("minDate", this.newUser.minDate !== "");
-    this.validateFields("initialDate", this.newUser.initialDate !== "");
-    this.validateFields("rol", this.newUser.rol.length > 0);
+    this.validateFields("startContract", this.newUser.startContract !== "");
+    this.validateFields("rol", this.newUser.rol.rolName.length > 0);
     this.validateFields("position", this.newUser.position.length > 0);
     this.validateFields("status", this.newUser.status !== null);
     // Validar que todos los campos requeridos estén diligenciados
@@ -742,28 +780,42 @@ export default class userCrud extends Vue {
     // cdc: para limpiar los campos y arreglos al cancelar
     this.validatedFields = [];
     this.validFields = [];
-    this.requiredFields = ["email", "rol", "status", "initialDate", "position"];
+    this.requiredFields = [
+      "email",
+      "rol",
+      "status",
+      "startContract",
+      "position",
+    ];
     this.newUser = {
       //cambiado a 0
-      userId: NaN,
+      id: NaN,
       userName: "",
       userLastN: "", //apellidos
       email: "", //correo empresarial
       perEmail: "", //correo personal
       minDate: "", // fecha minima para reportar actividades
-      rol: "",
+      rol: { id: 0, rolName: "" },
       status: "",
-      initialDate: "", // fecha de ingreso
-      endDate: "", // fecha de terminación de contrato
-      phone1: "",
-      phone2: "",
-      phone3: "", // contacto de emergencia
+      startContract: "", // fecha de ingreso
+      finshContract: "", // fecha de terminación de contrato
+      phone1: 0,
+      phone2: 0,
+      phone3: 0, // contacto de emergencia
       birthday: "", //cumpleaños
       address: "", //dirección
       position: "", //cargo en la empresa
       contact: "", //nombre contacto de emergencia
       profileimage: "",
+      vacationDays: 0,
+      password: "",
+      relatedTo: "",
+      tipId: 0,
+      numId: 0,
     };
+    this.hideOptions();
+  }
+  hideOptions() {
     const btnGuardar = document.querySelector(".btnGuardar") as HTMLElement;
     btnGuardar.classList.remove("hide");
     const diaHabilitado = document.querySelector(
@@ -774,8 +826,10 @@ export default class userCrud extends Vue {
     }
     const minDate = document.getElementById("minDate") as HTMLInputElement;
     minDate.disabled = false;
-    const endDate = document.getElementById("endDate") as HTMLInputElement;
-    endDate.disabled = false;
+    const finshContract = document.getElementById(
+      "finshContract"
+    ) as HTMLInputElement;
+    finshContract.disabled = false;
     const birthday = document.getElementById("birthday") as HTMLInputElement;
     birthday.disabled = false;
     const email = document.getElementById("email") as HTMLInputElement;
@@ -800,10 +854,10 @@ export default class userCrud extends Vue {
     status.disabled = false;
     const userName = document.getElementById("userName") as HTMLSelectElement;
     userName.disabled = false;
-    const initialDate = document.getElementById(
-      "initialDate"
+    const startContract = document.getElementById(
+      "startContract"
     ) as HTMLInputElement;
-    initialDate.disabled = false;
+    startContract.disabled = false;
     const datosPersonales = document.querySelectorAll(".datosPersonales");
     datosPersonales.forEach((element) => {
       element.classList.remove("show");
@@ -873,8 +927,5 @@ export default class userCrud extends Vue {
 }
 p.datosPersonales.show {
   display: block !important;
-}
-#btnGuardar.hide {
-  display: none;
 }
 </style>
