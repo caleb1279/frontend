@@ -31,6 +31,7 @@ request.interceptors.response.use(
 
 export default {
   Login(json: { email: string; password: string }) {
+    console.log(json);
     return request.post("/login", json);
   },
   async getActivities() {
