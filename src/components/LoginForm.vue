@@ -79,12 +79,21 @@ export default class LoginForm extends Vue {
         console.log(error);
         this.msg = "Ha ocurrido un error al intentar iniciar sesión";
         session.Login("auth-123", {
-          userId: 1,
-          email: "johndoe@colnexsi.com.co",
-          perEmail: "usco.doe@example.com",
+          id: 1,
+          email: "ejemplo@colnexsi.com.co",
+          fullName: "Pepito Perez",
+          rol: { id: 1, rolName: "User" },
+          phone: 4942826,
+          password: "password",
+          vacationDays: 15,
+          startContract: new Date("2022-01-01"),
+          finshContract: new Date("2024-01-31"),
+          tipId: 1,
+          numId: 1026574754,
+          /* perEmail: "usco.doe@example.com",
           userName: "John",
           userLastN: "Doe",
-          rol: "Administrador",
+          rol: { id: 1, rolName: "User" },
           status: "Disponible",
           minDate: new Date(),
           initialDate: new Date(),
@@ -97,7 +106,7 @@ export default class LoginForm extends Vue {
           address: "Velasquez St. No 80, Madrid",
           position: "Desarrollador",
           profileimage:
-            "https://i.pinimg.com/550x/8d/e7/fa/8de7fa2af12330350613ede63532c4fb.jpg",
+            "https://i.pinimg.com/550x/8d/e7/fa/8de7fa2af12330350613ede63532c4fb.jpg", */
         });
       });
   }

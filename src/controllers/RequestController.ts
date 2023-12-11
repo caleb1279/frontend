@@ -1,7 +1,7 @@
 import router from "@/router";
 import axios from "axios";
-import { useStorage } from "vue3-storage";
 import type { report } from "@/registerDataType";
+import { useStorage } from "vue3-storage";
 
 const storage = useStorage();
 
@@ -81,9 +81,8 @@ export default {
   async sendReport(report: report) {
     try {
       report.date = new Date(report.date).toISOString().substring(0, 10);
-      console.log(report);
       const data = await request.post("/writereport", report);
-      console.log(data);
+
       return data.status;
     } catch (error) {
       console.log(error);

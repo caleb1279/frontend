@@ -1,6 +1,12 @@
 <template>
   <div class="border-top">
-    <div class="modal fade" id="activityModal" tabindex="-1" aria-hidden="true" ref="settingsModalUpdatePass">
+    <div
+      class="modal fade"
+      id="activityModal"
+      tabindex="-1"
+      aria-hidden="true"
+      ref="settingsModalUpdatePass"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <form class="modal-form" v-on:submit.prevent="" novalidate>
@@ -8,92 +14,149 @@
               <h5 class="modal-title" id="exampleModalLabel">
                 {{ opccrud }} de Actividades
               </h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                v-on:click="clearModal()"></button><!-- cdc: se añade la funcion clearModal para limpiar el modal al cerrar con x -->
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                v-on:click="clearModal()"
+              ></button
+              ><!-- cdc: se añade la funcion clearModal para limpiar el modal al cerrar con x -->
             </div>
             <div class="modal-body">
               <div class="row">
                 <div class="total-row form-group">
                   <label for="title">Nombre de la actividad:</label>
-                  <input v-model="newReport.title" class="form-control shadow-none" type="text" id="title" :class="{
-                    'is-valid': validFields.includes('title'),
-                    'is-invalid':
-                      !validFields.includes('title') &&
-                      validatedFields.includes('title'), // cdc: otro array para saber si lo ha validado
-                  }" @input="validateFields('title', newReport.title.length > 0)" />
+                  <input
+                    v-model="newReport.title"
+                    class="form-control shadow-none"
+                    type="text"
+                    id="title"
+                    :class="{
+                      'is-valid': validFields.includes('title'),
+                      'is-invalid':
+                        !validFields.includes('title') &&
+                        validatedFields.includes('title'), // cdc: otro array para saber si lo ha validado
+                    }"
+                    @input="validateFields('title', newReport.title.length > 0)"
+                  />
                 </div>
               </div>
               <div class="row">
                 <div class="total-row form-group">
                   <label for="description">Descripción de la actividad:</label>
-                  <textarea v-model="newReport.detail" id="detail" class="form-control shadow-none" :class="{
-                    'is-valid': validFields.includes('detail'),
-                    'is-invalid':
-                      !validFields.includes('detail') &&
-                      validatedFields.includes('detail'), // cdc otro array para saber si lo ha validado
-                  }" @input="
-  validateFields('detail', newReport.detail.length > 0)
-  "></textarea>
+                  <textarea
+                    v-model="newReport.detail"
+                    id="detail"
+                    class="form-control shadow-none"
+                    :class="{
+                      'is-valid': validFields.includes('detail'),
+                      'is-invalid':
+                        !validFields.includes('detail') &&
+                        validatedFields.includes('detail'), // cdc otro array para saber si lo ha validado
+                    }"
+                    @input="
+                      validateFields('detail', newReport.detail.length > 0)
+                    "
+                  ></textarea>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="date">Fecha en que se realiza:</label>
-                    <date-picker v-model="newReport.date" class="form-control shadow-none" id="date"
-                      inputFormat="yyyy/MM/dd" :class="{
+                    <date-picker
+                      v-model="newReport.date"
+                      class="form-control shadow-none"
+                      id="date"
+                      inputFormat="yyyy/MM/dd"
+                      :class="{
                         'is-valid': validFields.includes('date'),
                         'is-invalid':
                           !validFields.includes('date') &&
                           validatedFields.includes('date'), // cdc otro array para saber si lo ha validado
-                      }" :upperLimit="new Date()" :lowerLimit="new Date(newReport.user.minDate)"
-                      @blur="validateFields('date', newReport.date !== null)"></date-picker>
+                      }"
+                      :upperLimit="new Date()"
+                      :lowerLimit="new Date(newReport.user.minDate)"
+                      @blur="validateFields('date', newReport.date !== null)"
+                    ></date-picker>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="hours">Duración en horas:</label>
-                    <input v-model="newReport.hours" type="number" class="form-control shadow-none" id="hours" min="0"
-                      step="0.5" :class="{
+                    <input
+                      v-model="newReport.hours"
+                      type="number"
+                      class="form-control shadow-none"
+                      id="hours"
+                      min="0"
+                      step="0.5"
+                      :class="{
                         'is-valid': validFields.includes('hours'),
                         'is-invalid':
                           !validFields.includes('hours') &&
                           validatedFields.includes('hours'), // cdc otro array para saber si lo ha validado
-                      }" @input="validateFields('hours', newReport.hours > 0)" />
+                      }"
+                      @input="validateFields('hours', newReport.hours > 0)"
+                    />
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="total-row form-group">
                   <label for="project">Nombre del proyecto:</label>
-                  <vue3-simple-typeahead v-bind:value="newReport.project.name" @selectItem="(item: string) => {
-                    newReport.project.name = item;
-                  }
-                    " class="form-control shadow-none" :minInputLength="1" id="project" :items="projects" :class="{
-    'is-valid': validFields.includes('project'),
-    'is-invalid':
-      !validFields.includes('project') &&
-      validatedFields.includes('project'), // cdc otro array para saber si lo ha validado
-  }" @input="
-  validateFields('project', newReport.project.name !== '')
-  "></vue3-simple-typeahead>
+                  <vue3-simple-typeahead
+                    v-bind:value="newReport.project.name"
+                    @selectItem="
+                      (item: string) => {
+                      newReport.project.name = item;
+                      validateFields('project', newReport.project.name.length > 0);
+                    }
+                    "
+                    class="form-control shadow-none"
+                    :minInputLength="1"
+                    id="project"
+                    :items="projectlist"
+                    :class="{
+                      'is-valid': validFields.includes('project'),
+                      'is-invalid':
+                        !validFields.includes('project') &&
+                        validatedFields.includes('project'), // cdc otro array para saber si lo ha validado
+                    }"
+                    @input="
+                      validateFields(
+                        'project',
+                        newReport.project.name.length > 0
+                      )
+                    "
+                  ></vue3-simple-typeahead>
                 </div>
               </div>
               <div class="row">
                 <div class="total-row form-group">
                   <label for="stage">Seleccione una etapa:</label>
-                  <select v-model="newReport.activity.name" class="form-select shadow-none" id="activity" :class="{
-                    'is-valid': validFields.includes('activity'),
-                    'is-invalid':
-                      !validFields.includes('activity') &&
-                      validatedFields.includes('activity'), // cdc otro array para saber si lo ha validado
-                  }" @change="
-  validateFields(
-    'activity',
-    newReport.activity.name.length > 0 // cdc: solo se necesita validar que haya algo debido al for de abajo
-  )
-  ">
-                    <option v-for="activity in activitylist" v-bind:key="activity.id">
+                  <select
+                    v-model="newReport.activity.name"
+                    class="form-select shadow-none"
+                    id="activity"
+                    :class="{
+                      'is-valid': validFields.includes('activity'),
+                      'is-invalid':
+                        !validFields.includes('activity') &&
+                        validatedFields.includes('activity'), // cdc otro array para saber si lo ha validado
+                    }"
+                    @change="
+                      validateFields(
+                        'activity',
+                        newReport.activity.name.length > 0 // cdc: solo se necesita validar que haya algo debido al for de abajo
+                      )
+                    "
+                  >
+                    <option
+                      v-for="activity in activitylist"
+                      v-bind:key="activity.id"
+                    >
                       {{ activity.name }}
                     </option>
                   </select>
@@ -101,7 +164,12 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" v-on:click="clearModal()">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                v-on:click="clearModal()"
+              >
                 <!-- cdc: se añade clearModal para el boton cerrar para no dejar datos -->
                 Cerrar
               </button>
@@ -118,15 +186,24 @@
     </div>
     <div class="d-flex">
       <div class="left-options">
-        <button type="button" class="btn btn-primary btn-create" data-bs-toggle="modal" data-bs-target="#activityModal"
-          v-on:click="opccrud = 'Creación'">
+        <button
+          type="button"
+          class="btn btn-primary btn-create"
+          data-bs-toggle="modal"
+          data-bs-target="#activityModal"
+          v-on:click="opccrud = 'Creación'"
+        >
           <font-awesome-icon icon="plus" /> Crear actividad
         </button>
       </div>
       <div class="right-search nav">
         <form class="d-flex" role="search" v-on:click.prevent="">
           <input class="form-control me-2 shadow-none" type="search" />
-          <button class="btn btn-primary" type="submit" onclick.prevent="searchdata(searchinput)">
+          <button
+            class="btn btn-primary"
+            type="submit"
+            onclick.prevent="searchdata(searchinput)"
+          >
             Buscar
           </button>
         </form>
@@ -155,7 +232,12 @@
             <td>{{ report.activity === null ? "" : report.activity.name }}</td>
             <td>{{ report.project === null ? "" : report.project.name }}</td>
             <td>
-              <a href="#" data-bs-toggle="modal" data-bs-target="#activityModal" v-on:click.prevent="editReport(report)">
+              <a
+                href="#"
+                data-bs-toggle="modal"
+                data-bs-target="#activityModal"
+                v-on:click.prevent="editReport(report)"
+              >
                 <font-awesome-icon icon="pen" />
               </a>
             </td>
@@ -170,7 +252,12 @@
       <nav aria-label="Page navigation">
         <ul class="pagination justify-content-end">
           <li class="page-item">
-            <a class="page-link shadow-none" href="#" v-on:click.prevent="updateRecords(-1)">Previous</a>
+            <a
+              class="page-link shadow-none"
+              href="#"
+              v-on:click.prevent="updateRecords(-1)"
+              >Previous</a
+            >
           </li>
           <li class="page-item disabled">
             <a class="page-link shadow-none">
@@ -179,16 +266,30 @@
                   month: "long",
                 })
               }}
-              <i v-if="new Date(actualDate).getFullYear() !== new Date().getFullYear()">
+              <i
+                v-if="
+                  new Date(actualDate).getFullYear() !==
+                  new Date().getFullYear()
+                "
+              >
                 - {{ new Date(actualDate).getFullYear() }}
               </i>
             </a>
           </li>
-          <li class="page-item" :class="{
-            disabled: actualDate.getMonth() === new Date().getMonth() &&
-              actualDate.getFullYear() === new Date().getFullYear(),
-          }">
-            <a class="page-link shadow-none" href="#" v-on:click.prevent="updateRecords(1)">Next</a>
+          <li
+            class="page-item"
+            :class="{
+              disabled:
+                actualDate.getMonth() === new Date().getMonth() &&
+                actualDate.getFullYear() === new Date().getFullYear(),
+            }"
+          >
+            <a
+              class="page-link shadow-none"
+              href="#"
+              v-on:click.prevent="updateRecords(1)"
+              >Next</a
+            >
           </li>
         </ul>
       </nav>
@@ -203,6 +304,7 @@ import type { activity, project, report } from "@/registerDataType";
 import { Vue } from "vue-class-component";
 
 export default class ReportCrud extends Vue {
+  actualDate = new Date();
   newReport: report = {
     id: 0,
     date: new Date(),
@@ -227,8 +329,6 @@ export default class ReportCrud extends Vue {
   opccrud!: string;
   projects!: string[];
 
-  actualDate = new Date();
-
   activitylist!: activity[];
   reportlist!: report[];
   projectlist!: project[];
@@ -249,6 +349,9 @@ export default class ReportCrud extends Vue {
     this.activitylist = session.getLocals("activitylist");
     this.reportlist = session.getLocals("reportlist");
     this.projects = this.projectlist.map((item) => item.name) || [];
+    this.reportlist.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
   }
 
   data() {
@@ -256,7 +359,7 @@ export default class ReportCrud extends Vue {
       activitylist: this.activitylist,
       reportlist: this.reportlist,
       projectlist: this.projectlist,
-    }
+    };
   }
 
   editReport(report: report) {
@@ -292,7 +395,8 @@ export default class ReportCrud extends Vue {
       this.newReport.activity = activity[0];
       this.newReport.project = project[0];
       console.log(await controllers.sendReport(this.newReport));
-      this.clearModal();
+      this.updateRecords(0);
+      (document.querySelector(".btn-close") as HTMLButtonElement).click();
     } else {
       // Muestra un mensaje de error o realiza alguna acción si no se han diligenciado todos los campos.
     }
@@ -300,10 +404,13 @@ export default class ReportCrud extends Vue {
 
   async updateRecords(dir: number) {
     this.reportlist = [];
-    let date = new Date(this.actualDate);
+    let date = this.actualDate;
     this.actualDate = new Date(date.getFullYear(), date.getMonth() + dir, 1);
     this.reportlist = await controllers.getReports(1, this.actualDate);
-    console.log(this.reportlist);
+    console.log(this.actualDate);
+    this.reportlist.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
   }
 
   validateFields(fieldName: string, condition: boolean) {
@@ -348,3 +455,27 @@ export default class ReportCrud extends Vue {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.table-contain {
+  overflow: auto;
+  max-height: 380px;
+  padding: 16px;
+}
+
+.right-search {
+  width: 500px;
+  margin: 25px;
+}
+
+.left-options {
+  margin: auto 25px;
+  width: 100%;
+  text-align: left;
+}
+
+.text-left {
+  // cdc: para alinear el texto a la izquierda
+  text-align: left;
+}
+</style>
