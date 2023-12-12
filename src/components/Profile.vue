@@ -244,7 +244,7 @@
               <label for="position">Cargo:</label>
               <select
                 v-model="user.position"
-                class="form-select shadow-none datosEmpresariales"
+                class="form-control shadow-none datosEmpresariales"
                 id="position"
                 :class="{
                   'is-valid': validFields.includes('position'),
@@ -444,11 +444,6 @@ export default class userCrud extends Vue {
 
 <!--Estilos-->
 <style scoped lang="scss">
-.text-left {
-  // cdc: para alinear el texto a la izquierda
-  text-align: left;
-}
-
 .titulo {
   position: relative;
   z-index: 1;
@@ -469,8 +464,7 @@ export default class userCrud extends Vue {
   background: #fff;
   padding: 0 15px;
 }
-.form-control,
-.form-select {
+.form-control {
   margin: 15px !important;
 }
 

@@ -469,27 +469,3 @@ export default class ReportCrud extends Vue {
   }
 }
 </script>
-
-<style scoped lang="scss">
-.table-contain {
-  overflow: auto;
-  max-height: 380px;
-  padding: 16px;
-}
-
-.right-search {
-  width: 500px;
-  margin: 25px;
-}
-
-.left-options {
-  margin: auto 25px;
-  width: 100%;
-  text-align: left;
-}
-
-.text-left {
-  // cdc: para alinear el texto a la izquierda
-  text-align: left;
-}
-</style>
