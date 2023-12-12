@@ -198,7 +198,7 @@ export default class HomePage extends Vue {
 
   logout = session.Logout;
   particlesContainer!: Container;
-  avatarimage = this.user === null ? "" : this.user.profileimage;
+  avatarimage = this.user === undefined ? "" : this.user.profileimage;
 
   particlesInit = async (engine: Engine) => {
     if (session.ValidateSesison() === true) {
@@ -216,17 +216,17 @@ export default class HomePage extends Vue {
 
   async beforeMount() {
     let reports: report[] = await request.getReports(
-      this.user.userId,
+      this.user.id,
       new Date()
     );
 
-    let projects: project[] = await request.getProjects(this.user.userId);
+    let projects: project[] = await request.getProjects(this.user.id);
 
     let activities: activity[] = await request.getActivities();
 
-    this.reportlist = reports !== null ? reports : [];
-    this.activitylist = activities !== null ? activities : [];
-    this.projectlist = projects !== null ? projects : [];
+    this.reportlist = reports !== undefined ? reports : [];
+    this.activitylist = activities !== undefined ? activities : [];
+    this.projectlist = projects !== undefined ? projects : [];
 
     session.setLocals("projectlist", this.projectlist);
     session.setLocals("reportlist", this.reportlist);

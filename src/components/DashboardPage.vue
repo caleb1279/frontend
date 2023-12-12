@@ -135,7 +135,7 @@ import session from "@/controllers/SessionController";
 export default class DashboardPage extends Vue {
   username!: string;
   beforeMount() {
-    this.username = session.getUserData() === null ? "" : session.getUserData().userName;
+    this.username = session.getUserData() === undefined ? "" : session.getUserData().userName;
   }
 
   data() {

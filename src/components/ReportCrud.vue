@@ -68,7 +68,7 @@
                       v-model="newReport.date"
                       class="form-control shadow-none"
                       id="date"
-                      inputFormat="yyyy/MM/dd"
+                      inputFormat="yyyy-MM-dd"
                       :class="{
                         'is-valid': validFields.includes('date'),
                         'is-invalid':
@@ -76,7 +76,16 @@
                           validatedFields.includes('date'), // cdc otro array para saber si lo ha validado
                       }"
                       :upperLimit="new Date()"
-                      :lowerLimit="new Date()"
+                      :lowerLimit="
+                        new Date(
+                          user.minDate.substring(0, 4) +
+                            '-' +
+                            user.minDate.substring(5, 7) +
+                            '-' +
+                            (parseInt(user.minDate.substring(8, 10)) +
+                            1)
+                        )
+                      "
                       @blur="validateFields('date', newReport.date !== null)"
                     ></date-picker>
                   </div>
@@ -306,6 +315,7 @@ import { Vue } from "vue-class-component";
 
 export default class ReportCrud extends Vue {
   actualDate = new Date();
+  user = session.getUserData();
   newReport: report = {
     id: 0,
     date: new Date(),
@@ -325,7 +335,7 @@ export default class ReportCrud extends Vue {
       source: "",
       status: null,
     },
-    user: session.getUserData(),
+    user: this.user,
   };
   opccrud!: string;
   projects!: string[];
@@ -347,12 +357,13 @@ export default class ReportCrud extends Vue {
     this.projectlist = session.getLocals("projectlist");
     this.activitylist = session.getLocals("activitylist");
     this.reportlist = session.getLocals("reportlist");
-    if (this.reportlist !== undefined)
+    if (this.reportlist !== null)
       this.projects = this.projectlist.map((item) => item.name);
     else this.projects = [];
-    this.reportlist.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
+    if (this.reportlist !== undefined && this.reportlist !== null)
+      this.reportlist.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
   }
 
   data() {
@@ -409,10 +420,11 @@ export default class ReportCrud extends Vue {
     let date = this.actualDate;
     this.actualDate = new Date(date.getFullYear(), date.getMonth() + dir, 1);
     this.reportlist = await controllers.getReports(1, this.actualDate);
-    console.log(this.actualDate);
-    this.reportlist.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
+    session.setLocals("reportlist", this.reportlist);
+    if (this.reportlist !== undefined && this.reportlist !== null)
+      this.reportlist.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
   }
 
   validateFields(fieldName: string, condition: boolean) {

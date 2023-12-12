@@ -68,7 +68,7 @@
                       v-model="newProject.labDate"
                       class="form-control shadow-none"
                       id="labdate"
-                      inputFormat="yyyy/MM/dd"
+                      inputFormat="yyyy-MM-dd"
                       :class="{
                         'is-valid': validFields.includes('labdate'),
                         'is-invalid':
@@ -88,7 +88,7 @@
                       v-model="newProject.proDate"
                       class="form-control shadow-none"
                       id="prodate"
-                      inputFormat="yyyy/MM/dd"
+                      inputFormat="yyyy-MM-dd"
                       :class="{
                         'is-valid': validFields.includes('prodate'),
                         'is-invalid':
@@ -266,7 +266,7 @@ export default class ProjectCrud extends Vue {
 
   beforeMount() {
     const projects = session.getLocals("projectlist");
-    this.projectlist = projects === null ? [] : projects;
+    this.projectlist = projects === undefined ? [] : projects;
   }
 
   editProject(project: project) {

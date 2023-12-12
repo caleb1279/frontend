@@ -16,7 +16,7 @@
           <div class="col-md-6">
             <label for="name">Nombre:</label>
             <input
-              v-model="newUser.userName"
+              v-model="user.userName"
               class="form-control shadow-none"
               type="text"
               id="userName"
@@ -26,17 +26,13 @@
                   !validFields.includes('userName') &&
                   validatedFields.includes('userName'),
               }"
-              @input="validateFields('userName', newUser.userName.length > 0)"
+              @input="validateFields('userName', user.userName.length > 0)"
             />
-            <div class="valid-feedback text-left">¡Se ve bien!</div>
-            <div class="invalid-feedback text-left">
-              Por favor diligencia este campo
-            </div>
           </div>
           <div class="col-md-6">
             <label for="lastN">Apellidos:</label>
             <input
-              v-model="newUser.userLastN"
+              v-model="user.userLastN"
               class="form-control shadow-none"
               type="text"
               id="userLastN"
@@ -46,12 +42,8 @@
                   !validFields.includes('userLastN') &&
                   validatedFields.includes('userLastN'),
               }"
-              @input="validateFields('userLastN', newUser.userLastN.length > 0)"
+              @input="validateFields('userLastN', user.userLastN.length > 0)"
             />
-            <div class="valid-feedback text-left">¡Se ve bien!</div>
-            <div class="invalid-feedback text-left">
-              Por favor diligencia este campo
-            </div>
           </div>
         </div>
         <!--Email personal-->
@@ -61,7 +53,7 @@
             <input
               type="email"
               class="form-control shadow-none"
-              v-model="newUser.perEmail"
+              v-model="user.perEmail"
               id="perEmail"
               :class="{
                 'is-valid': validFields.includes('perEmail'),
@@ -69,12 +61,8 @@
                   !validFields.includes('perEmail') &&
                   validatedFields.includes('perEmail'),
               }"
-              @input="validateFields('user', newUser.perEmail.length > 0)"
+              @input="validateFields('user', user.perEmail.length > 0)"
             />
-            <div class="valid-feedback text-left">¡Se ve bien!</div>
-            <div class="invalid-feedback text-left">
-              Por favor diligencia este campo
-            </div>
           </div>
         </div>
         <!--Telefonos-->
@@ -83,7 +71,7 @@
             <div class="form-group">
               <label for="phone1">Telefono 1:</label>
               <input
-                v-model="newUser.phone1"
+                v-model="user.phone1"
                 class="form-control shadow-none"
                 type="text"
                 id="phone1"
@@ -93,19 +81,15 @@
                     !validFields.includes('phone1') &&
                     validatedFields.includes('phone1'),
                 }"
-                @input="validateFields('phone1', newUser.phone1 > 0)"
+                @input="validateFields('phone1', user.phone1 > 0)"
               />
-              <div class="valid-feedback text-left">¡Se ve bien!</div>
-              <div class="invalid-feedback text-left">
-                Por favor diligencia este campo
-              </div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <label for="phone2">Telefono 2:</label>
               <input
-                v-model="newUser.phone2"
+                v-model="user.phone2"
                 class="form-control shadow-none"
                 type="text"
                 id="phone2"
@@ -118,20 +102,18 @@
           <div class="total-row birthday">
             <label for="birthday">Fecha de nacimiento:</label>
             <date-picker
-              v-model="newUser.birthday"
+              v-model="user.birthday"
               class="form-control shadow-none"
               id="birthday"
-              inputFormat="yyyy/MM/dd"
+              inputFormat="yyyy-MM-dd"
               :class="{
                 'is-valid': validFields.includes('birthday'),
                 'is-invalid':
                   !validFields.includes('birthday') &&
                   validatedFields.includes('birthday'),
               }"
-              @blur="validateFields('birthday', newUser.birthday !== '')"
+              @blur="validateFields('birthday', user.birthday !== '')"
             />
-            <div class="valid-feedback">¡Se ve bien!</div>
-            <div class="invalid-feedback">Por favor diligencia este campo</div>
           </div>
         </div>
         <!--Dirección-->
@@ -139,7 +121,7 @@
           <div class="total-row form-group">
             <label for="address">Dirección:</label>
             <input
-              v-model="newUser.address"
+              v-model="user.address"
               class="form-control shadow-none"
               type="text"
               id="address"
@@ -149,12 +131,8 @@
                   !validFields.includes('address') &&
                   validatedFields.includes('address'),
               }"
-              @input="validateFields('address', newUser.address.length > 0)"
+              @input="validateFields('address', user.address.length > 0)"
             />
-            <div class="valid-feedback text-left">¡Se ve bien!</div>
-            <div class="invalid-feedback text-left">
-              Por favor diligencia este campo
-            </div>
           </div>
         </div>
         <p class="titulo datosPersonales">
@@ -165,7 +143,7 @@
             <div class="form-group">
               <label for="contact">Nombre:</label>
               <input
-                v-model="newUser.contact"
+                v-model="user.contact"
                 class="form-control shadow-none"
                 type="text"
                 id="contact"
@@ -175,19 +153,15 @@
                     !validFields.includes('contact') &&
                     validatedFields.includes('contact'),
                 }"
-                @input="validateFields('contact', newUser.contact.length > 0)"
+                @input="validateFields('contact', user.contact.length > 0)"
               />
-              <div class="valid-feedback text-left">¡Se ve bien!</div>
-              <div class="invalid-feedback text-left">
-                Por favor diligencia este campo
-              </div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <label for="relatedTo">Parentesco:</label>
               <input
-                v-model="newUser.relatedTo"
+                v-model="user.relatedTo"
                 class="form-control shadow-none"
                 type="text"
                 id="relatedTo"
@@ -197,16 +171,14 @@
                     !validFields.includes('relatedTo') &&
                     validatedFields.includes('relatedTo'),
                 }"
-                @input="
-                  validateFields('relatedTo', newUser.relatedTo.length > 0)
-                "
+                @input="validateFields('relatedTo', user.relatedTo.length > 0)"
               />
             </div>
           </div>
           <div class="total-row">
             <label for="phone3">Telefono :</label>
             <input
-              v-model="newUser.phone3"
+              v-model="user.phone3"
               class="form-control shadow-none"
               type="text"
               id="phone3"
@@ -216,12 +188,8 @@
                   !validFields.includes('phone3') &&
                   validatedFields.includes('phone3'),
               }"
-              @input="validateFields('phone1', newUser.phone3 > 0)"
+              @input="validateFields('phone1', user.phone3 > 0)"
             />
-            <div class="valid-feedback text-left">¡Se ve bien!</div>
-            <div class="invalid-feedback text-left">
-              Por favor diligencia este campo
-            </div>
           </div>
         </div>
         <p class="titulo datosEmpresariales">
@@ -234,7 +202,7 @@
             <input
               type="email"
               class="form-control shadow-none datosEmpresariales"
-              v-model="newUser.email"
+              v-model="user.email"
               id="email"
               :class="{
                 'is-valid': validFields.includes('email'),
@@ -242,12 +210,8 @@
                   !validFields.includes('email') &&
                   validatedFields.includes('email'),
               }"
-              @input="validateFields('user', newUser.email.length > 0)"
+              @input="validateFields('user', user.email.length > 0)"
             />
-            <div class="valid-feedback text-left">¡Se ve bien!</div>
-            <div class="invalid-feedback text-left">
-              Por favor diligencia este campo
-            </div>
           </div>
         </div>
         <!--Status-->
@@ -255,7 +219,7 @@
           <div class="total-row form-group has-validation">
             <label for="status">Estado:</label>
             <select
-              v-model="newUser.status"
+              v-model="user.status"
               class="form-select shadow-none datosEmpresariales"
               id="status"
               :class="{
@@ -264,7 +228,7 @@
                   !validFields.includes('status') &&
                   validatedFields.includes('status'),
               }"
-              @change="validateFields('status', newUser.status.length > 0)"
+              @change="validateFields('status', user.status.length > 0)"
             >
               <option>Inactivo</option>
               <option>Disponible</option>
@@ -279,7 +243,7 @@
             <div class="form-group has-validation">
               <label for="position">Cargo:</label>
               <select
-                v-model="newUser.position"
+                v-model="user.position"
                 class="form-select shadow-none datosEmpresariales"
                 id="position"
                 :class="{
@@ -288,9 +252,7 @@
                     !validFields.includes('position') &&
                     validatedFields.includes('position'),
                 }"
-                @change="
-                  validateFields('position', newUser.position.length > 0)
-                "
+                @change="validateFields('position', user.position.length > 0)"
               >
                 <option>Director</option>
                 <option>Coordinador</option>
@@ -303,9 +265,8 @@
             <div class="form-group has-validation">
               <label for="rol">Rol:</label>
               <input
-                type="text"
-                v-model="newUser.rol.rolName"
-                class="form-select shadow-none datosEmpresariales"
+                v-bind:value="user.rol.rolName"
+                class="form-control shadow-none datosEmpresariales"
                 id="rol"
                 :class="{
                   'is-valid': validFields.includes('rol'),
@@ -313,7 +274,6 @@
                     !validFields.includes('rol') &&
                     validatedFields.includes('rol'),
                 }"
-                @change="validateFields('rol', newUser.rol.rolName.length > 0)"
               />
             </div>
           </div>
@@ -327,7 +287,7 @@
             <label for="startContract">Fecha de ingreso:</label>
             <input
               v-bind:value="
-                new Date(newUser.startContract).toISOString().substring(0, 10)
+                new Date(user.startContract).toISOString().substring(0, 10)
               "
               class="form-control shadow-none datosEmpresariales"
               id="startContract"
@@ -338,7 +298,7 @@
                   validatedFields.includes('startContract'), // cdc otro array para saber si lo ha validado
               }"
               @blur="
-                validateFields('startContract', newUser.startContract !== null)
+                validateFields('startContract', user.startContract !== null)
               "
             />
           </div>
@@ -346,7 +306,7 @@
             <label for="finshContract">Fecha de terminación:</label>
             <input
               v-bind:value="
-                new Date(newUser.finshContract).toISOString().substring(0, 10)
+                new Date(user.finshContract).toISOString().substring(0, 10)
               "
               class="form-control shadow-none datosEmpresariales"
               id="finshContract"
@@ -364,7 +324,7 @@
               <label for="minDate">Fecha mínima:</label>
               <input
                 v-bind:value="
-                  new Date(newUser.minDate).toISOString().substring(0, 10)
+                  new Date(user.minDate).toISOString().substring(0, 10)
                 "
                 class="form-control shadow-none datosEmpresariales"
                 id="minDate"
@@ -374,7 +334,7 @@
                     !validFields.includes('minDate') &&
                     validatedFields.includes('minDate'),
                 }"
-                @blur="validateFields('minDate', newUser.minDate !== '')"
+                @blur="validateFields('minDate', user.minDate !== '')"
               />
             </div>
           </div>
@@ -409,75 +369,35 @@
 </template>
 
 <script lang="ts">
-import controllers from "@/controllers/RequestController";
 import session from "@/controllers/SessionController";
 import { Vue } from "vue-class-component";
-import type { user } from "@/registerDataType";
+
 export default class userCrud extends Vue {
   user = session.getUserData();
-  newUser = this.user;
   maxDate = new Date();
-  userList!: user[];
   validFields: string[] = [];
   validatedFields: string[] = [];
   requiredFields: string[] = [
-    "email",
-    "rol",
-    "status",
-    "startContract",
-    "position",
+    "perEmail",
+    "userName",
+    "userLastN",
+    "birthday",
+    "phone1",
+    "phone3",
+    "address",
+    "contact",
+    "relatedTo",
   ]; // Lista de campos requeridos
-  opccrud!: string;
 
-  async beforeMount() {
-    this.userList = (await controllers.getUser()) || [];
-  }
   data() {
     return {
-      userList: this.userList,
-      opccrud: this.opccrud,
-      newUser: this.newUser,
+      user: this.user,
       validFields: this.validFields,
     };
   }
-  getImage(user: number) {
-    let image = this.userList[user].profileimage;
-    console.log(image);
-    if (!image) return "";
-    else {
-      return image;
-    }
-  }
 
   mounted() {
-    this.requiredFields = [
-      "perEmail",
-      "userName",
-      "userLastN",
-      "phone1",
-      "phone3",
-      "contact",
-      "birthday",
-    ]; // Lista de campos requeridos
-    /* this.newUser.userId = user.userId;
-    this.newUser.birthday = new Date(user.birthday);
-    this.newUser.userName = user.userName;
-    this.newUser.userLastN = user.userLastN;
-    this.newUser.contact = user.contact;
-    this.newUser.phone1 = user.phone1;
-    this.newUser.phone2 = user.phone2;
-    this.newUser.phone3 = user.phone3;
-    this.newUser.address = user.address;
-    this.newUser.perEmail = user.perEmail;
-    this.newUser.rol = user.rol;
-    this.newUser.status = user.status;
-    this.newUser.email = user.email;
-    this.newUser.position = user.position; */
-    this.newUser.startContract = new Date(this.newUser.startContract);
-    this.newUser.minDate = new Date(this.newUser.minDate);
-    this.newUser.finshContract = new Date(this.newUser.finshContract);
-    this.newUser.birthday = new Date(this.newUser.birthday);
-
+    this.user.birthday = new Date(this.user.birthday);
     const datosEmpresariales = document.querySelectorAll(".datosEmpresariales");
     datosEmpresariales.forEach((element) => {
       (element as HTMLInputElement).disabled = true;
@@ -489,7 +409,7 @@ export default class userCrud extends Vue {
       this.validatedFields.push(fieldName); // cdc: cuando el campo llama a esta funcion es porque se ha digitado algo, entonces al validarlo se añade el campo a este array para mostrar error
     const field = document.getElementById(fieldName) as HTMLInputElement;
     if (condition && field !== null) {
-      if (!this.validFields.includes(fieldName) && field.checkValidity())
+      if (!this.validFields.includes(fieldName))
         this.validFields.push(fieldName);
     } else {
       const index = this.validFields.indexOf(fieldName);
@@ -497,16 +417,17 @@ export default class userCrud extends Vue {
         this.validFields.splice(index, 1);
     }
   }
+
   submitForm() {
-    this.validateFields("perEmail", this.newUser.perEmail.length > 0);
-    this.validateFields("name", this.newUser.userName.length > 0);
-    this.validateFields("lastN", this.newUser.userLastN.length > 0);
-    this.validateFields("birthday", this.newUser.birthday !== "");
-    this.validateFields("phone1", this.newUser.phone1 > 0);
-    this.validateFields("phone2", this.newUser.phone2 > 0);
-    this.validateFields("phone3", this.newUser.phone3 > 0);
-    this.validateFields("address", this.newUser.address.length > 0);
-    this.validateFields("contact", this.newUser.contact.length > 0);
+    this.validateFields("perEmail", this.user.perEmail.length > 0);
+    this.validateFields("userName", this.user.userName.length > 0);
+    this.validateFields("userLastN", this.user.userLastN.length > 0);
+    this.validateFields("birthday", this.user.birthday !== "");
+    this.validateFields("phone1", this.user.phone1 > 0);
+    this.validateFields("phone3", this.user.phone3 > 0);
+    this.validateFields("address", this.user.address.length > 0);
+    this.validateFields("contact", this.user.contact.length > 0);
+    this.validateFields("relatedTo", this.user.relatedTo.length > 0);
 
     // Validar que todos los campos requeridos estén diligenciados
     if (
@@ -516,7 +437,6 @@ export default class userCrud extends Vue {
       // Agrega tu lógica para guardar los cambios aquí.
     } else {
       // Muestra un mensaje de error o realiza alguna acción si no se han diligenciado todos los campos.
-      alert("Por favor diligencie todos los campos requeridos.");
     }
   }
 }

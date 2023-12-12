@@ -129,7 +129,7 @@ export default class LoginForm extends Vue {
           userLastN: "Doe",
           rol: { id: 1, rolName: "User" },
           status: "Disponible",
-          minDate: new Date(),
+          minDate: new Date("2023-12-09"),
           phone1: 123456789,
           phone2: 79716834,
           phone3: 317247222,

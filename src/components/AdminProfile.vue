@@ -40,10 +40,6 @@ adminProfile
                     validateFields('userName', newUser.userName.length > 0)
                   "
                 />
-                <div class="valid-feedback text-left">¡Se ve bien!</div>
-                <div class="invalid-feedback text-left">
-                  Por favor diligencia este campo
-                </div>
               </div>
               <div class="col-md-6">
                 <label for="lastN">Apellidos:</label>
@@ -62,10 +58,6 @@ adminProfile
                     validateFields('userLastN', newUser.userLastN.length > 0)
                   "
                 />
-                <div class="valid-feedback text-left">¡Se ve bien!</div>
-                <div class="invalid-feedback text-left">
-                  Por favor diligencia este campo
-                </div>
               </div>
             </div>
             <!--Email personal-->
@@ -85,10 +77,6 @@ adminProfile
                   }"
                   @input="validateFields('user', newUser.perEmail.length > 0)"
                 />
-                <div class="valid-feedback text-left">¡Se ve bien!</div>
-                <div class="invalid-feedback text-left">
-                  Por favor diligencia este campo
-                </div>
               </div>
             </div>
             <!--Telefonos-->
@@ -109,10 +97,6 @@ adminProfile
                     }"
                     @input="validateFields('phone1', newUser.phone1 > 0)"
                   />
-                  <div class="valid-feedback text-left">¡Se ve bien!</div>
-                  <div class="invalid-feedback text-left">
-                    Por favor diligencia este campo
-                  </div>
                 </div>
               </div>
               <div class="col-md-6">
@@ -135,7 +119,7 @@ adminProfile
                   v-model="newUser.birthday"
                   class="form-control shadow-none"
                   id="birthday"
-                  inputFormat="yyyy/MM/dd"
+                  inputFormat="yyyy-MM-dd"
                   :class="{
                     'is-valid': validFields.includes('birthday'),
                     'is-invalid':
@@ -144,10 +128,6 @@ adminProfile
                   }"
                   @blur="validateFields('birthday', newUser.birthday !== '')"
                 />
-                <div class="valid-feedback">¡Se ve bien!</div>
-                <div class="invalid-feedback">
-                  Por favor diligencia este campo
-                </div>
               </div>
             </div>
             <!--Dirección-->
@@ -167,10 +147,6 @@ adminProfile
                   }"
                   @input="validateFields('address', newUser.address.length > 0)"
                 />
-                <div class="valid-feedback text-left">¡Se ve bien!</div>
-                <div class="invalid-feedback text-left">
-                  Por favor diligencia este campo
-                </div>
               </div>
             </div>
             <p class="titulo datosPersonales">
@@ -195,10 +171,6 @@ adminProfile
                       validateFields('contact', newUser.contact.length > 0)
                     "
                   />
-                  <div class="valid-feedback text-left">¡Se ve bien!</div>
-                  <div class="invalid-feedback text-left">
-                    Por favor diligencia este campo
-                  </div>
                 </div>
               </div>
               <div class="col-md-6">
@@ -236,10 +208,6 @@ adminProfile
                   }"
                   @input="validateFields('phone1', newUser.phone3 > 0)"
                 />
-                <div class="valid-feedback text-left">¡Se ve bien!</div>
-                <div class="invalid-feedback text-left">
-                  Por favor diligencia este campo
-                </div>
               </div>
             </div>
             <p class="titulo">
@@ -262,10 +230,6 @@ adminProfile
                   }"
                   @input="validateFields('user', newUser.email.length > 0)"
                 />
-                <div class="valid-feedback text-left">¡Se ve bien!</div>
-                <div class="invalid-feedback text-left">
-                  Por favor diligencia este campo
-                </div>
               </div>
             </div>
             <!--Status-->
@@ -352,7 +316,7 @@ adminProfile
                   v-model="newUser.startContract"
                   class="form-control shadow-none"
                   id="startContract"
-                  inputFormat="yyyy/MM/dd"
+                  inputFormat="yyyy-MM-dd"
                   :class="{
                     'is-valid': validFields.includes('startContract'),
                     'is-invalid':
@@ -366,10 +330,6 @@ adminProfile
                     )
                   "
                 ></date-picker>
-                <div class="valid-feedback">¡Se ve bien!</div>
-                <div class="invalid-feedback">
-                  Por favor diligencia este campo
-                </div>
               </div>
               <div class="col-md-6 form-group">
                 <label for="finshContract">Fecha de terminación:</label>
@@ -377,7 +337,7 @@ adminProfile
                   v-model="newUser.finshContract"
                   class="form-control shadow-none"
                   id="finshContract"
-                  inputFormat="yyyy/MM/dd"
+                  inputFormat="yyyy-MM-dd"
                 ></date-picker>
               </div>
             </div>
@@ -394,7 +354,7 @@ adminProfile
                     v-model="newUser.minDate"
                     class="form-control shadow-none"
                     id="minDate"
-                    inputFormat="yyyy/MM/dd"
+                    inputFormat="yyyy-MM-dd"
                     :class="{
                       'is-valid': validFields.includes('minDate'),
                       'is-invalid':
@@ -403,10 +363,6 @@ adminProfile
                     }"
                     @blur="validateFields('minDate', newUser.minDate !== '')"
                   />
-                  <div class="valid-feedback">¡Se ve bien!</div>
-                  <div class="invalid-feedback">
-                    Por favor diligencia este campo
-                  </div>
                 </div>
               </div>
               <!--fecha limite-->
@@ -417,13 +373,9 @@ adminProfile
                     v-model="maxDate"
                     class="form-control shadow-none"
                     id="maxDate"
-                    inputFormat="yyyy/MM/dd"
+                    inputFormat="yyyy-MM-dd"
                     :disabled="true"
                   />
-                  <div class="valid-feedback">¡Se ve bien!</div>
-                  <div class="invalid-feedback">
-                    Por favor diligencia este campo
-                  </div>
                 </div>
               </div>
             </div>
