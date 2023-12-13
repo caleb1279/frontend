@@ -196,6 +196,8 @@ import type { activity, report, project, user } from "@/registerDataType";
 export default class HomePage extends Vue {
   user = session.getUserData();
 
+  actualDate!: Date;
+
   logout = session.Logout;
   particlesContainer!: Container;
   avatarimage = this.user === undefined ? "" : this.user.profileimage;
@@ -215,22 +217,28 @@ export default class HomePage extends Vue {
   projectlist!: project[];
 
   async beforeMount() {
-    let reports: report[] = await request.getReports(
-      this.user.id,
-      new Date()
-    );
+    if (session.getLocals() && session.getLocals().actualdate === Date) {
+      this.actualDate = session.getLocals().actualDate;
+    } else {
+      this.actualDate = new Date();
+    }
+
+    let reports = await request.getReports(this.user.id, new Date());
 
     let projects: project[] = await request.getProjects(this.user.id);
 
     let activities: activity[] = await request.getActivities();
 
-    this.reportlist = reports !== undefined ? reports : [];
+    this.reportlist = reports !== undefined && reports !== null ? reports : [];
     this.activitylist = activities !== undefined ? activities : [];
     this.projectlist = projects !== undefined ? projects : [];
 
-    session.setLocals("projectlist", this.projectlist);
-    session.setLocals("reportlist", this.reportlist);
-    session.setLocals("activitylist", this.activitylist);
+    session.setLocals({
+      actualdate: this.actualDate,
+      reportlist: this.reportlist,
+      activitylist: this.activitylist,
+      projectlist: this.projectlist,
+    });
   }
 
   beforeUnmount() {

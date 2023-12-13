@@ -113,7 +113,7 @@ export default class LoginForm extends Vue {
       .catch((error: AxiosError) => {
         console.log(error);
         this.msg = "Ha ocurrido un error al intentar iniciar sesión";
-        session.Login("auth-123", {
+        session.Login("1", {
           id: 1,
           email: "ejemplo@colnexsi.com.co",
           /* fullName: "Pepito Perez", */
@@ -121,24 +121,24 @@ export default class LoginForm extends Vue {
           password: "password",
           vacationDays: 15,
           startContract: new Date("2022-01-01"),
-          finshContract: new Date("2024-01-31"),
+          finishContract: new Date("2024-01-31"),
           tipId: 1,
           numId: 1026574754,
-          perEmail: "usco.doe@example.com",
-          userName: "John",
-          userLastN: "Doe",
+          personalEmail: "usco.doe@example.com",
+          name: "John",
+          lastName: "Doe",
           rol: { id: 1, rolName: "User" },
           status: "Disponible",
-          minDate: new Date("2023-12-09"),
-          phone1: 123456789,
+          minimumReportDate: new Date("2023-12-09"),
+          phone: 123456789,
           phone2: 79716834,
-          phone3: 317247222,
-          contact: "Maria Teresa",
-          relatedTo: "Madre",
+          emergencyPhone: 317247222,
+          emergencyContact: "Maria Teresa",
+          relationshipContact: "Madre",
           birthday: new Date("2003-05-08"),
           address: "Velasquez St. No 80, Madrid",
-          position: "Desarrollador",
-          profileimage:
+          workPosition: "Desarrollador",
+          profilePicture:
             "https://i.pinimg.com/550x/8d/e7/fa/8de7fa2af12330350613ede63532c4fb.jpg",
         });
       });

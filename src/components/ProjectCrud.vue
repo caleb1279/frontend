@@ -173,7 +173,7 @@
           data-bs-toggle="modal"
           data-bs-target="#projectModal"
           v-on:click="opccrud = 'Creación'"
-          v-on:click.prevent=""
+          v-on:click.prevent="clearModal()"
         >
           <font-awesome-icon icon="plus" /> Crear Proyecto
         </button>
@@ -265,7 +265,7 @@ export default class ProjectCrud extends Vue {
   opccrud!: string;
 
   beforeMount() {
-    const projects = session.getLocals("projectlist");
+    const projects = session.getLocals().projectlist;
     this.projectlist = projects === undefined ? [] : projects;
   }
 

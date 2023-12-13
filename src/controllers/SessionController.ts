@@ -2,11 +2,6 @@ import { useStorage } from "vue3-storage";
 import { useCookies } from "vue3-cookies";
 import router from "@/router";
 import type { user } from "@/registerDataType";
-import { globalCookiesConfig } from "vue3-cookies";
-
-globalCookiesConfig({
-  expireTimes: "1h",
-});
 
 const storage = useStorage();
 const { cookies } = useCookies(); // cookies.get(key) | cookies.set(key, value)
@@ -20,9 +15,7 @@ export default {
   Logout() {
     storage.removeStorageSync("Authorization");
     storage.removeStorageSync("userdata");
-    cookies.remove("projectlist");
-    cookies.remove("reportlist");
-    cookies.remove("activitylist");
+    storage.removeStorageSync("appdata");
     router.push("/login");
   },
   ValidateSesison() {
@@ -38,28 +31,36 @@ export default {
     if (data !== undefined && data !== null) {
       return JSON.parse(data);
     } else {
-      return null;
+      return undefined;
     }
   },
 
-  setLocals(key: string, value: any) {
-    if (value === null || value === undefined) {
-      return;
-    }
-
-    cookies.set(key, JSON.stringify(value));
-  },
-
-  getLocals(key: string) {
-    if (key === "") {
-      return null;
-    }
-
+  setLocals(value: any) {
     try {
-      const data = cookies.get(key);
+      storage.setStorageSync("appdata", JSON.stringify(value));
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getLocals() {
+    try {
+      const data = storage.getStorageSync("appdata");
       return JSON.parse(data);
     } catch {
-      return null;
+      return undefined;
     }
+  },
+
+  setCookie(key: string, value: string, expire: string | number = "1h") {
+    cookies.set(key, value, expire);
+  },
+
+  getCookie(key: string) {
+    return cookies.get(key);
+  },
+
+  clearCookie(key: string) {
+    cookies.remove(key);
   },
 };

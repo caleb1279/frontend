@@ -6,7 +6,7 @@ import { useStorage } from "vue3-storage";
 const storage = useStorage();
 
 const request = axios.create({
-  baseURL: "https://3cc1-191-156-176-63.ngrok-free.app",
+  baseURL: "https://2e58-186-84-89-185.ngrok-free.app",
   withCredentials: false,
   headers: {
     Accept: "application/json",
@@ -81,7 +81,6 @@ export default {
   },
   async sendReport(report: report) {
     try {
-      report.date = new Date(report.date).toISOString().substring(0, 10);
       const data = await request.post("/writereport", report);
       return data.status;
     } catch (error) {
@@ -89,4 +88,13 @@ export default {
       return null;
     }
   },
+
+  async deleteReport(id: number) {
+    try {
+      const data = await request.delete("/deletereport/"+id);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };

@@ -60,9 +60,8 @@
                   ></textarea>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
+              <div class="total-row">
+                <div class="form-group">
                     <label for="date">Fecha en que se realiza:</label>
                     <date-picker
                       v-model="newReport.date"
@@ -76,20 +75,12 @@
                           validatedFields.includes('date'), // cdc otro array para saber si lo ha validado
                       }"
                       :upperLimit="new Date()"
-                      :lowerLimit="
-                        new Date(
-                          user.minDate.substring(0, 4) +
-                            '-' +
-                            user.minDate.substring(5, 7) +
-                            '-' +
-                            (parseInt(user.minDate.substring(8, 10)) +
-                            1)
-                        )
-                      "
-                      @blur="validateFields('date', newReport.date !== null)"
+                     
+                      @blur="validateFields('date', newReport.date !== '')"
                     ></date-picker>
                   </div>
-                </div>
+              </div>
+              <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="hours">Duración en horas:</label>
@@ -110,6 +101,26 @@
                     />
                   </div>
                 </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="estimatedHours">Horas estimadas:</label>
+                    <input
+                      v-model="newReport.estimatedHours"
+                      type="number"
+                      class="form-control shadow-none"
+                      id="estimatedHours"
+                      min="0"
+                      step="0.5"
+                      :class="{
+                        'is-valid': validFields.includes('estimatedHours'),
+                        'is-invalid':
+                          !validFields.includes('estimatedHours') &&
+                          validatedFields.includes('estimatedHours'), // cdc otro array para saber si lo ha validado
+                      }"
+                      @input="validateFields('estimatedHours', newReport.estimatedHours > 0)"
+                    />
+                  </div>
+                </div>
               </div>
               <div class="row">
                 <div class="total-row form-group">
@@ -125,7 +136,7 @@
                     class="form-control shadow-none"
                     :minInputLength="1"
                     id="project"
-                    :items="projectlist"
+                    :items="projects"
                     :class="{
                       'is-valid': validFields.includes('project'),
                       'is-invalid':
@@ -198,10 +209,7 @@
           class="btn btn-primary btn-create"
           data-bs-toggle="modal"
           data-bs-target="#activityModal"
-          v-on:click.prevent="
-            opccrud = 'Creación';
-            clearModal();
-          "
+          v-on:click.prevent="createReport()"
         >
           <font-awesome-icon icon="plus" /> Crear actividad
         </button>
@@ -219,13 +227,57 @@
         </form>
       </div>
     </div>
+    <nav class="navigation" aria-label="Page navigation">
+      <ul class="pagination justify-content-end">
+        <li class="page-item">
+          <a
+            class="page-link shadow-none"
+            href="#"
+            v-on:click.prevent="updateRecords(-1)"
+            >Previous</a
+          >
+        </li>
+        <li class="page-item disabled">
+          <a class="page-link shadow-none">
+            {{
+              new Date(actualDate).toLocaleString("default", {
+                month: "long",
+              })
+            }}
+            <i
+              v-if="
+                new Date(actualDate).getFullYear() !== new Date().getFullYear()
+              "
+            >
+              - {{ new Date(actualDate).getFullYear() }}
+            </i>
+          </a>
+        </li>
+        <li
+          class="page-item"
+          :class="{
+            disabled:
+              actualDate.getMonth() === new Date().getMonth() &&
+              actualDate.getFullYear() === new Date().getFullYear(),
+          }"
+        >
+          <a
+            class="page-link shadow-none"
+            href="#"
+            v-on:click.prevent="updateRecords(1)"
+            >Next</a
+          >
+        </li>
+      </ul>
+    </nav>
     <div class="table-contain">
       <table class="table text-left">
         <thead>
           <tr>
             <th scope="col">Fecha creaci&oacute;n</th>
             <th scope="col">Descripci&oacute;n</th>
-            <th scope="col">horas</th>
+            <th scope="col">Horas Estimadas</th>
+            <th scope="col">Horas Reales</th>
             <th scope="col">Actividad</th>
             <th scope="col">Etapa</th>
             <th scope="col">Proyecto</th>
@@ -237,6 +289,7 @@
           <tr v-for="report in reportlist" :key="report.id">
             <td>{{ new Date(report.date).toISOString().substring(0, 10) }}</td>
             <td>{{ report.detail }}</td>
+            <td>{{ report.estimatedHours }}</td>
             <td>{{ report.hours }}</td>
             <td>{{ report.title }}</td>
             <td>{{ report.activity === null ? "" : report.activity.name }}</td>
@@ -252,57 +305,13 @@
               </a>
             </td>
             <td>
-              <a href="#" v-on:click.prevent="">
+              <a href="#" v-on:click.prevent="deleteReport(parseInt(report.id))">
                 <font-awesome-icon icon="trash" />
               </a>
             </td>
           </tr>
         </tbody>
       </table>
-      <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-end">
-          <li class="page-item">
-            <a
-              class="page-link shadow-none"
-              href="#"
-              v-on:click.prevent="updateRecords(-1)"
-              >Previous</a
-            >
-          </li>
-          <li class="page-item disabled">
-            <a class="page-link shadow-none">
-              {{
-                new Date(actualDate).toLocaleString("default", {
-                  month: "long",
-                })
-              }}
-              <i
-                v-if="
-                  new Date(actualDate).getFullYear() !==
-                  new Date().getFullYear()
-                "
-              >
-                - {{ new Date(actualDate).getFullYear() }}
-              </i>
-            </a>
-          </li>
-          <li
-            class="page-item"
-            :class="{
-              disabled:
-                actualDate.getMonth() === new Date().getMonth() &&
-                actualDate.getFullYear() === new Date().getFullYear(),
-            }"
-          >
-            <a
-              class="page-link shadow-none"
-              href="#"
-              v-on:click.prevent="updateRecords(1)"
-              >Next</a
-            >
-          </li>
-        </ul>
-      </nav>
     </div>
   </div>
 </template>
@@ -314,12 +323,13 @@ import type { activity, project, report } from "@/registerDataType";
 import { Vue } from "vue-class-component";
 
 export default class ReportCrud extends Vue {
-  actualDate = new Date();
+  actualDate!: Date;
   user = session.getUserData();
   newReport: report = {
     id: 0,
     date: new Date(),
     hours: NaN,
+    estimatedHours: NaN,
     detail: "",
     title: "",
     activity: {
@@ -348,16 +358,28 @@ export default class ReportCrud extends Vue {
     "title",
     "detail",
     "date",
+    "estimatedHours",
     "hours",
     "project",
     "activity",
   ];
 
+  createReport() {
+    this.opccrud = "Creación";
+    this.clearModal();
+    this.newReport.date = new Date(this.newReport.date)
+  }
+
   async beforeMount() {
-    this.projectlist = session.getLocals("projectlist");
-    this.activitylist = session.getLocals("activitylist");
-    this.reportlist = session.getLocals("reportlist");
-    if (this.reportlist !== null)
+    if (session.getLocals()) {
+      this.actualDate = new Date(session.getLocals().actualdate) || new Date();
+    } else {
+      this.actualDate = new Date();
+    }
+    this.projectlist = session.getLocals().projectlist;
+    this.activitylist = session.getLocals().activitylist;
+    this.reportlist = session.getLocals().reportlist;
+    if (this.projectlist !== undefined && this.projectlist !== null)
       this.projects = this.projectlist.map((item) => item.name);
     else this.projects = [];
     if (this.reportlist !== undefined && this.reportlist !== null)
@@ -372,7 +394,18 @@ export default class ReportCrud extends Vue {
       reportlist: this.reportlist,
       projectlist: this.projectlist,
       opccrud: this.opccrud,
+      actualDate: this.actualDate,
+      newReport: this.newReport,
+      projects: this.projects,
     };
+  }
+
+  async deleteReport(id: number) {
+    let answer = window.confirm("Seguro que desea eliminar el registro?");
+    if (answer) {
+      await controllers.deleteReport(id);
+      this.updateRecords(0);
+    }
   }
 
   editReport(report: report) {
@@ -381,8 +414,9 @@ export default class ReportCrud extends Vue {
     this.newReport.title = report.title;
     this.newReport.detail = report.detail;
     this.newReport.hours = report.hours;
+    this.newReport.estimatedHours = report.estimatedHours;
     this.newReport.project = report.project;
-    this.newReport.date = report.date;
+    this.newReport.date = new Date(report.date);
     this.newReport.activity = report.activity;
   }
 
@@ -390,7 +424,8 @@ export default class ReportCrud extends Vue {
     this.validateFields("title", this.newReport.title.length > 0);
     this.validateFields("detail", this.newReport.detail.length > 0);
     this.validateFields("date", this.newReport.date !== "");
-    this.validateFields("hours", this.newReport.hours !== 0);
+    this.validateFields("hours", this.newReport.hours > 0);
+    this.validateFields("estimatedHours", this.newReport.estimatedHours > 0);
     this.validateFields("project", this.newReport.project.name !== "");
     this.validateFields("activity", this.newReport.activity.name.length > 0);
     // Validar que todos los campos requeridos estén diligenciados
@@ -409,6 +444,7 @@ export default class ReportCrud extends Vue {
       this.newReport.project = project[0];
       console.log(await controllers.sendReport(this.newReport));
       this.updateRecords(0);
+      console.log(this.newReport.date);
       (document.querySelector(".btn-close") as HTMLButtonElement).click();
     } else {
       // Muestra un mensaje de error o realiza alguna acción si no se han diligenciado todos los campos.
@@ -419,12 +455,19 @@ export default class ReportCrud extends Vue {
     this.reportlist = [];
     let date = this.actualDate;
     this.actualDate = new Date(date.getFullYear(), date.getMonth() + dir, 1);
-    this.reportlist = await controllers.getReports(1, this.actualDate);
-    session.setLocals("reportlist", this.reportlist);
-    if (this.reportlist !== undefined && this.reportlist !== null)
+    this.reportlist = await controllers.getReports(
+      session.getUserData().id,
+      this.actualDate
+    );
+    if (this.reportlist !== undefined && this.reportlist !== null) {
+      let locals = session.getLocals();
+      locals.reportlist = this.reportlist;
+      locals.actualdate = this.actualDate;
+      session.setLocals(locals);
       this.reportlist.sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
       );
+    }
   }
 
   validateFields(fieldName: string, condition: boolean) {
@@ -451,6 +494,7 @@ export default class ReportCrud extends Vue {
       detail: "",
       date: new Date(),
       hours: NaN,
+      estimatedHours: NaN,
       project: {
         id: "",
         projectId: "",
@@ -469,3 +513,9 @@ export default class ReportCrud extends Vue {
   }
 }
 </script>
+
+<style>
+.navigation {
+  margin: 26px;
+}
+</style>
