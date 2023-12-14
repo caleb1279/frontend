@@ -196,6 +196,9 @@ export default class DashboardPage extends Vue {
       this.adhierance = Math.round(this.adhierance / counter);
       this.meanHours = Math.round(this.totalHours / counter);
     }
+
+    if (isNaN(this.adhierance)) this.adhierance = 0;
+    if (isNaN(this.adhierance)) this.adhierance = 0;
   }
 
   data() {
