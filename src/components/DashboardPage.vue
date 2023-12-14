@@ -22,7 +22,7 @@
       <i><font-awesome-icon icon="arrow-trend-up"></font-awesome-icon></i>
       <div class="informacion">
         <span class="text">Promedio de Horas</span>
-        <span class="number">{{  meanHours }}</span>
+        <span class="number">{{ meanHours }}</span>
       </div>
     </div>
     <div class="box">
@@ -54,6 +54,14 @@
       height="300"
       width="850"
       :options="{
+        theme: {
+          monochrome: {
+            enabled: true,
+            shadeTo: 'light',
+            shadeIntensity: 0.8,
+            color: '#000083',
+          },
+        },
         chart: {
           height: 300,
           width: 850,
@@ -79,11 +87,20 @@
           categories: activities,
         },
       }"
-      :series="series"
+      :series="[
+        {
+          name: 'Horas Estimadas',
+          data: numberData2,
+        },
+        {
+          name: 'Horas Reales',
+          data: numberData,
+        },
+      ]"
     ></apexchart>
     <div class="projects">
       <h2>Proyectos Activos</h2>
-      <br>
+      <br />
       <ul v-for="project in projectlist">
         <li>{{ project }}</li>
       </ul>
@@ -106,28 +123,9 @@ export default class DashboardPage extends Vue {
   dayActivity = 0;
   reportlist!: report[];
   projectlist: string[] = [];
-
-  series = [
-    {
-      name: "Horas",
-      data: [
-      10, 41, 35, 51, 49, 62, 69, 91, 148, 25,
-      ],
-    },
-  ];
-
-  activities = [
-    "SLDA043",
-    "SLB042A",
-    "SL1346",
-    "SL600",
-    "SIIL01",
-    "SLB001",
-    "SL1348",
-    "SIRV006",
-    "SL1346",
-    "SL600",
-  ];
+  activities: string[] = [];
+  numberData: number[] = [];
+  numberData2: number[] = [];
 
   beforeMount() {
     this.username =
@@ -152,6 +150,14 @@ export default class DashboardPage extends Vue {
       });
     }
 
+    if (this.reportlist.length > 0) {
+      this.reportlist.forEach((report) => {
+        if (report.title) {
+          this.activities.push(report.title);
+        }
+      });
+    }
+
     this.collectData();
   }
 
@@ -161,11 +167,21 @@ export default class DashboardPage extends Vue {
     this.dayActivity = 0;
     this.meanHours = 0;
     let counter = 0;
+    this.numberData = [];
+    this.numberData2 = [];
     let countedDays: (string | Date)[] = [];
     if (this.reportlist !== undefined) {
       this.reportlist.forEach((report) => {
         if (typeof report.hours === "number" && !isNaN(report.hours)) {
           this.totalHours += report.hours;
+          this.numberData.push(report.hours);
+        }
+
+        if (
+          typeof report.estimatedHours === "number" &&
+          !isNaN(report.estimatedHours)
+        ) {
+          this.numberData2.push(report.estimatedHours);
         }
 
         if (!countedDays.includes(report.date)) {
@@ -186,6 +202,8 @@ export default class DashboardPage extends Vue {
     return {
       username: this.username,
       actualDate: this.actualDate,
+      numberData: this.numberData,
+      numberData2: this.numberData2,
     };
   }
 

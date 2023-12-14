@@ -130,7 +130,7 @@
                 <div class="total-row form-group">
                   <label for="project">Nombre del proyecto:</label>
                   <vue3-simple-typeahead
-                    v-bind:value="newReport.project.name"
+                    v-model="newReport.project.name"
                     @selectItem="
                       (item: string) => {
                       newReport.project.name = item;
@@ -150,7 +150,7 @@
                     @input="
                       validateFields(
                         'project',
-                        newReport.project.name.length > 0
+                        newReport.project.name !== ''
                       )
                     "
                   ></vue3-simple-typeahead>
@@ -220,7 +220,11 @@
       </div>
       <div class="right-search nav">
         <form class="d-flex" role="search" v-on:click.prevent="">
-          <input class="form-control me-2 shadow-none" id="search" type="search" />
+          <input
+            class="form-control me-2 shadow-none"
+            id="search"
+            type="search"
+          />
           <button
             class="btn btn-primary"
             type="submit"
@@ -527,7 +531,8 @@ export default class ReportCrud extends Vue {
   color: black;
 }
 
-.navigation a:hover, .navigation a:focus {
+.navigation a:hover,
+.navigation a:focus {
   color: initial;
 }
 </style>
