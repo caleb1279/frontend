@@ -62,23 +62,22 @@
               </div>
               <div class="total-row">
                 <div class="form-group">
-                    <label for="date">Fecha en que se realiza:</label>
-                    <date-picker
-                      v-model="newReport.date"
-                      class="form-control shadow-none"
-                      id="date"
-                      inputFormat="yyyy-MM-dd"
-                      :class="{
-                        'is-valid': validFields.includes('date'),
-                        'is-invalid':
-                          !validFields.includes('date') &&
-                          validatedFields.includes('date'), // cdc otro array para saber si lo ha validado
-                      }"
-                      :upperLimit="new Date()"
-                     
-                      @blur="validateFields('date', newReport.date !== '')"
-                    ></date-picker>
-                  </div>
+                  <label for="date">Fecha en que se realiza:</label>
+                  <date-picker
+                    v-model="newReport.date"
+                    class="form-control shadow-none"
+                    id="date"
+                    inputFormat="yyyy-MM-dd"
+                    :class="{
+                      'is-valid': validFields.includes('date'),
+                      'is-invalid':
+                        !validFields.includes('date') &&
+                        validatedFields.includes('date'), // cdc otro array para saber si lo ha validado
+                    }"
+                    :upperLimit="new Date()"
+                    @blur="validateFields('date', newReport.date !== '')"
+                  ></date-picker>
+                </div>
               </div>
               <div class="row">
                 <div class="col-md-6">
@@ -117,7 +116,12 @@
                           !validFields.includes('estimatedHours') &&
                           validatedFields.includes('estimatedHours'), // cdc otro array para saber si lo ha validado
                       }"
-                      @input="validateFields('estimatedHours', newReport.estimatedHours > 0)"
+                      @input="
+                        validateFields(
+                          'estimatedHours',
+                          newReport.estimatedHours > 0
+                        )
+                      "
                     />
                   </div>
                 </div>
@@ -216,7 +220,7 @@
       </div>
       <div class="right-search nav">
         <form class="d-flex" role="search" v-on:click.prevent="">
-          <input class="form-control me-2 shadow-none" type="search" />
+          <input class="form-control me-2 shadow-none" id="search" type="search" />
           <button
             class="btn btn-primary"
             type="submit"
@@ -305,7 +309,7 @@
               </a>
             </td>
             <td>
-              <a href="#" v-on:click.prevent="deleteReport(parseInt(report.id))">
+              <a href="#" v-on:click.prevent="deleteReport(report.id)">
                 <font-awesome-icon icon="trash" />
               </a>
             </td>
@@ -333,11 +337,11 @@ export default class ReportCrud extends Vue {
     detail: "",
     title: "",
     activity: {
-      id: "",
+      id: 0,
       name: "",
     },
     project: {
-      id: "",
+      id: 0,
       projectId: "",
       name: "",
       labDate: "",
@@ -367,7 +371,7 @@ export default class ReportCrud extends Vue {
   createReport() {
     this.opccrud = "Creación";
     this.clearModal();
-    this.newReport.date = new Date(this.newReport.date)
+    this.newReport.date = new Date(this.newReport.date);
   }
 
   async beforeMount() {
@@ -496,7 +500,7 @@ export default class ReportCrud extends Vue {
       hours: NaN,
       estimatedHours: NaN,
       project: {
-        id: "",
+        id: 0,
         projectId: "",
         name: "",
         labDate: "",
@@ -505,7 +509,7 @@ export default class ReportCrud extends Vue {
         status: null,
       },
       activity: {
-        id: "",
+        id: 0,
         name: "",
       },
       user: session.getUserData(),
@@ -516,6 +520,14 @@ export default class ReportCrud extends Vue {
 
 <style>
 .navigation {
-  margin: 26px;
+  margin: 0 25px;
+}
+
+.navigation a {
+  color: black;
+}
+
+.navigation a:hover, .navigation a:focus {
+  color: initial;
 }
 </style>

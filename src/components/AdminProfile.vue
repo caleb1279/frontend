@@ -1,5 +1,3 @@
-adminProfile
-
 <template>
   <div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
@@ -36,9 +34,7 @@ adminProfile
                       !validFields.includes('name') &&
                       validatedFields.includes('name'),
                   }"
-                  @input="
-                    validateFields('name', newUser.name.length > 0)
-                  "
+                  @input="validateFields('name', newUser.name.length > 0)"
                 />
               </div>
               <div class="col-md-6">
@@ -75,7 +71,9 @@ adminProfile
                       !validFields.includes('personalEmail') &&
                       validatedFields.includes('personalEmail'),
                   }"
-                  @input="validateFields('user', newUser.personalEmail.length > 0)"
+                  @input="
+                    validateFields('user', newUser.personalEmail.length > 0)
+                  "
                 />
               </div>
             </div>
@@ -168,7 +166,10 @@ adminProfile
                         validatedFields.includes('emergencyContact'),
                     }"
                     @input="
-                      validateFields('emergencyContact', newUser.emergencyContact.length > 0)
+                      validateFields(
+                        'emergencyContact',
+                        newUser.emergencyContact.length > 0
+                      )
                     "
                   />
                 </div>
@@ -188,7 +189,10 @@ adminProfile
                         validatedFields.includes('relationshipContact'),
                     }"
                     @input="
-                      validateFields('relationshipContact', newUser.relationshipContact.length > 0)
+                      validateFields(
+                        'relationshipContact',
+                        newUser.relationshipContact.length > 0
+                      )
                     "
                   />
                 </div>
@@ -271,7 +275,10 @@ adminProfile
                         validatedFields.includes('workPosition'),
                     }"
                     @change="
-                      validateFields('workPosition', newUser.workPosition.length > 0)
+                      validateFields(
+                        'workPosition',
+                        newUser.workPosition.length > 0
+                      )
                     "
                   >
                     <option>Director</option>
@@ -361,7 +368,12 @@ adminProfile
                         !validFields.includes('minimumReportDate') &&
                         validatedFields.includes('minimumReportDate'),
                     }"
-                    @blur="validateFields('minimumReportDate', newUser.minimumReportDate !== '')"
+                    @blur="
+                      validateFields(
+                        'minimumReportDate',
+                        newUser.minimumReportDate !== ''
+                      )
+                    "
                   />
                 </div>
               </div>
@@ -421,7 +433,11 @@ adminProfile
     </div>
     <div class="right-search nav">
       <form class="d-flex" role="search" v-on:click.prevent="">
-        <input class="form-control me-2 shadow-none" type="search" />
+        <input
+          class="form-control me-2 shadow-none"
+          id="search"
+          type="search"
+        />
         <button class="btn btn-primary" type="submit" v-on:click.prevent="">
           Buscar
         </button>
@@ -440,16 +456,16 @@ adminProfile
           <th scope="col">Cargo</th>
           <th scope="col">Rol</th>
           <th scope="col">Estado</th>
-          <th></th>
-          <th></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody v-for="user in userList" :key="user.id">
         <td>
           <img
             class="avatar-rounded"
-            with="50"
-            height="50"
+            with="30"
+            height="30"
             :src="getImage(user)"
           />
         </td>
@@ -544,7 +560,7 @@ export default class userCrud extends Vue {
         address: "calle 1 # 10 - 10",
         workPosition: "Director",
         emergencyContact: "Julian Rosa",
-        profileimage:
+        profilePicture:
           "https://www.imagenesbonitasname.com/covers/preview/fondo-de-perfil-watsapp-flor-rosa.jpg",
         startContract: "2023/08/09",
         finishContract: "2024/08/09",
@@ -566,7 +582,7 @@ export default class userCrud extends Vue {
         address: "calle 1 # 10 - 10",
         workPosition: "Director",
         emergencyContact: "Julian Rosa",
-        profileimage:
+        profilePicture:
           "https://www.imagenesbonitasname.com/covers/preview/fondo-de-perfil-watsapp-flor-rosa.jpg",
         startContract: "2023/06/09",
         relationshipContact: "Padre",
@@ -586,6 +602,7 @@ export default class userCrud extends Vue {
     let userimage = this.userList.filter((userin) => {
       if (user === userin) return user;
     });
+    console.log(userimage);
     if (userimage) {
       return userimage[0].profilePicture;
     } else {
@@ -652,7 +669,9 @@ export default class userCrud extends Vue {
       ".diaHabilitado"
     ) as HTMLElement;
     diaHabilitado.classList.add("show");
-    const minimumReportDate = document.getElementById("minimumReportDate") as HTMLInputElement;
+    const minimumReportDate = document.getElementById(
+      "minimumReportDate"
+    ) as HTMLInputElement;
     minimumReportDate.disabled = true;
     const finishContract = document.getElementById(
       "finishContract"
@@ -662,19 +681,27 @@ export default class userCrud extends Vue {
     birthday.disabled = true;
     const email = document.getElementById("email") as HTMLInputElement;
     email.disabled = true;
-    const personalEmail = document.getElementById("personalEmail") as HTMLInputElement;
+    const personalEmail = document.getElementById(
+      "personalEmail"
+    ) as HTMLInputElement;
     personalEmail.disabled = true;
-    const emergencyContact = document.getElementById("emergencyContact") as HTMLInputElement;
+    const emergencyContact = document.getElementById(
+      "emergencyContact"
+    ) as HTMLInputElement;
     emergencyContact.disabled = true;
     const phone = document.getElementById("phone") as HTMLInputElement;
     phone.disabled = true;
     const phone2 = document.getElementById("phone2") as HTMLInputElement;
     phone2.disabled = true;
-    const emergencyPhone = document.getElementById("emergencyPhone") as HTMLInputElement;
+    const emergencyPhone = document.getElementById(
+      "emergencyPhone"
+    ) as HTMLInputElement;
     emergencyPhone.disabled = true;
     const address = document.getElementById("address") as HTMLTextAreaElement;
     address.disabled = true;
-    const workPosition = document.getElementById("workPosition") as HTMLSelectElement;
+    const workPosition = document.getElementById(
+      "workPosition"
+    ) as HTMLSelectElement;
     workPosition.disabled = true;
     const rol = document.getElementById("rol") as HTMLSelectElement;
     rol.disabled = true;
@@ -684,7 +711,9 @@ export default class userCrud extends Vue {
     name.disabled = true;
     const lastName = document.getElementById("lastName") as HTMLSelectElement;
     lastName.disabled = true;
-    const relationshipContact = document.getElementById("relationshipContact") as HTMLSelectElement;
+    const relationshipContact = document.getElementById(
+      "relationshipContact"
+    ) as HTMLSelectElement;
     relationshipContact.disabled = true;
     const startContract = document.getElementById(
       "startContract"
@@ -712,7 +741,10 @@ export default class userCrud extends Vue {
     this.validateFields("email", this.newUser.email.length > 0);
     this.validateFields("name", this.newUser.name.length > 0);
     this.validateFields("lastN", this.newUser.lastName.length > 0);
-    this.validateFields("minimumReportDate", this.newUser.minimumReportDate !== "");
+    this.validateFields(
+      "minimumReportDate",
+      this.newUser.minimumReportDate !== ""
+    );
     this.validateFields("startContract", this.newUser.startContract !== "");
     this.validateFields("rol", this.newUser.rol.rolName.length > 0);
     this.validateFields("workPosition", this.newUser.workPosition.length > 0);
@@ -776,7 +808,9 @@ export default class userCrud extends Vue {
     if (diaHabilitado.classList.contains("show")) {
       diaHabilitado.classList.remove("show");
     }
-    const minimumReportDate = document.getElementById("minimumReportDate") as HTMLInputElement;
+    const minimumReportDate = document.getElementById(
+      "minimumReportDate"
+    ) as HTMLInputElement;
     minimumReportDate.disabled = false;
     const finishContract = document.getElementById(
       "finishContract"
@@ -786,19 +820,27 @@ export default class userCrud extends Vue {
     birthday.disabled = false;
     const email = document.getElementById("email") as HTMLInputElement;
     email.disabled = false;
-    const personalEmail = document.getElementById("personalEmail") as HTMLInputElement;
+    const personalEmail = document.getElementById(
+      "personalEmail"
+    ) as HTMLInputElement;
     personalEmail.disabled = false;
-    const emergencyContact = document.getElementById("emergencyContact") as HTMLInputElement;
+    const emergencyContact = document.getElementById(
+      "emergencyContact"
+    ) as HTMLInputElement;
     emergencyContact.disabled = false;
     const phone = document.getElementById("phone") as HTMLInputElement;
     phone.disabled = false;
     const phone2 = document.getElementById("phone2") as HTMLInputElement;
     phone2.disabled = false;
-    const emergencyPhone = document.getElementById("emergencyPhone") as HTMLInputElement;
+    const emergencyPhone = document.getElementById(
+      "emergencyPhone"
+    ) as HTMLInputElement;
     emergencyPhone.disabled = false;
     const address = document.getElementById("address") as HTMLTextAreaElement;
     address.disabled = false;
-    const workPosition = document.getElementById("workPosition") as HTMLSelectElement;
+    const workPosition = document.getElementById(
+      "workPosition"
+    ) as HTMLSelectElement;
     workPosition.disabled = false;
     const rol = document.getElementById("rol") as HTMLSelectElement;
     rol.disabled = false;
@@ -820,35 +862,15 @@ export default class userCrud extends Vue {
 
 <!--Estilos-->
 <style scoped lang="scss">
-.text-left {
-  // cdc: para alinear el texto a la izquierda
-  text-align: left;
-}
-.table-contain {
-  overflow: auto;
-  max-height: 380px;
-  padding: 16px;
-}
-
-.right-search {
-  width: 500px;
-  margin: 25px;
-}
-
-.left-options {
-  margin: auto 25px;
-  width: 100%;
-  text-align: left;
-}
 .titulo {
-  workPosition: relative;
+  position: relative;
   z-index: 1;
 }
 .titulo:before {
   border-top: 2px solid #141b27;
   content: "";
   margin: 0 auto;
-  workPosition: absolute;
+  position: absolute;
   top: 50%;
   left: 0;
   right: 0;
@@ -879,5 +901,9 @@ export default class userCrud extends Vue {
 }
 p.datosPersonales.show {
   display: block !important;
+}
+
+.avatar-rounded {
+  padding: 2px;
 }
 </style>

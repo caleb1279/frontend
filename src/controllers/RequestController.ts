@@ -6,7 +6,7 @@ import { useStorage } from "vue3-storage";
 const storage = useStorage();
 
 const request = axios.create({
-  baseURL: "https://2e58-186-84-89-185.ngrok-free.app",
+  baseURL: "https://7f67-186-84-89-185.ngrok-free.app",
   withCredentials: false,
   headers: {
     Accept: "application/json",

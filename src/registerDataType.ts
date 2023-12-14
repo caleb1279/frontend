@@ -1,10 +1,10 @@
 export type rol = {
-  id: string | number;
+  id: number;
   rolName: string;
 };
 
 export type user = {
-  id: string | number;
+  id: number;
   email: string; //correo empresarial
   personalEmail: string; // correo personal
   name: string;
@@ -32,12 +32,12 @@ export type user = {
 };
 
 export type activity = {
-  id: string | number;
+  id: number;
   name: string;
 };
 
 export type project = {
-  id: string | number;
+  id: number;
   projectId: string;
   name: string;
   labDate: Date | string;
@@ -47,7 +47,7 @@ export type project = {
 };
 
 export type report = {
-  id: string | number;
+  id: number;
   date: Date | string;
   detail: string;
   hours: number; // horas reales

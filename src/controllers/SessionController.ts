@@ -1,10 +1,8 @@
 import { useStorage } from "vue3-storage";
-import { useCookies } from "vue3-cookies";
 import router from "@/router";
 import type { user } from "@/registerDataType";
 
 const storage = useStorage();
-const { cookies } = useCookies(); // cookies.get(key) | cookies.set(key, value)
 
 export default {
   Login(token: string, data: user) {
@@ -50,17 +48,5 @@ export default {
     } catch {
       return undefined;
     }
-  },
-
-  setCookie(key: string, value: string, expire: string | number = "1h") {
-    cookies.set(key, value, expire);
-  },
-
-  getCookie(key: string) {
-    return cookies.get(key);
-  },
-
-  clearCookie(key: string) {
-    cookies.remove(key);
   },
 };

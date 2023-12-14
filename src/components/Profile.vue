@@ -440,14 +440,14 @@ export default class userCrud extends Vue {
 <!--Estilos-->
 <style scoped lang="scss">
 .titulo {
-  workPosition: relative;
+  position: relative;
   z-index: 1;
 }
 .titulo:before {
   border-top: 2px solid #141b27;
   content: "";
   margin: 0 auto;
-  workPosition: absolute;
+  position: absolute;
   top: 50%;
   left: 0;
   right: 0;

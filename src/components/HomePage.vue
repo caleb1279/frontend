@@ -4,7 +4,7 @@
       <div class="container-fluid justify-content-start">
         <div class="m-0">
           <div class="navbar-brand">
-            <img src="/img/logo.png" width="140" />
+            <img src="/img/logo.png" width="135" />
           </div>
         </div>
       </div>
@@ -33,13 +33,13 @@
               <img
                 class="avatar-rounded"
                 :src="avatarimage"
-                width="40"
-                height="40"
+                width="35"
+                height="35"
               />
             </a>
             <ul class="dropdown-menu dropdown-menu-lg-end usuario">
               <li class="userbrand">
-                {{ user.userName }} {{ user.userLastN }}
+                {{ user.name }} {{ user.lastName }}
                 <span>{{ user.email }}</span>
               </li>
               <li class="dropdown-divider"></li>
@@ -200,7 +200,7 @@ export default class HomePage extends Vue {
 
   logout = session.Logout;
   particlesContainer!: Container;
-  avatarimage = this.user === undefined ? "" : this.user.profileimage;
+  avatarimage = this.user !== undefined ? this.user.profilePicture : "";
 
   particlesInit = async (engine: Engine) => {
     if (session.ValidateSesison() === true) {

@@ -180,7 +180,7 @@
       </div>
       <div class="right-search nav">
         <form class="d-flex" role="search" v-on:click.prevent="">
-          <input class="form-control me-2 shadow-none" type="search" />
+          <input class="form-control me-2 shadow-none" id="search" type="search" />
           <button class="btn btn-primary" type="submit" v-on:click.prevent="">
             Buscar
           </button>
@@ -245,7 +245,7 @@ export default class ProjectCrud extends Vue {
   projectlist: project[] = [];
 
   newProject: project = {
-    id: NaN,
+    id: 0,
     labDate: "",
     name: "",
     proDate: "",

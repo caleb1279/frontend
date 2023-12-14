@@ -1,50 +1,5 @@
 <template>
-  <div class="maintitle px-4 mt-3">
-    <h1>Dashboard de {{ username }}</h1>
-  </div>
-  <!-- <nav aria-label="Page navigation">
-    <ul class="pagination justify-content-end">
-      <li class="page-item">
-        <a
-          class="page-link shadow-none"
-          href="#"
-          v-on:click.prevent="updateRecords(-1)"
-          >Previous</a
-        >
-      </li>
-      <li class="page-item disabled">
-        <a class="page-link shadow-none">
-          {{
-            new Date(actualDate).toLocaleString("default", {
-              month: "long",
-            })
-          }}
-          <i
-            v-if="
-              new Date(actualDate).getFullYear() !== new Date().getFullYear()
-            "
-          >
-            - {{ new Date(actualDate).getFullYear() }}
-          </i>
-        </a>
-      </li>
-      <li
-        class="page-item"
-        :class="{
-          disabled:
-            actualDate.getMonth() === new Date().getMonth() &&
-            actualDate.getFullYear() === new Date().getFullYear(),
-        }"
-      >
-        <a
-          class="page-link shadow-none"
-          href="#"
-          v-on:click.prevent="updateRecords(1)"
-          >Next</a
-        >
-      </li>
-    </ul>
-  </nav> -->
+  <br />
   <div class="boxes">
     <div class="box">
       <i
@@ -59,8 +14,15 @@
     <div class="box">
       <i><font-awesome-icon icon="arrow-trend-up"></font-awesome-icon></i>
       <div class="informacion">
-        <span class="text">Avance</span>
-        <span class="number">71%</span>
+        <span class="text">Actividades Totales</span>
+        <span class="number">{{ dayActivity }}</span>
+      </div>
+    </div>
+    <div class="box">
+      <i><font-awesome-icon icon="arrow-trend-up"></font-awesome-icon></i>
+      <div class="informacion">
+        <span class="text">Promedio de Horas</span>
+        <span class="number">{{  meanHours }}</span>
       </div>
     </div>
     <div class="box">
@@ -78,41 +40,24 @@
         ><font-awesome-icon icon="greater-than"></font-awesome-icon
       ></i>
       <div class="informacion">
-        <span class="text">Mes actual</span>
+        <span class="text">Mes Actual</span>
         <span class="number">{{
           actualDate.toLocaleString("default", { month: "short" })
         }}</span>
       </div>
     </div>
   </div>
-  <div class="charts">
+
+  <div class="chart">
     <apexchart
-      width="500"
-      type="bar"
+      type="line"
+      height="300"
+      width="850"
       :options="{
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            borderRadius: '8',
-            borderRariusWhenStacked: 'last',
-            columnWidth: '20%',
-          },
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        theme: {
-          monochrome: {
-            enabled: true,
-            shadeTo: 'light',
-            shadeIntensity: 0.8,
-            color: '#000083',
-          },
-        },
         chart: {
-          type: 'bar',
-          height: 350,
-          stacked: true,
+          height: 300,
+          width: 850,
+          type: 'line',
           toolbar: {
             show: false,
           },
@@ -120,75 +65,36 @@
             enabled: false,
           },
         },
-      }"
-      :series="[
-        {
-          name: 'En curso',
-          data: [44, 55, 41, 67, 22, 43],
-        },
-        {
-          name: 'Realizado',
-          data: [13, 23, 20, 8, 13, 27],
-        },
-        {
-          name: 'Pendiente',
-          data: [11, 17, 15, 15, 21, 14],
-        },
-      ]"
-    ></apexchart>
-    <div class="list" style="
-      padding: 10px;
-      background-color: red;
-      width: 35%;
-      height: 350px;
-    ">
-    </div>
-  </div>
-  <apexchart
-    type="area"
-    :options="{
-      theme: {
-        monochrome: {
-          enabled: true,
-          shadeTo: 'light',
-          shadeIntensity: 0.8,
-          color: '#000083',
-        },
-      },
-      chart: {
-        width: '99%',
-        type: 'area',
-        toolbar: {
-          show: false,
-        },
-        zoom: {
+        dataLabels: {
           enabled: false,
         },
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        curve: 'smooth',
-      },
-    }"
-    :series="[
-      {
-        name: 'Promedio horas estimadas',
-        data: [31, 40, 28, 51, 42, 109, 100],
-      },
-      {
-        name: 'Promedio horas reales',
-        data: [11, 32, 45, 32, 34, 52, 41],
-      },
-    ]"
-  ></apexchart>
+        stroke: {
+          curve: 'smooth',
+        },
+        title: {
+          text: '',
+          align: 'left',
+        },
+        xaxis: {
+          categories: activities,
+        },
+      }"
+      :series="series"
+    ></apexchart>
+    <div class="projects">
+      <h2>Proyectos Activos</h2>
+      <br>
+      <ul v-for="project in projectlist">
+        <li>{{ project }}</li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import session from "@/controllers/SessionController";
-import type { report } from "@/registerDataType";
+import type { project, report } from "@/registerDataType";
 import request from "@/controllers/RequestController";
 
 export default class DashboardPage extends Vue {
@@ -196,7 +102,32 @@ export default class DashboardPage extends Vue {
   actualDate!: Date;
   totalHours = 0;
   adhierance = 0;
+  meanHours = 0;
+  dayActivity = 0;
   reportlist!: report[];
+  projectlist: string[] = [];
+
+  series = [
+    {
+      name: "Horas",
+      data: [
+      10, 41, 35, 51, 49, 62, 69, 91, 148, 25,
+      ],
+    },
+  ];
+
+  activities = [
+    "SLDA043",
+    "SLB042A",
+    "SL1346",
+    "SL600",
+    "SIIL01",
+    "SLB001",
+    "SL1348",
+    "SIRV006",
+    "SL1346",
+    "SL600",
+  ];
 
   beforeMount() {
     this.username =
@@ -211,6 +142,15 @@ export default class DashboardPage extends Vue {
     }
 
     this.reportlist = session.getLocals().reportlist || [];
+    let projects: project[] = session.getLocals().projectlist || [];
+
+    if (projects.length > 0) {
+      projects.forEach((project) => {
+        if (project.name) {
+          this.projectlist.push(project.name);
+        }
+      });
+    }
 
     this.collectData();
   }
@@ -218,18 +158,27 @@ export default class DashboardPage extends Vue {
   collectData() {
     this.totalHours = 0;
     this.adhierance = 0;
+    this.dayActivity = 0;
+    this.meanHours = 0;
     let counter = 0;
+    let countedDays: (string | Date)[] = [];
     if (this.reportlist !== undefined) {
       this.reportlist.forEach((report) => {
         if (typeof report.hours === "number" && !isNaN(report.hours)) {
           this.totalHours += report.hours;
         }
 
-        this.adhierance += (report.hours/report.estimatedHours)*100;
+        if (!countedDays.includes(report.date)) {
+          this.dayActivity += 1;
+          countedDays.push(report.date);
+        }
+
+        this.adhierance += (report.hours / report.estimatedHours) * 100;
         counter += 1;
       });
 
-      this.adhierance = Math.round(this.adhierance/counter);
+      this.adhierance = Math.round(this.adhierance / counter);
+      this.meanHours = Math.round(this.totalHours / counter);
     }
   }
 
@@ -268,7 +217,6 @@ export default class DashboardPage extends Vue {
 
 <style>
 .boxes {
-  padding: 25px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -283,7 +231,7 @@ export default class DashboardPage extends Vue {
   align-items: right;
   justify-content: space-between;
   border-radius: 12px;
-  width: calc((90% / 4) - 15px);
+  width: calc((90% / 5) - 0.4rem);
   padding: 15px 20px;
   background: linear-gradient(45deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6))
     #000083;
@@ -312,17 +260,31 @@ export default class DashboardPage extends Vue {
   flex-direction: column;
   text-align: right;
 }
-.charts {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.charts * {
-  margin: auto !important;
-}
 
 .clickable:hover {
   cursor: pointer;
+}
+
+.chart {
+  display: flex;
+  flex-direction: row;
+}
+
+.projects {
+  border: 1px solid #dbdbdb;
+  border-top: none;
+  margin: 1.8rem 0.4rem;
+  padding: 1.2rem;
+}
+
+.projects li {
+  text-align: left;
+  margin: auto;
+}
+
+.projects h2 {
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 6px;
 }
 </style>
