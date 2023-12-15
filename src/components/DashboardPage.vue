@@ -48,62 +48,64 @@
     </div>
   </div>
 
-  <div class="chart">
-    <apexchart
-      type="line"
-      height="300"
-      width="850"
-      :options="{
-        theme: {
-          monochrome: {
-            enabled: true,
-            shadeTo: 'light',
-            shadeIntensity: 0.8,
-            color: '#000083',
+  <div class="container">
+    <div class="chart">
+      <apexchart
+        type="line"
+        height="300"
+        width="850"
+        :options="{
+          theme: {
+            monochrome: {
+              enabled: true,
+              shadeTo: 'light',
+              shadeIntensity: 0.8,
+              color: '#000083',
+            },
           },
-        },
-        chart: {
-          height: 300,
-          width: 850,
-          type: 'line',
-          toolbar: {
-            show: false,
+          chart: {
+            height: 300,
+            width: 850,
+            type: 'line',
+            toolbar: {
+              show: false,
+            },
+            zoom: {
+              enabled: false,
+            },
           },
-          zoom: {
+          dataLabels: {
             enabled: false,
           },
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          curve: 'smooth',
-        },
-        title: {
-          text: '',
-          align: 'left',
-        },
-        xaxis: {
-          categories: activities,
-        },
-      }"
-      :series="[
-        {
-          name: 'Horas Estimadas',
-          data: numberData2,
-        },
-        {
-          name: 'Horas Reales',
-          data: numberData,
-        },
-      ]"
-    ></apexchart>
-    <div class="projects">
-      <h2>Proyectos Activos</h2>
-      <br />
-      <ul v-for="project in projectlist">
-        <li>{{ project }}</li>
-      </ul>
+          stroke: {
+            curve: 'smooth',
+          },
+          title: {
+            text: '',
+            align: 'left',
+          },
+          xaxis: {
+            categories: activities,
+          },
+        }"
+        :series="[
+          {
+            name: 'Horas Estimadas',
+            data: numberData2,
+          },
+          {
+            name: 'Horas Reales',
+            data: numberData,
+          },
+        ]"
+      ></apexchart>
+      <div class="projects">
+        <h2>Proyectos Activos</h2>
+        <br />
+        <ul v-for="project in projectlist">
+          <li>{{ project }}</li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -170,35 +172,33 @@ export default class DashboardPage extends Vue {
     this.numberData = [];
     this.numberData2 = [];
     let countedDays: (string | Date)[] = [];
-    if (this.reportlist !== undefined) {
-      this.reportlist.forEach((report) => {
-        if (typeof report.hours === "number" && !isNaN(report.hours)) {
-          this.totalHours += report.hours;
-          this.numberData.push(report.hours);
-        }
+    this.reportlist.forEach((report) => {
+      if (typeof report.hours === "number" && !isNaN(report.hours)) {
+        this.totalHours += report.hours;
+        this.numberData.push(report.hours);
+      }
 
-        if (
-          typeof report.estimatedHours === "number" &&
-          !isNaN(report.estimatedHours)
-        ) {
-          this.numberData2.push(report.estimatedHours);
-        }
+      if (
+        typeof report.estimatedHours === "number" &&
+        !isNaN(report.estimatedHours)
+      ) {
+        this.numberData2.push(report.estimatedHours);
+      }
 
-        if (!countedDays.includes(report.date)) {
-          this.dayActivity += 1;
-          countedDays.push(report.date);
-        }
+      if (!countedDays.includes(report.date)) {
+        this.dayActivity += 1;
+        countedDays.push(report.date);
+      }
 
-        this.adhierance += (report.hours / report.estimatedHours) * 100;
-        counter += 1;
-      });
+      this.adhierance += (report.hours / report.estimatedHours) * 100;
+      counter += 1;
+    });
 
-      this.adhierance = Math.round(this.adhierance / counter);
-      this.meanHours = Math.round(this.totalHours / counter);
-    }
+    this.adhierance = Math.round(this.adhierance / counter);
+    this.meanHours = Math.round(this.totalHours / counter);
 
     if (isNaN(this.adhierance)) this.adhierance = 0;
-    if (isNaN(this.adhierance)) this.adhierance = 0;
+    if (isNaN(this.meanHours)) this.meanHours = 0;
   }
 
   data() {
@@ -224,7 +224,7 @@ export default class DashboardPage extends Vue {
       session.getUserData().id,
       this.actualDate
     );
-    if (this.reportlist === undefined) {
+    if (this.reportlist === undefined || this.reportlist === null) {
       this.reportlist = [];
     }
     let locals = session.getLocals();
@@ -236,7 +236,7 @@ export default class DashboardPage extends Vue {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
 .boxes {
   display: flex;
   align-items: center;
@@ -286,15 +286,25 @@ export default class DashboardPage extends Vue {
   cursor: pointer;
 }
 
+.container {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
 .chart {
   display: flex;
   flex-direction: row;
+  margin: auto;
+  justify-content: center;
+}
+
+.vue-apexcharts {
+  margin: 1rem auto; 
 }
 
 .projects {
-  border: 1px solid #dbdbdb;
-  border-top: none;
-  margin: 1.8rem 0.4rem;
+  margin: 1rem 0.5rem;
   padding: 1.2rem;
 }
 

@@ -219,6 +219,16 @@ figure {
 #navbar {
   padding: 0;
 }
+
+#navbar .justify-content-start {
+  max-width: 150px;
+  margin: 0;
+}
+
+#navbar .justify-content-end {
+  max-width: calc(100% - 150px);
+  margin: auto;
+}
 /* end navbar */
 
 /* login */

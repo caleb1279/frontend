@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column">
-    <nav class="navbar bg-body-tertiary navbar-expand-lg" id="navbar">
+    <nav class="navbar" id="navbar">
       <div class="container-fluid justify-content-start">
         <div class="m-0">
           <div class="navbar-brand">
@@ -138,7 +138,7 @@
                 value: 99,
               },
               fullScreen: {
-                enable: true,
+                enable: false,
               },
               fpsLimit: 60,
               particles: {
@@ -163,9 +163,9 @@
                 number: {
                   density: {
                     enable: true,
-                    area: 900,
+                    area: 800,
                   },
-                  value: 100,
+                  value: 200,
                 },
                 opacity: {
                   value: 0.1,
