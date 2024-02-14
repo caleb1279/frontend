@@ -32,7 +32,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "ReportCrud",
         component: ReportCrud,
       },
-      {
+{
         path: "/project",
         name: "ProjectCrud",
         component: ProjectCrud,

@@ -97,7 +97,7 @@ export default class LoginForm extends Vue {
   validatedFields: string[] = [];
 
   login() {
-    RequestController.Login({
+    /* RequestController.Login({
       email: this.uname,
       password: CryptoJS.SHA256(this.passwd).toString(CryptoJS.enc.Hex),
     })
@@ -108,40 +108,41 @@ export default class LoginForm extends Vue {
         } else {
           this.msg = data.data.message;
         }
-        console.log(data);
       })
       .catch((error: AxiosError) => {
         console.log(error);
         this.msg = "Ha ocurrido un error al intentar iniciar sesión";
-        session.Login("1", {
-          id: 1,
-          email: "ejemplo@colnexsi.com.co",
-          /* fullName: "Pepito Perez", */
-          /* phone: 4942826, */
-          password: "password",
-          vacationDays: 15,
-          startContract: new Date("2022-01-01"),
-          finishContract: new Date("2024-01-31"),
-          tipId: 1,
-          numId: 1026574754,
-          personalEmail: "usco.doe@example.com",
-          name: "John",
-          lastName: "Doe",
-          rol: { id: 1, rolName: "User" },
-          status: "Disponible",
-          minimumReportDate: new Date("2023-12-09"),
-          phone: 123456789,
-          phone2: 79716834,
-          emergencyPhone: 317247222,
-          emergencyContact: "Maria Teresa",
-          relationshipContact: "Madre",
-          birthday: new Date("2003-05-08"),
-          address: "Velasquez St. No 80, Madrid",
-          workPosition: "Desarrollador",
-          profilePicture:
-            "https://i.pinimg.com/550x/8d/e7/fa/8de7fa2af12330350613ede63532c4fb.jpg",
-        });
-      });
+      }); */
+    session.Login("Authorization", {
+      id: 1,
+      email: "john.doe@example.com", //correo empresarial
+      personalEmail: "john.doe@gmail.com", // correo personal
+      name: "John",
+      lastName: "Doe", //apellidos
+      /* fullName: string; */
+      password: "d41d8cd98f00b204e9800998ecf8427e",
+      tipId: 1, //tipo de id
+      numId: 4762553256, //cédula
+      /* phone: number; */
+      vacationDays: 2,
+      startContract: new Date(), // fecha de ingreso
+      finishContract: new Date(), // fecha de terminacion de contrato
+      rol: {
+        id: 1,
+        rolName: "user",
+      },
+      status: "",
+      minimumReportDate: new Date(), // fecha minima para reportar actividades
+      phone: 4532348654,
+      phone2: 0,
+      emergencyPhone: 6423486564, //telefono contacto de emergencia
+      emergencyContact: "Susan", //nombre contacto de emergencia
+      relationshipContact: "Hermano/a", // parentesco del contacto de emergencia
+      birthday: new Date(), //cumpleaños
+      address: "", //dirección
+      workPosition: "", //cargo en la empresa
+      profilePicture: "https://starter-blog.rizkicitra.dev/_next/image?url=%2Fstatic%2Favatar.jpg&w=1080&q=75" // imagen de perfil
+    })
   }
 
   viewPassword() {

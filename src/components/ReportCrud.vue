@@ -96,7 +96,7 @@
                           !validFields.includes('hours') &&
                           validatedFields.includes('hours'), // cdc otro array para saber si lo ha validado
                       }"
-                      @input="validateFields('hours', newReport.hours > 0)"
+                      @input="validateFields('hours', newReport.hours > 0 && newReport.hours <= 8 )"
                     />
                   </div>
                 </div>

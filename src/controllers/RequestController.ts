@@ -6,7 +6,7 @@ import { useStorage } from "vue3-storage";
 const storage = useStorage();
 
 const request = axios.create({
-  baseURL: "https://7f67-186-84-89-185.ngrok-free.app",
+  baseURL: process.env.VUE_APP_BASE_URI,
   withCredentials: false,
   headers: {
     Accept: "application/json",
@@ -31,7 +31,6 @@ request.interceptors.response.use(
 
 export default {
   Login(json: { email: string; password: string }) {
-    console.log(json);
     return request.post("/login", json);
   },
   async getActivities() {
@@ -60,7 +59,7 @@ export default {
       console.log(error);
       return null;
     }
-  },
+  }, 
   async getReports(user: number, date: Date) {
     try {
       const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -92,7 +91,6 @@ export default {
   async deleteReport(id: number) {
     try {
       const data = await request.delete("/deletereport/"+id);
-      console.log(data);
     } catch (error) {
       console.log(error);
     }

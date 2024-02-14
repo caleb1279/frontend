@@ -33,6 +33,7 @@ import {
   faCalendar,
   faLessThan,
   faGreaterThan,
+  faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "vue3-simple-typeahead/dist/vue3-simple-typeahead.css";
@@ -61,7 +62,8 @@ library.add(
   faArrowTrendUp,
   faCalendar,
   faLessThan,
-  faGreaterThan
+  faGreaterThan,
+  faUserPlus
 );
 
 app.use(BootstrapVue3);

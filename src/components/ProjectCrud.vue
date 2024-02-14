@@ -180,7 +180,11 @@
       </div>
       <div class="right-search nav">
         <form class="d-flex" role="search" v-on:click.prevent="">
-          <input class="form-control me-2 shadow-none" id="search" type="search" />
+          <input
+            class="form-control me-2 shadow-none"
+            id="search"
+            type="search"
+          />
           <button class="btn btn-primary" type="submit" v-on:click.prevent="">
             Buscar
           </button>
@@ -199,6 +203,7 @@
             <th scope="col">Estado</th>
             <th></th>
             <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -213,6 +218,68 @@
             </td>
             <td>{{ project.source }}</td>
             <td>{{ project.status ? "Activo" : "Inactivo" }}</td>
+            <td>
+              <div class="btn-group">
+                <a
+                  href="#"
+                  v-on:click.prevent=""
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasExample"
+                  aria-controls="offcanvasExample"
+                >
+                  <font-awesome-icon icon="user-plus" />
+                </a>
+                <div
+                  class="offcanvas offcanvas-end"
+                  tabindex="-1"
+                  id="offcanvasExample"
+                  aria-labelledby="offcanvasExampleLabel"
+                >
+                  <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">
+                      Administrar usuarios
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="offcanvas"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="offcanvas-body">
+                    <div class="table-contain">
+                      <table class="table text-left">
+                        <thead>
+                          <tr>
+                            <th></th>
+                            <th scope="col">Usuarios</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody v-for="user in users" :key="user.id">
+                          <td>
+                            <img
+                              class="avatar-rounded"
+                              with="30"
+                              height="30"
+                              :src="getImage(user)"
+                            />
+                          </td>
+                          <td>{{ user.name }}</td>
+                          <td>{{ user.status }}</td>
+                          <td>
+                            <a href="#" v-on:click.prevent="">
+                              <font-awesome-icon icon="plus" />
+                            </a>
+                          </td>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
             <td>
               <a
                 href="#"
@@ -239,10 +306,11 @@
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import session from "@/controllers/SessionController";
-import type { project } from "@/registerDataType";
+import type { project, user } from "@/registerDataType";
 
 export default class ProjectCrud extends Vue {
   projectlist: project[] = [];
+  users: user[] = [];
 
   newProject: project = {
     id: 0,
@@ -266,7 +334,112 @@ export default class ProjectCrud extends Vue {
 
   beforeMount() {
     const projects = session.getLocals().projectlist;
-    this.projectlist = projects === undefined ? [] : projects;
+    //this.projectlist = projects === undefined ? [] : projects;
+    this.projectlist = [
+      {
+        id: 1,
+        projectId: "PROY0442",
+        name: "Cargos Fijos",
+        labDate: new Date(),
+        proDate: new Date(),
+        source: "FMCA046390",
+        status: true,
+      },
+    ];
+
+    this.users = [
+      {
+        id: 1,
+        email: "john.doe@example.com", //correo empresarial
+        personalEmail: "john.doe@gmail.com", // correo personal
+        name: "John",
+        lastName: "Doe", //apellidos
+        /* fullName: string; */
+        password: "d41d8cd98f00b204e9800998ecf8427e",
+        tipId: 1, //tipo de id
+        numId: 4762553256, //cédula
+        /* phone: number; */
+        vacationDays: 2,
+        startContract: new Date(), // fecha de ingreso
+        finishContract: new Date(), // fecha de terminacion de contrato
+        rol: {
+          id: 1,
+          rolName: "user",
+        },
+        status: "Disponible",
+        minimumReportDate: new Date(), // fecha minima para reportar actividades
+        phone: 4532348654,
+        phone2: 0,
+        emergencyPhone: 6423486564, //telefono contacto de emergencia
+        emergencyContact: "Susan", //nombre contacto de emergencia
+        relationshipContact: "Hermano/a", // parentesco del contacto de emergencia
+        birthday: new Date(), //cumpleaños
+        address: "", //dirección
+        workPosition: "", //cargo en la empresa
+        profilePicture:
+          "https://starter-blog.rizkicitra.dev/_next/image?url=%2Fstatic%2Favatar.jpg&w=1080&q=75", // imagen de perfil
+      },
+      {
+        id: 2,
+        name: "Esteban",
+        lastName: "Rosa",
+        rol: {
+          id: 1,
+          rolName: "user",
+        },
+        password: "d41d8cd98f00b204e9800998ecf8427e",
+        tipId: 1, //tipo de id
+        numId: 4762553256, //cédula
+        /* phone: number; */
+        vacationDays: 2,
+        minimumReportDate: "2023/11/11",
+        status: "Disponible",
+        email: "estebanrosa@empresa.com",
+        personalEmail: "estebanrosa@personal.com",
+        phone: 3103030303,
+        phone2: 3104040404,
+        emergencyPhone: 3105050505,
+        birthday: "1987/06/11",
+        address: "calle 1 # 10 - 10",
+        workPosition: "Director",
+        emergencyContact: "Julian Rosa",
+        profilePicture:
+          "https://www.imagenesbonitasname.com/covers/preview/fondo-de-perfil-watsapp-flor-rosa.jpg",
+        startContract: "2023/08/09",
+        finishContract: "2024/08/09",
+        relationshipContact: "Padre",
+      },
+      {
+        id: 1,
+        name: "Maria",
+        lastName: "Rosa",
+        rol: {
+          id: 1,
+          rolName: "user",
+        },
+        password: "d41d8cd98f00b204e9800998ecf8427e",
+        tipId: 1, //tipo de id
+        numId: 4762553256, //cédula
+        /* phone: number; */
+        vacationDays: 2,
+        minimumReportDate: "2023/11/11",
+        status: "Disponible",
+        email: "mariarosa@empresa.com",
+        personalEmail: "mariarosa@personal.com",
+        phone: 3103030303,
+        phone2: 3104040404,
+        emergencyPhone: 3105050505,
+        birthday: "1987/06/11",
+        address: "calle 1 # 10 - 10",
+        workPosition: "Director",
+        emergencyContact: "Julian Rosa",
+        profilePicture:
+          "https://www.imagenesbonitasname.com/covers/preview/fondo-de-perfil-watsapp-flor-rosa.jpg",
+        startContract: "2023/06/09",
+        finishContract: "2024/08/09",
+        relationshipContact: "Padre",
+      },
+    ];
   }
 
   editProject(project: project) {
@@ -309,6 +482,18 @@ export default class ProjectCrud extends Vue {
       // Agrega tu lógica para guardar los cambios aquí.
     } else {
       // Muestra un mensaje de error o realiza alguna acción si no se han diligenciado todos los campos.
+    }
+  }
+
+  getImage(user: user): string {
+    let userimage = this.users.filter((userin) => {
+      if (user === userin) return user;
+    });
+    console.log(userimage);
+    if (userimage) {
+      return userimage[0].profilePicture;
+    } else {
+      return "";
     }
   }
 

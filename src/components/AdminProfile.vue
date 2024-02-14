@@ -264,9 +264,10 @@
               <div class="col-md-6">
                 <div class="form-group has-validation">
                   <label for="workPosition">Seleccione un Cargo:</label>
-                  <select
+                  <input
+                    type="text"
                     v-model="newUser.workPosition"
-                    class="form-select shadow-none"
+                    class="form-control shadow-none"
                     id="workPosition"
                     :class="{
                       'is-valid': validFields.includes('workPosition'),
@@ -280,12 +281,7 @@
                         newUser.workPosition.length > 0
                       )
                     "
-                  >
-                    <option>Director</option>
-                    <option>Coordinador</option>
-                    <option>Gerente</option>
-                    <option>Desarrollador</option>
-                  </select>
+                  />
                 </div>
               </div>
               <div class="col-md-6">
