@@ -4,7 +4,7 @@
       <form
         class="login-form needs-validation"
         id="form"
-        v-on:submit.prevent="login"
+        v-on:submit.prevent="recaptcha"
       >
         <div class="children-login-form">
           <div class="image-logo text-center">
@@ -24,6 +24,7 @@
               id="username"
               v-model="uname"
               name="username"
+              autocomplete="email"
               placeholder="johndoe@example.com"
               @input="validateFields('username')"
               :class="{
@@ -41,6 +42,7 @@
               class="form-control shadow-none"
               type="password"
               id="password"
+              autocomplete="current-password"
               v-model="passwd"
               name="password"
               placeholder="**********"
@@ -96,10 +98,25 @@ export default class LoginForm extends Vue {
   validFields: string[] = [];
   validatedFields: string[] = [];
 
-  login() {
-    /* RequestController.Login({
+  async recaptcha() {
+    await this.$recaptchaLoaded();
+    const token = await this.$recaptcha('login');
+    console.log(token);
+    this.login(token);
+  }
+
+  data() {
+    return {
+      uname: this.uname,
+      passwd: this.passwd,
+    }
+  }
+
+  login(token: string) {
+    RequestController.Login({
       email: this.uname,
       password: CryptoJS.SHA256(this.passwd).toString(CryptoJS.enc.Hex),
+      captchaToken: token,
     })
       .then((data: AxiosResponse) => {
         if (data.data.status === "200") {
@@ -109,21 +126,20 @@ export default class LoginForm extends Vue {
           this.msg = data.data.message;
         }
       })
-      .catch((error: AxiosError) => {
-        console.log(error);
+      .catch(() => {
         this.msg = "Ha ocurrido un error al intentar iniciar sesión";
-      }); */
-    session.Login("Authorization", {
+      });
+    /*session.Login("Authorization", {
       id: 1,
       email: "john.doe@example.com", //correo empresarial
       personalEmail: "john.doe@gmail.com", // correo personal
       name: "John",
       lastName: "Doe", //apellidos
-      /* fullName: string; */
+      // fullName: string; 
       password: "d41d8cd98f00b204e9800998ecf8427e",
       tipId: 1, //tipo de id
       numId: 4762553256, //cédula
-      /* phone: number; */
+      //phone: number; 
       vacationDays: 2,
       startContract: new Date(), // fecha de ingreso
       finishContract: new Date(), // fecha de terminacion de contrato
@@ -142,7 +158,7 @@ export default class LoginForm extends Vue {
       address: "", //dirección
       workPosition: "", //cargo en la empresa
       profilePicture: "https://starter-blog.rizkicitra.dev/_next/image?url=%2Fstatic%2Favatar.jpg&w=1080&q=75" // imagen de perfil
-    })
+    })*/
   }
 
   viewPassword() {

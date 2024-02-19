@@ -30,7 +30,7 @@ request.interceptors.response.use(
 );
 
 export default {
-  Login(json: { email: string; password: string }) {
+  Login(json: { email: string; password: string, captchaToken: string }) {
     return request.post("/login", json);
   },
   async getActivities() {

@@ -118,7 +118,7 @@
               enabled: true,
               shadeTo: 'light',
               shadeIntensity: 0.8,
-              color: '#D9005C',
+              color: '#C9345D',
             },
           },
           chart: {
@@ -215,17 +215,17 @@ export default class DashboardPage extends Vue {
       this.projects = session.getLocals().projectlist || [];
       console.log(session.getLocals());
     } else {
-      await this.getBackData();
+      // await this.getBackData();
+      this.$forceUpdate();
     }
 
     this.actualDate = new Date(session.getLocals().actualdate) || new Date();
 
     this.projects.forEach((project) => {
-      if (project.name && project.status === true) {
+      if (project.status === true) {
         this.projectlist.push(project.name);
       }
     });
-
     this.collectData();
   }
 
