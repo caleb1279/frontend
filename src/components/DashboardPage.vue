@@ -8,28 +8,34 @@
 
       <div class="informacion">
         <span class="text">Horas totales</span>
-        <span class="number">{{ totalHours }}</span>
+        <span class="number">{{ getTotalHours()[0] }}</span>
       </div>
     </div>
     <div class="box">
       <i><font-awesome-icon icon="arrow-trend-up"></font-awesome-icon></i>
       <div class="informacion">
         <span class="text">Actividades Totales</span>
-        <span class="number">{{ dayActivity }}</span>
+        <span class="number">{{ reports.length }}</span>
       </div>
     </div>
     <div class="box">
       <i><font-awesome-icon icon="arrow-trend-up"></font-awesome-icon></i>
       <div class="informacion">
         <span class="text">Promedio de Horas</span>
-        <span class="number">{{ meanHours }}</span>
+        <span class="number">{{
+          Math.round(getTotalHours()[0] / reports.length)
+        }}</span>
       </div>
     </div>
     <div class="box">
       <i><font-awesome-icon icon="users-gear"></font-awesome-icon></i>
       <div class="informacion">
         <span class="text">Adherencia</span>
-        <span class="number">{{ adhierance }}%</span>
+        <span class="number"
+          >{{
+            Math.round(getTotalHours()[1] * 100 / getTotalHours()[0])
+          }}%</span
+        >
       </div>
     </div>
     <div class="box">
@@ -60,7 +66,6 @@
         type="area"
         height="255"
         width="500"
-        :key="numberData.length"
         :options="{
           theme: {
             monochrome: {
@@ -72,7 +77,7 @@
           },
           colors: ['#FC6945', '#960075'],
           chart: {
-            stacked: true,
+            stacked: false,
             toolbar: {
               show: true,
             },
@@ -83,15 +88,15 @@
           dataLabels: {
             enabled: false,
           },
-          stroke: {
-            curve: 'smooth',
-          },
           title: {
             text: '',
             align: 'left',
           },
+          stroke: {
+            curve: 'smooth',
+          },
           xaxis: {
-            categories: activities,
+            categories: reports.map((obj) => obj.title),
             labels: {
               show: false,
             },
@@ -100,11 +105,11 @@
         :series="[
           {
             name: 'Horas Reales',
-            data: numberData2,
+            data: reports.map((obj) => obj.hours),
           },
           {
             name: 'Horas Estimadas',
-            data: numberData,
+            data: reports.map((obj) => obj.estimatedHours),
           },
         ]"
       ></apexchart>
@@ -143,34 +148,30 @@
             align: 'left',
           },
           xaxis: {
-            reversed: true,
-            categories: ['Analisis', 'Desarrollo', 'Pruebas', 'Soporte', 'Documentacion', 'capacitacion'],
+            categories: activities.map((obj) => obj.name),
             labels: {
               show: false,
             },
-          },
-          yaxis: {
-            reversed: true,
           },
         }"
         :series="[
           {
             name: 'data',
-            data: [6, 3, 65, 3, 6, 89]
-          }
+            data: getActivityResume(),
+          },
         ]"
       ></apexchart>
       <div class="projects">
         <h2>Proyectos Activos</h2>
         <br />
-        <ul v-for="project in projectlist">
-          <a href="#" v-on:click.prevent="filtrarProyecto(project)"
+        <ul v-for="project in projects">
+          <a href="#" v-on:click.prevent="filtrarProyecto(project.name)"
             ><li
               :class="{
-                active: filteredID === project,
+                active: filteredReport === project.name,
               }"
             >
-              {{ project }}
+              {{ project.name }}
             </li></a
           >
         </ul>
@@ -181,114 +182,47 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
+import type { activity, project, report } from "@/registerDataType";
+import datacontroller from "@/controllers/DataController";
 import session from "@/controllers/SessionController";
-import type { project, report } from "@/registerDataType";
-import request from "@/controllers/RequestController";
 
 export default class DashboardPage extends Vue {
-  username!: string;
   actualDate!: Date;
-  totalHours = 0;
-  adhierance = 0;
-  meanHours = 0;
-  dayActivity = 0;
-  reportlist!: report[];
+  datos: any = datacontroller;
+
+  reports: report[] = [];
   projects: project[] = [];
-  projectlist: string[] = [];
-  activities: string[] = [];
-  numberData: number[] = [];
-  numberData2: number[] = [];
-  filteredReport!: string;
-  filteredID!: string;
+  activities: activity[] = [];
 
-  async beforeMount() {
-    this.filteredReport = "";
-    this.filteredID = "";
+  filteredReport: string = "";
 
-    this.username =
-      session.getUserData() === undefined || session.getUserData() === null
-        ? ""
-        : session.getUserData().name;
-
-    if (session.getLocals()) {
-      this.reportlist = session.getLocals().reportlist || [];
-      this.projects = session.getLocals().projectlist || [];
-      console.log(session.getLocals());
-    } else {
-      // await this.getBackData();
-      this.$forceUpdate();
-    }
-
-    this.actualDate = new Date(session.getLocals().actualdate) || new Date();
-
-    this.projects.forEach((project) => {
-      if (project.status === true) {
-        this.projectlist.push(project.name);
-      }
-    });
+  beforeMount() {
+    this.actualDate = new Date();
     this.collectData();
-  }
-
-  collectData() {
-    this.totalHours = 0;
-    this.adhierance = 0;
-    this.dayActivity = 0;
-    this.meanHours = 0;
-    let counter = 0;
-    this.numberData = [];
-    this.numberData2 = [];
-    this.activities = [];
-
-    this.reportlist.forEach((report) => {
-      if (
-        this.filteredReport !== "" &&
-        this.filteredReport !== report.project.name
-      ) {
-        return;
-      }
-
-      this.activities.push(report.title);
-
-      if (typeof report.hours === "number" && !isNaN(report.hours)) {
-        this.totalHours += report.hours;
-        this.numberData.push(report.hours);
-      }
-
-      if (
-        typeof report.estimatedHours === "number" &&
-        !isNaN(report.estimatedHours)
-      ) {
-        this.numberData2.push(report.estimatedHours);
-      }
-      this.dayActivity += 1;
-
-      this.adhierance += report.hours / report.estimatedHours;
-      counter += 1;
-    });
-
-    this.adhierance = Math.round(this.adhierance / counter) * 10;
-    this.meanHours = Math.round(this.totalHours / counter);
-
-    if (isNaN(this.adhierance)) this.adhierance = 0;
-    if (isNaN(this.meanHours)) this.meanHours = 0;
   }
 
   data() {
     return {
-      username: this.username,
-      actualDate: this.actualDate,
-      numberData: this.numberData,
-      numberData2: this.numberData2,
+      filteredReport: this.filteredReport,
+      projects: this.projects,
+      reports: this.reports,
+      activities: this.activities,
     };
+  }
+
+  async collectData() {
+    this.datos.setActualDate(this.actualDate);
+    await this.datos.collectData();
+    this.reports = this.datos.getReports(this.filteredReport);
+    this.projects = this.datos.getProjects();
+    this.activities = this.datos.getActivities("");
   }
 
   filtrarProyecto(proy: string) {
     if (this.filteredReport === "" || this.filteredReport !== proy) {
       this.filteredReport = proy;
-      this.filteredID = proy;
     } else {
       this.filteredReport = "";
-      this.filteredID = "";
     }
 
     this.collectData();
@@ -301,42 +235,45 @@ export default class DashboardPage extends Vue {
       dir == 1
     )
       return;
-    this.reportlist = [];
+
     let date = this.actualDate;
     this.actualDate = new Date(date.getFullYear(), date.getMonth() + dir, 1);
-    this.reportlist = await request.getReports(
-      session.getUserData().id,
-      this.actualDate
-    );
-    if (this.reportlist === undefined || this.reportlist === null) {
-      this.reportlist = [];
-    }
-    let locals = session.getLocals();
-    locals.reportlist = this.reportlist;
-    locals.actualdate = this.actualDate;
-    session.setLocals(locals);
+
     this.collectData();
   }
 
-  async getBackData() {
-    let reports = await request.getReports(
-      session.getUserData().id,
-      new Date()
-    );
-    let projects: project[] = await request.getProjects(
-      session.getUserData().id
-    );
+  getActivityResume() {
+    let totalActivityHours: number[] = [];
+    this.activities.forEach((activity) => {
+      let totalHours = 0;
 
-    this.reportlist = reports === undefined ? [] : reports;
-    this.projects = projects !== undefined ? projects : [];
+      this.reports.forEach((report) => {
+        if (report.activity.id === activity.id) {
+          totalHours += report.hours;
+        }
+      });
 
-    this.actualDate = new Date();
-
-    session.setLocals({
-      reportlist: this.reportlist,
-      projectlist: this.projects,
-      actualdate: this.actualDate,
+      totalActivityHours.push(totalHours);
     });
+
+    return totalActivityHours;
+  }
+
+  getTotalHours() {
+    let totalHours = 0;
+    let totalEstimated = 0;
+    this.reports.forEach((report) => {
+      totalHours += report.hours;
+      totalEstimated += report.estimatedHours;
+    });
+
+    return [totalHours, totalEstimated];
+  }
+
+  beforeCreate(): void {
+      if (!session.validateSession) {
+        this.$router.push("/login")
+      }
   }
 }
 </script>

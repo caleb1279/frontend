@@ -434,6 +434,12 @@ export default class userCrud extends Vue {
       // Muestra un mensaje de error o realiza alguna acción si no se han diligenciado todos los campos.
     }
   }
+
+  beforeCreate(): void {
+      if (!session.validateSession) {
+        this.$router.push("/login")
+      }
+  }
 }
 </script>
 

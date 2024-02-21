@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="container-fluid justify-content-end">
-        <!-- <div class="dropdown p-3">
+        <div class="dropdown p-3">
           <a
             class="nav-link dropdown-toggle"
             role="button"
@@ -21,7 +21,7 @@
           <ul class="dropdown-menu dropdown-menu-lg-end">
             <li class="dropdown-item">No tienes notificaciones</li>
           </ul>
-        </div> -->
+        </div>
         <div class="m-0 usuario">
           <div class="dropdown p-3">
             <a
@@ -32,7 +32,7 @@
             >
               <img
                 class="avatar-rounded"
-                :src="avatarimage"
+                :src="user.profilePicture"
                 width="35"
                 height="35"
               />
@@ -92,13 +92,13 @@
             aria-expanded="false"
             aria-controls="collapseWidthExample"
           >
-            <li class="sidebar-item">
+            <li class="sidebar-item" v-if="user.rol.id >= 2">
               <font-awesome-icon icon="gears"></font-awesome-icon>
               Administrar
             </li>
           </a>
 
-          <div style="min-height: 120px">
+          <div style="min-height: 120px" v-if="user.rol.id >= 2">
             <div class="collapse" id="collapseWidthExample">
               <div class="card">
                 <a
@@ -187,23 +187,24 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-import session from "@/controllers/SessionController";
-import request from "@/controllers/RequestController";
 import { loadFull } from "tsparticles";
 import { Engine, Container } from "tsparticles-engine";
-import type { activity, report, project, user } from "@/registerDataType";
+import { user } from "@/registerDataType";
+import session from "@/controllers/SessionController";
 
 export default class HomePage extends Vue {
   user = session.getUserData();
-
-  actualDate!: Date;
-
   logout = session.Logout;
   particlesContainer!: Container;
-  avatarimage = this.user !== undefined ? this.user.profilePicture : "";
-
+  
+  data() {
+    return {
+      user: this.user,
+    }
+  }
+  
   particlesInit = async (engine: Engine) => {
-    if (session.ValidateSesison() === true) {
+    if (session.validateSession() === true) {
       await loadFull(engine);
     }
   };
@@ -212,197 +213,16 @@ export default class HomePage extends Vue {
     this.particlesContainer = container;
   };
 
-  activitylist!: activity[];
-  reportlist!: report[];
-  projectlist!: project[];
-
-  async beforeMount() {
-    if (session.getLocals() && session.getLocals().actualdate === Date) {
-      this.actualDate = session.getLocals().actualDate;
-    } else {
-      this.actualDate = new Date();
-    }
-
-    let reports = await request.getReports(this.user.id, new Date());
-
-    let projects: project[] = await request.getProjects(this.user.id);
-
-    let activities: activity[] = await request.getActivities();
-
-    this.reportlist = reports !== undefined && reports !== null ? reports : [
-      {
-        id: 101,
-        title: "Nombre programa",
-        detail: "Detalle alineado a la izquierda",
-        date: new Date(),
-        hours: 8,
-        estimatedHours: 5,
-        project: {name: "Leasing"},
-        activity: {stage: "Desarrollo"},
-      },
-      {
-        id: 102,
-        title: "Programa de Leasing",
-        detail: "Detalle alineado a la derecha",
-        date: new Date(),
-        hours: 3,
-        estimatedHours: 3,
-        project: {name: "Leasing"},
-        activity: {stage: "Desarrollo"},
-      },
-      {
-        id: 103,
-        title: "Prueba de Leasing",
-        detail: "Analisis de la prueba de leasing",
-        date: new Date(),
-        hours: 5,
-        estimatedHours: 2,
-        project: {name: "Leasing"},
-        activity: {stage: "Desarrollo"},
-      },
-      {
-        id: 104,
-        title: "Reporte de circular",
-        detail: "Modificacion",
-        date: new Date(),
-        hours: 4,
-        estimatedHours: 4,
-        project: {name: "Circular 006"},
-        activity: {stage: "Desarrollo"},
-      },
-      {
-        id: 105,
-        title: "Otra Prueba",
-        detail: "Analisis de la prueba de leasing",
-        date: new Date(),
-        hours: 15,
-        estimatedHours: 4,
-        project: {name: "Leasing"},
-        activity: {stage: "Desarrollo"},
-      },
-      {
-        id: 106,
-        title: "Prueba de Leasing II",
-        detail: "Analisis de la prueba de leasing",
-        date: new Date(),
-        hours: 6,
-        estimatedHours: 3,
-        project: {name: "Leasing"},
-        activity: {stage: "Desarrollo"},
-      },
-      {
-        id: 101,
-        title: "Programa de desembolsos",
-        detail: "Detalle alineado a la izquierda",
-        date: new Date(),
-        hours: 8,
-        estimatedHours: 7,
-        project: {name: "Desembolsos digitales"},
-        activity: {stage: "Desarrollo"},
-      },
-      {
-        id: 102,
-        title: "Prueba de cargos fijos",
-        detail: "Detalle alineado a la derecha",
-        date: new Date(),
-        hours: 7,
-        estimatedHours: 13,
-        project: {name: "cajitas"},
-        activity: {stage: "Desarrollo"},
-      },
-      {
-        id: 103,
-        title: "Programa masivo",
-        detail: "Analisis de la prueba de leasing",
-        date: new Date(),
-        hours: 5,
-        estimatedHours: 4,
-        project: {name: "Desembolsos digitales"},
-        activity: {stage: "Desarrollo"},
-      },
-      {
-        id: 104,
-        title: "Modificacion de pointers",
-        detail: "Modificacion",
-        date: new Date(),
-        hours: 9,
-        estimatedHours: 8,
-        project: {name: "Cajitas"},
-        activity: {stage: "Desarrollo"},
-      },
-      {
-        id: 105,
-        title: "PAD de cargue masivo",
-        detail: "Analisis de la prueba de leasing",
-        date: new Date(),
-        hours: 1,
-        estimatedHours: 1,
-        project: {name: "Desembolsos digitales"},
-        activity: {stage: "Desarrollo"},
-      },
-      {
-        id: 106,
-        title: "PAD de cargue masivo II",
-        detail: "Analisis de la prueba de leasing",
-        date: new Date(),
-        hours: 6,
-        estimatedHours: 4,
-        project: {name: "Desembolsos digitales"},
-        activity: {stage: "Desarrollo"},
-      },
-    ];
-    this.activitylist = activities !== undefined ? activities : [];
-    this.projectlist = [ //projects !== undefined ? projects : [
-      {
-        id: 1,
-        projectId: "PROY0442",
-        name: "Cajitas",
-        labDate: new Date(),
-        proDate: new Date(),
-        source: "fmca046390",
-        status: true,
-      },
-      {
-        id: 2,
-        projectId: "PROY0784",
-        name: "Desembolsos digitales",
-        labDate: new Date(),
-        proDate: new Date(),
-        source: "fmca046391",
-        status: true,
-      },
-      {
-        id: 2,
-        projectId: "PROY0562",
-        name: "Leasing",
-        labDate: new Date(),
-        proDate: new Date(),
-        source: "fmca047344",
-        status: true,
-      },
-      {
-        id: 2,
-        projectId: "PROY07643",
-        name: "Circular 006",
-        labDate: new Date(),
-        proDate: new Date(),
-        source: "fmca0473473",
-        status: true,
-      },
-    ];
-
-    session.setLocals({
-      actualdate: this.actualDate,
-      reportlist: this.reportlist,
-      activitylist: this.activitylist,
-      projectlist: this.projectlist,
-    });
-  }
-
   beforeUnmount() {
     if (this.particlesContainer) {
       this.particlesContainer.destroy();
     }
+  }
+
+  beforeCreate(): void {
+      if (!session.validateSession) {
+        this.$router.push("/login")
+      }
   }
 }
 </script>

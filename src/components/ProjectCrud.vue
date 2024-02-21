@@ -305,8 +305,9 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-import session from "@/controllers/SessionController";
+import data from "@/controllers/DataController";
 import type { project, user } from "@/registerDataType";
+import session from "@/controllers/SessionController";
 
 export default class ProjectCrud extends Vue {
   projectlist: project[] = [];
@@ -332,114 +333,10 @@ export default class ProjectCrud extends Vue {
   ]; // Lista de campos requeridos
   opccrud!: string;
 
-  beforeMount() {
-    const projects = session.getLocals().projectlist;
-    //this.projectlist = projects === undefined ? [] : projects;
-    this.projectlist = [
-      {
-        id: 1,
-        projectId: "PROY0442",
-        name: "Cargos Fijos",
-        labDate: new Date(),
-        proDate: new Date(),
-        source: "FMCA046390",
-        status: true,
-      },
-    ];
-
-    this.users = [
-      {
-        id: 1,
-        email: "john.doe@example.com", //correo empresarial
-        personalEmail: "john.doe@gmail.com", // correo personal
-        name: "John",
-        lastName: "Doe", //apellidos
-        /* fullName: string; */
-        password: "d41d8cd98f00b204e9800998ecf8427e",
-        tipId: 1, //tipo de id
-        numId: 4762553256, //cédula
-        /* phone: number; */
-        vacationDays: 2,
-        startContract: new Date(), // fecha de ingreso
-        finishContract: new Date(), // fecha de terminacion de contrato
-        rol: {
-          id: 1,
-          rolName: "user",
-        },
-        status: "Disponible",
-        minimumReportDate: new Date(), // fecha minima para reportar actividades
-        phone: 4532348654,
-        phone2: 0,
-        emergencyPhone: 6423486564, //telefono contacto de emergencia
-        emergencyContact: "Susan", //nombre contacto de emergencia
-        relationshipContact: "Hermano/a", // parentesco del contacto de emergencia
-        birthday: new Date(), //cumpleaños
-        address: "", //dirección
-        workPosition: "", //cargo en la empresa
-        profilePicture:
-          "https://starter-blog.rizkicitra.dev/_next/image?url=%2Fstatic%2Favatar.jpg&w=1080&q=75", // imagen de perfil
-      },
-      {
-        id: 2,
-        name: "Esteban",
-        lastName: "Rosa",
-        rol: {
-          id: 1,
-          rolName: "user",
-        },
-        password: "d41d8cd98f00b204e9800998ecf8427e",
-        tipId: 1, //tipo de id
-        numId: 4762553256, //cédula
-        /* phone: number; */
-        vacationDays: 2,
-        minimumReportDate: "2023/11/11",
-        status: "Disponible",
-        email: "estebanrosa@empresa.com",
-        personalEmail: "estebanrosa@personal.com",
-        phone: 3103030303,
-        phone2: 3104040404,
-        emergencyPhone: 3105050505,
-        birthday: "1987/06/11",
-        address: "calle 1 # 10 - 10",
-        workPosition: "Director",
-        emergencyContact: "Julian Rosa",
-        profilePicture:
-          "https://www.imagenesbonitasname.com/covers/preview/fondo-de-perfil-watsapp-flor-rosa.jpg",
-        startContract: "2023/08/09",
-        finishContract: "2024/08/09",
-        relationshipContact: "Padre",
-      },
-      {
-        id: 1,
-        name: "Maria",
-        lastName: "Rosa",
-        rol: {
-          id: 1,
-          rolName: "user",
-        },
-        password: "d41d8cd98f00b204e9800998ecf8427e",
-        tipId: 1, //tipo de id
-        numId: 4762553256, //cédula
-        /* phone: number; */
-        vacationDays: 2,
-        minimumReportDate: "2023/11/11",
-        status: "Disponible",
-        email: "mariarosa@empresa.com",
-        personalEmail: "mariarosa@personal.com",
-        phone: 3103030303,
-        phone2: 3104040404,
-        emergencyPhone: 3105050505,
-        birthday: "1987/06/11",
-        address: "calle 1 # 10 - 10",
-        workPosition: "Director",
-        emergencyContact: "Julian Rosa",
-        profilePicture:
-          "https://www.imagenesbonitasname.com/covers/preview/fondo-de-perfil-watsapp-flor-rosa.jpg",
-        startContract: "2023/06/09",
-        finishContract: "2024/08/09",
-        relationshipContact: "Padre",
-      },
-    ];
+  async beforeMount() {
+    await data.collectData();
+    this.projectlist = data.getProjects();
+    this.users = data.getUsers();
   }
 
   editProject(project: project) {
@@ -510,6 +407,12 @@ export default class ProjectCrud extends Vue {
       source: "",
       status: null,
     };
+  }
+
+  beforeCreate(): void {
+      if (!session.validateSession) {
+        this.$router.push("/login")
+      }
   }
 }
 </script>

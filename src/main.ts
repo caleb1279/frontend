@@ -13,7 +13,8 @@ import SimpleTypeahead from "vue3-simple-typeahead/src/vue3-simple-typeahead.vue
 import Particles from "vue3-particles";
 import VueApexCharts from "vue3-apexcharts";
 import { VueReCaptcha } from "vue-recaptcha-v3";
-import { ReCaptchaInstance } from 'recaptcha-v3'
+import { ReCaptchaInstance } from "recaptcha-v3";
+import * as dotenv from "dotenv";
 
 import {
   faClock,
@@ -81,7 +82,7 @@ app.use(Axios, axios);
 app.use(Particles);
 app.use(VueApexCharts);
 app.use(VueReCaptcha, {
-  siteKey: "6Lfeh3UpAAAAAJzjPNnMNRa49v3NKpXOLJc-efHv",
+  siteKey: "" + process.env.VUE_APP_CAPTCHA_TOKEN,
   loaderOptions: {
     useRecaptchaNet: true,
   },

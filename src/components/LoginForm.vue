@@ -4,7 +4,7 @@
       <form
         class="login-form needs-validation"
         id="form"
-        v-on:submit.prevent="recaptcha"
+        v-on:submit.prevent="recaptcha()"
       >
         <div class="children-login-form">
           <div class="image-logo text-center">
@@ -85,10 +85,10 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-import session from "@/controllers/SessionController";
 import RequestController from "@/controllers/RequestController";
 import { AxiosError, AxiosResponse } from "axios";
 import CryptoJS from "crypto-js";
+import session from "@/controllers/SessionController";
 
 export default class LoginForm extends Vue {
   msg = "";
@@ -100,8 +100,7 @@ export default class LoginForm extends Vue {
 
   async recaptcha() {
     await this.$recaptchaLoaded();
-    const token = await this.$recaptcha('login');
-    console.log(token);
+    const token = await this.$recaptcha("login");
     this.login(token);
   }
 
@@ -109,27 +108,31 @@ export default class LoginForm extends Vue {
     return {
       uname: this.uname,
       passwd: this.passwd,
-    }
+    };
   }
 
   login(token: string) {
+    this.msg = "";
     RequestController.Login({
       email: this.uname,
       password: CryptoJS.SHA256(this.passwd).toString(CryptoJS.enc.Hex),
-      captchaToken: token,
     })
       .then((data: AxiosResponse) => {
-        if (data.data.status === "200") {
-          session.Login(data.data.Authorization, data.data.user);
-          this.$router.push("/");
+        console.log(data);
+        if (data.status === 200) {
+          session.Login(token, data.data);
         } else {
-          this.msg = data.data.message;
+          this.msg = data.data.Error;
         }
       })
-      .catch(() => {
-        this.msg = "Ha ocurrido un error al intentar iniciar sesión";
+      .catch((error: AxiosError) => {
+        if (error.response) {
+          this.msg = (error.response.data as {Error: string}).Error;
+        } else {
+          this.msg = "Usuario o Contraseña Incorrectos";
+        }
       });
-    /*session.Login("Authorization", {
+    session.Login("Authorization", {
       id: 1,
       email: "john.doe@example.com", //correo empresarial
       personalEmail: "john.doe@gmail.com", // correo personal
@@ -147,7 +150,7 @@ export default class LoginForm extends Vue {
         id: 1,
         rolName: "user",
       },
-      status: "",
+      status: "Disponible",
       minimumReportDate: new Date(), // fecha minima para reportar actividades
       phone: 4532348654,
       phone2: 0,
@@ -156,9 +159,9 @@ export default class LoginForm extends Vue {
       relationshipContact: "Hermano/a", // parentesco del contacto de emergencia
       birthday: new Date(), //cumpleaños
       address: "", //dirección
-      workPosition: "", //cargo en la empresa
+      workPosition: "Desarrollador", //cargo en la empresa
       profilePicture: "https://starter-blog.rizkicitra.dev/_next/image?url=%2Fstatic%2Favatar.jpg&w=1080&q=75" // imagen de perfil
-    })*/
+    });
   }
 
   viewPassword() {

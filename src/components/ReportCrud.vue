@@ -325,12 +325,14 @@
 </template>
 
 <script lang="ts">
-import controllers from "@/controllers/RequestController";
+import datacontroller from "@/controllers/DataController";
 import session from "@/controllers/SessionController";
+import request from "@/controllers/RequestController";
 import type { activity, project, report } from "@/registerDataType";
 import { Vue } from "vue-class-component";
 
 export default class ReportCrud extends Vue {
+  datos = datacontroller;
   actualDate!: Date;
   user = session.getUserData();
   newReport: report = {
@@ -379,19 +381,12 @@ export default class ReportCrud extends Vue {
   }
 
   async beforeMount() {
-    if (session.getLocals()) {
-      this.actualDate = new Date(session.getLocals().actualdate) || new Date();
-    } else {
-      this.actualDate = new Date();
-    }
-    this.projectlist = session.getLocals().projectlist;
-    this.activitylist = session.getLocals().activitylist;
-    this.reportlist = session.getLocals().reportlist;
-    if (this.projectlist !== undefined && this.projectlist !== null)
-      this.projects = this.projectlist.map((item) => item.name);
-    else this.projects = [];
-    if (this.reportlist !== undefined && this.reportlist !== null)
-      this.reportlist.sort(
+    this.actualDate = new Date();
+    await this.datos.collectData();
+    this.projectlist = this.datos.getProjects();
+    this.activitylist = this.datos.getActivities("");
+    this.reportlist = this.datos.getReports("")
+      .sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
       );
   }
@@ -411,7 +406,7 @@ export default class ReportCrud extends Vue {
   async deleteReport(id: number) {
     let answer = window.confirm("Seguro que desea eliminar el registro?");
     if (answer) {
-      await controllers.deleteReport(id);
+      await request.deleteReport(id);
       this.updateRecords(0);
     }
   }
@@ -450,7 +445,7 @@ export default class ReportCrud extends Vue {
       });
       this.newReport.activity = activity[0];
       this.newReport.project = project[0];
-      console.log(await controllers.sendReport(this.newReport));
+      console.log(await request.sendReport(this.newReport));
       this.updateRecords(0);
       console.log(this.newReport.date);
       (document.querySelector(".btn-close") as HTMLButtonElement).click();
@@ -463,19 +458,12 @@ export default class ReportCrud extends Vue {
     this.reportlist = [];
     let date = this.actualDate;
     this.actualDate = new Date(date.getFullYear(), date.getMonth() + dir, 1);
-    this.reportlist = await controllers.getReports(
-      session.getUserData().id,
-      this.actualDate
-    );
-    if (this.reportlist !== undefined && this.reportlist !== null) {
-      let locals = session.getLocals();
-      locals.reportlist = this.reportlist;
-      locals.actualdate = this.actualDate;
-      session.setLocals(locals);
-      this.reportlist.sort(
+    this.datos.setActualDate(this.actualDate);
+    await this.datos.collectData();
+    this.reportlist = this.datos.getReports("")
+      .sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
       );
-    }
   }
 
   validateFields(fieldName: string, condition: boolean) {
@@ -518,6 +506,12 @@ export default class ReportCrud extends Vue {
       },
       user: session.getUserData(),
     };
+  }
+
+  beforeCreate(): void {
+      if (!session.validateSession) {
+        this.$router.push("/login")
+      }
   }
 }
 </script>

@@ -497,9 +497,11 @@
 </template>
 
 <script lang="ts">
-import controllers from "@/controllers/RequestController";
 import { Vue } from "vue-class-component";
+import data from "@/controllers/DataController";
+import session from "@/controllers/SessionController"
 import type { user } from "@/registerDataType";
+import router from "@/router";
 export default class userCrud extends Vue {
   newUser: user = {
     id: NaN,
@@ -538,52 +540,10 @@ export default class userCrud extends Vue {
     "workPosition",
   ]; // Lista de campos requeridos
   opccrud!: string;
+
   async beforeMount() {
-    this.userList = (await controllers.getUser()) || [
-      {
-        userId: "39393939",
-        name: "Esteban",
-        lastName: "Rosa",
-        rol: "Administrador",
-        minimumReportDate: "2023/11/11",
-        status: "Disponible",
-        email: "estebanrosa@empresa.com",
-        personalEmail: "estebanrosa@personal.com",
-        phone: 3103030303,
-        phone2: 3104040404,
-        emergencyPhone: 3105050505,
-        birthday: "1987/06/11",
-        address: "calle 1 # 10 - 10",
-        workPosition: "Director",
-        emergencyContact: "Julian Rosa",
-        profilePicture:
-          "https://www.imagenesbonitasname.com/covers/preview/fondo-de-perfil-watsapp-flor-rosa.jpg",
-        startContract: "2023/08/09",
-        finishContract: "2024/08/09",
-        relationshipContact: "Padre",
-      },
-      {
-        userId: "39393938",
-        name: "Maria",
-        lastName: "Rosa",
-        rol: "Lider de equipo",
-        minimumReportDate: "2023/11/11",
-        status: "Disponible",
-        email: "mariarosa@empresa.com",
-        personalEmail: "mariarosa@personal.com",
-        phone: 3103030303,
-        phone2: 3104040404,
-        emergencyPhone: 3105050505,
-        birthday: "1987/06/11",
-        address: "calle 1 # 10 - 10",
-        workPosition: "Director",
-        emergencyContact: "Julian Rosa",
-        profilePicture:
-          "https://www.imagenesbonitasname.com/covers/preview/fondo-de-perfil-watsapp-flor-rosa.jpg",
-        startContract: "2023/06/09",
-        relationshipContact: "Padre",
-      },
-    ];
+    await data.collectData();
+    this.userList = data.getUsers();
   }
   data() {
     return {
@@ -598,7 +558,6 @@ export default class userCrud extends Vue {
     let userimage = this.userList.filter((userin) => {
       if (user === userin) return user;
     });
-    console.log(userimage);
     if (userimage) {
       return userimage[0].profilePicture;
     } else {
@@ -852,6 +811,12 @@ export default class userCrud extends Vue {
     datosPersonales.forEach((element) => {
       element.classList.remove("show");
     });
+  }
+
+  beforeCreate(): void {
+      if (!session.validateSession) {
+        this.$router.push("/login")
+      }
   }
 }
 </script>

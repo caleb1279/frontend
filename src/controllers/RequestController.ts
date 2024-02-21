@@ -6,13 +6,13 @@ import { useStorage } from "vue3-storage";
 const storage = useStorage();
 
 const request = axios.create({
-  baseURL: process.env.VUE_APP_BASE_URI,
+  baseURL: "https://4233-186-84-89-254.ngrok-free.app",
   withCredentials: false,
   headers: {
-    Accept: "application/json",
-    ContentType: "application/json",
-    AccessControlAllowOrigin: "*",
-    Authorization: storage.getStorageSync("Authorization") || "",
+    Accept: "*/*",
+    //ContentType: "application/json",
+    //AccessControlAllowOrigin: "*",
+    //Authorization: storage.getStorageSync("Authorization") || "",
   },
 });
 
@@ -30,8 +30,8 @@ request.interceptors.response.use(
 );
 
 export default {
-  Login(json: { email: string; password: string, captchaToken: string }) {
-    return request.post("/login", json);
+  Login(json: { email: string; password: string }) {
+    return request.get("/users/login/"+json.email+"/"+json.password);
   },
   async getActivities() {
     try {
@@ -51,9 +51,9 @@ export default {
       return null;
     }
   },
-  async getUser() {
+  async getUsers() {
     try {
-      const data = await request.get("/users/");
+      const data = await request.get("/users/all");
       return data.data.user;
     } catch (error) {
       console.log(error);
@@ -64,15 +64,16 @@ export default {
     try {
       const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
       const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-      const data = await request.get(
-        "/reports/" +
-          user +
-          "/" +
-          firstDay.toISOString().substring(0, 10) +
-          "/" +
-          lastDay.toISOString().substring(0, 10)
-      );
-      return data.data.reports;
+      let vari = "/reports/" +
+      user +
+      "/" +
+      firstDay.toISOString().substring(0, 10) +
+      "/" +
+      lastDay.toISOString().substring(0, 10);
+      console.log(vari);
+      const data = await request.get(vari);
+      console.log(data);
+      return data.data;
     } catch (error) {
       console.log(error);
       return null;

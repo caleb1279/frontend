@@ -11,7 +11,7 @@ import AdminProfile from "@/components/AdminProfile.vue";
 import Profile from "@/components/Profile.vue";
 import DashboardPage from "@/components/DashboardPage.vue";
 
-//sesiones
+// sesiones
 import session from "@/controllers/SessionController";
 
 const authExceptions: Array<string> = ["ErrorNotFound", "Login"];
@@ -32,7 +32,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "ReportCrud",
         component: ReportCrud,
       },
-{
+      {
         path: "/project",
         name: "ProjectCrud",
         component: ProjectCrud,
@@ -67,7 +67,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  const authenticated = session.ValidateSesison();
+  const authenticated = session.validateSession();
   if (!authenticated && !authExceptions.includes(String(to.name))) {
     router.push("/login");
   }
