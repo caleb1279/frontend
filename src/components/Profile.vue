@@ -397,6 +397,11 @@ export default class userCrud extends Vue {
     datosEmpresariales.forEach((element) => {
       (element as HTMLInputElement).disabled = true;
     });
+    document.querySelector('.spinner')?.classList.add('hidden');
+  }
+
+  beforeUnmount() {
+    document.querySelector('.spinner')?.classList.remove('hidden');      
   }
 
   validateFields(fieldName: string, condition: boolean) {

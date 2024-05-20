@@ -28,6 +28,7 @@ import {
   faPen,
   faTrash,
   faPlus,
+  faMinus,
   faUsers,
   faGears,
   faArrowTrendUp,
@@ -66,7 +67,8 @@ library.add(
   faCalendar,
   faLessThan,
   faGreaterThan,
-  faUserPlus
+  faUserPlus,
+  faMinus
 );
 
 declare module '@vue/runtime-core' {

@@ -44,6 +44,7 @@ export type project = {
   proDate: Date | string;
   source: string;
   status: boolean | null;
+  users: user[];
 };
 
 export type report = {

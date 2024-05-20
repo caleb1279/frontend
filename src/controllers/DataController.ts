@@ -17,12 +17,15 @@ class DataController {
   }
 
   async collectData() {
-    this.users = await request.getUsers() || [
+    this.users = (await request.getUsers()) || [
       {
-        userId: "39393939",
+        id: 39393939,
         name: "Esteban",
         lastName: "Rosa",
-        rol: "Administrador",
+        rol: {
+          id: 5,
+          rolName: "Administrador",
+        },
         minimumReportDate: "2023/11/11",
         status: "Disponible",
         email: "estebanrosa@empresa.com",
@@ -41,10 +44,13 @@ class DataController {
         relationshipContact: "Padre",
       },
       {
-        userId: "39393938",
+        id: 39393938,
         name: "Maria",
         lastName: "Rosa",
-        rol: "Lider de equipo",
+        rol: {
+          id: 8,
+          rolName: "Lider de equipo"
+        },
         minimumReportDate: "2023/11/11",
         status: "Disponible",
         email: "mariarosa@empresa.com",
@@ -61,11 +67,36 @@ class DataController {
         startContract: "2023/06/09",
         relationshipContact: "Padre",
       },
+      {
+        id: 1,
+        name: "Máximo",
+        lastName: "Décimo Meridio",
+        tipId: 1,
+        numId: 52416811,
+        birthday: "1969-10-31T00:00:00.000+00:00",
+        email: "maximo.decimo@colnexsi.com.co",
+        personalEmail: "maximo.decimo@gmail.com",
+        address: "Calle 116 # 19-10",
+        phone: 3144320060,
+        phone2: 6532826,
+        emergencyPhone: 3502137899,
+        emergencyContact: "Marco Meridio",
+        relationshipContact: "Padre",
+        startContract: "2024-01-01T00:00:00.000+00:00",
+        finishContract: "2025-12-31T00:00:00.000+00:00",
+        vacationDays: 15,
+        status: "Activo",
+        workPosition: "Desarrollador",
+        password: "Decimo3110*",
+        profilePicture: "C:\\Users\\William Guerrero\\Pictures\\Camera Roll",
+        minimumReportDate: "2024-01-29T00:00:00.000+00:00",
+        rol: {
+          id: 3,
+          rolName: "User",
+        },
+      },
     ];
-    this.reports = (await request.getReports(
-      this.userid,
-      this.actualDate
-    )) || [
+    this.reports = (await request.getReports(this.userid, this.actualDate)) || [
       {
         id: 101,
         title: "Nombre programa",
@@ -128,7 +159,7 @@ class DataController {
       },
       {
         id: 101,
-        title: "Programa de desembolsos",
+        title: "SILG4352",
         detail: "Detalle alineado a la izquierda",
         date: new Date(),
         hours: 8,
@@ -219,7 +250,8 @@ class DataController {
       },
     ];
 
-    this.projects = (await request.getProjects(this.userid)) || [
+    this.projects = [
+      //(await request.getProjects(this.userid)) || [
       {
         id: 1,
         projectId: "PROY0442",
@@ -228,6 +260,37 @@ class DataController {
         proDate: new Date(),
         source: "fmca046390",
         status: true,
+        users: [
+          {
+            id: 39393938,
+            name: "Maria",
+            lastName: "Rosa",
+            rol: {
+              id: 3,
+              rolName: "User",
+            },
+            minimumReportDate: "2023/11/11",
+            status: "Disponible",
+            email: "mariarosa@empresa.com",
+            personalEmail: "mariarosa@personal.com",
+            phone: 3103030303,
+            phone2: 3104040404,
+            emergencyPhone: 3105050505,
+            birthday: "1987/06/11",
+            address: "calle 1 # 10 - 10",
+            workPosition: "Director",
+            emergencyContact: "Julian Rosa",
+            profilePicture:
+              "https://www.imagenesbonitasname.com/covers/preview/fondo-de-perfil-watsapp-flor-rosa.jpg",
+            startContract: "2023/06/09",
+            finishContract: "2025-12-31T00:00:00.000+00:00",
+            vacationDays: 15,
+            tipId: 1,
+            numId: 52416811,
+            relationshipContact: "Padre",
+            password: "Decimo3110*",
+          },
+        ],
       },
       {
         id: 2,
@@ -237,6 +300,37 @@ class DataController {
         proDate: new Date(),
         source: "fmca046391",
         status: true,
+        users: [
+          {
+            id: 1,
+            name: "Máximo",
+            lastName: "Décimo Meridio",
+            tipId: 1,
+            numId: 52416811,
+            birthday: "1969-10-31T00:00:00.000+00:00",
+            email: "maximo.decimo@colnexsi.com.co",
+            personalEmail: "maximo.decimo@gmail.com",
+            address: "Calle 116 # 19-10",
+            phone: 3144320060,
+            phone2: 6532826,
+            emergencyPhone: 3502137899,
+            emergencyContact: "Marco Meridio",
+            relationshipContact: "Padre",
+            startContract: "2024-01-01T00:00:00.000+00:00",
+            finishContract: "2025-12-31T00:00:00.000+00:00",
+            vacationDays: 15,
+            status: "Activo",
+            workPosition: "Desarrollador",
+            password: "Decimo3110*",
+            profilePicture:
+              "C:\\Users\\William Guerrero\\Pictures\\Camera Roll",
+            minimumReportDate: "2024-01-29T00:00:00.000+00:00",
+            rol: {
+              id: 3,
+              rolName: "User",
+            },
+          },
+        ],
       },
       {
         id: 2,
@@ -246,6 +340,61 @@ class DataController {
         proDate: new Date(),
         source: "fmca047344",
         status: true,
+        users: [
+          {
+            id: 1,
+            name: "Máximo",
+            lastName: "Décimo Meridio",
+            tipId: 1,
+            numId: 52416811,
+            birthday: "1969-10-31T00:00:00.000+00:00",
+            email: "maximo.decimo@colnexsi.com.co",
+            personalEmail: "maximo.decimo@gmail.com",
+            address: "Calle 116 # 19-10",
+            phone: 3144320060,
+            phone2: 6532826,
+            emergencyPhone: 3502137899,
+            emergencyContact: "Marco Meridio",
+            relationshipContact: "Padre",
+            startContract: "2024-01-01T00:00:00.000+00:00",
+            finishContract: "2025-12-31T00:00:00.000+00:00",
+            vacationDays: 15,
+            status: "Activo",
+            workPosition: "Desarrollador",
+            password: "Decimo3110*",
+            profilePicture:
+              "C:\\Users\\William Guerrero\\Pictures\\Camera Roll",
+            minimumReportDate: "2024-01-29T00:00:00.000+00:00",
+            rol: {
+              id: 3,
+              rolName: "User",
+            },
+          },
+          {
+            id: 39393938,
+            name: "Maria",
+            lastName: "Rosa",
+            rol: {
+              id: 3,
+              rolName: "User",
+            },
+            minimumReportDate: "2023/11/11",
+            status: "Disponible",
+            email: "mariarosa@empresa.com",
+            personalEmail: "mariarosa@personal.com",
+            phone: 3103030303,
+            phone2: 3104040404,
+            emergencyPhone: 3105050505,
+            birthday: "1987/06/11",
+            address: "calle 1 # 10 - 10",
+            workPosition: "Director",
+            emergencyContact: "Julian Rosa",
+            profilePicture:
+              "https://www.imagenesbonitasname.com/covers/preview/fondo-de-perfil-watsapp-flor-rosa.jpg",
+            startContract: "2023/06/09",
+            relationshipContact: "Padre",
+          } as user,
+        ],
       },
       {
         id: 2,
@@ -255,6 +404,37 @@ class DataController {
         proDate: new Date(),
         source: "fmca0473473",
         status: true,
+        users: [
+          {
+            id: 1,
+            name: "Máximo",
+            lastName: "Décimo Meridio",
+            tipId: 1,
+            numId: 52416811,
+            birthday: "1969-10-31T00:00:00.000+00:00",
+            email: "maximo.decimo@colnexsi.com.co",
+            personalEmail: "maximo.decimo@gmail.com",
+            address: "Calle 116 # 19-10",
+            phone: 3144320060,
+            phone2: 6532826,
+            emergencyPhone: 3502137899,
+            emergencyContact: "Marco Meridio",
+            relationshipContact: "Padre",
+            startContract: "2024-01-01T00:00:00.000+00:00",
+            finishContract: "2025-12-31T00:00:00.000+00:00",
+            vacationDays: 15,
+            status: "Activo",
+            workPosition: "Desarrollador",
+            password: "Decimo3110*",
+            profilePicture:
+              "C:\\Users\\William Guerrero\\Pictures\\Camera Roll",
+            minimumReportDate: "2024-01-29T00:00:00.000+00:00",
+            rol: {
+              id: 3,
+              rolName: "User",
+            },
+          },
+        ],
       },
       {
         id: 2,
@@ -264,6 +444,37 @@ class DataController {
         proDate: new Date(),
         source: "fmca0473473",
         status: true,
+        users: [
+          {
+            id: 1,
+            name: "Máximo",
+            lastName: "Décimo Meridio",
+            tipId: 1,
+            numId: 52416811,
+            birthday: "1969-10-31T00:00:00.000+00:00",
+            email: "maximo.decimo@colnexsi.com.co",
+            personalEmail: "maximo.decimo@gmail.com",
+            address: "Calle 116 # 19-10",
+            phone: 3144320060,
+            phone2: 6532826,
+            emergencyPhone: 3502137899,
+            emergencyContact: "Marco Meridio",
+            relationshipContact: "Padre",
+            startContract: "2024-01-01T00:00:00.000+00:00",
+            finishContract: "2025-12-31T00:00:00.000+00:00",
+            vacationDays: 15,
+            status: "Activo",
+            workPosition: "Desarrollador",
+            password: "Decimo3110*",
+            profilePicture:
+              "C:\\Users\\William Guerrero\\Pictures\\Camera Roll",
+            minimumReportDate: "2024-01-29T00:00:00.000+00:00",
+            rol: {
+              id: 3,
+              rolName: "User",
+            },
+          },
+        ],
       },
     ];
 
@@ -277,11 +488,11 @@ class DataController {
     ];
   }
 
-  totalHours() {
+  totalHours(): number {
     return this.reports.reduce((total, obj) => total + obj.hours, 0);
   }
 
-  projectlist() {
+  projectlist(): string[] {
     let projectlist: string[] = [];
     this.projects.forEach((project) => {
       if (project.status === true) {
@@ -292,7 +503,7 @@ class DataController {
     return projectlist;
   }
 
-  getReports(filteredReport: string) {
+  getReports(filteredReport: string): report[] {
     if (filteredReport === "") {
       return this.reports;
     }
@@ -307,11 +518,11 @@ class DataController {
     return reportlist;
   }
 
-  getProjects() {
-    return this.projects;
+  getProjects(): project[] {
+    return this.projects === undefined ? [] : this.projects;
   }
 
-  getActivities(filteredActivity: string) {
+  getActivities(filteredActivity: string): activity[] {
     if (filteredActivity === "") {
       return this.activities;
     }
@@ -321,12 +532,12 @@ class DataController {
       if (activity.name === filteredActivity) {
         activitylist.push(activity);
       }
-    }); 
+    });
 
     return activitylist;
   }
 
-  getActualDate() {
+  getActualDate(): Date {
     return this.actualDate;
   }
 
@@ -334,10 +545,10 @@ class DataController {
     this.actualDate = date;
   }
 
-  getUsers() {
+  getUsers(): user[] {
     return this.users;
   }
 }
 
 var datos: DataController = new DataController();
-export default datos
+export default datos;

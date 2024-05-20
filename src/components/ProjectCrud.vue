@@ -224,7 +224,7 @@
                   href="#"
                   v-on:click.prevent=""
                   data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasExample"
+                  :data-bs-target="'#offcanvas' + project.id"
                   aria-controls="offcanvasExample"
                 >
                   <font-awesome-icon icon="user-plus" />
@@ -232,7 +232,7 @@
                 <div
                   class="offcanvas offcanvas-end"
                   tabindex="-1"
-                  id="offcanvasExample"
+                  :id="'offcanvas' + project.id"
                   aria-labelledby="offcanvasExampleLabel"
                 >
                   <div class="offcanvas-header">
@@ -247,6 +247,20 @@
                     ></button>
                   </div>
                   <div class="offcanvas-body">
+                    <form class="d-flex" role="search" v-on:click.prevent="">
+                      <input
+                        class="form-control me-2 shadow-none"
+                        id="search"
+                        type="search"
+                      />
+                      <button
+                        class="btn btn-primary"
+                        type="submit"
+                        v-on:click.prevent=""
+                      >
+                        Buscar
+                      </button>
+                    </form>
                     <div class="table-contain">
                       <table class="table text-left">
                         <thead>
@@ -257,7 +271,10 @@
                             <th scope="col"></th>
                           </tr>
                         </thead>
-                        <tbody v-for="user in users" :key="user.id">
+                        <tbody
+                          v-for="user in users.sort((a: user, b: user) => (a.id - b.id))"
+                          :key="user.id"
+                        >
                           <td>
                             <img
                               class="avatar-rounded"
@@ -269,12 +286,44 @@
                           <td>{{ user.name }}</td>
                           <td>{{ user.status }}</td>
                           <td>
-                            <a href="#" v-on:click.prevent="">
-                              <font-awesome-icon icon="plus" />
+                            <a
+                              href="#"
+                              v-on:click.prevent="
+                                updateUserProjectStatus(user, project)
+                              "
+                            >
+                              <font-awesome-icon
+                                :icon="
+                                  project.users.some(
+                                    (obj) => obj.name === user.name
+                                  )
+                                    ? 'minus'
+                                    : 'plus'
+                                "
+                              />
                             </a>
                           </td>
                         </tbody>
                       </table>
+                      <div class="modal-footer flex-side">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="offcanvas"
+                          aria-label="Close"
+                        >
+                          Cerrar
+                        </button>
+                        <button
+                          type="submit"
+                          class="btn btn-primary"
+                          data-bs-dismiss="offcanvas"
+                          aria-label="Close"
+                          @click=""
+                        >
+                          Guardar cambios
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -313,15 +362,7 @@ export default class ProjectCrud extends Vue {
   projectlist: project[] = [];
   users: user[] = [];
 
-  newProject: project = {
-    id: 0,
-    labDate: "",
-    name: "",
-    proDate: "",
-    projectId: "",
-    source: "",
-    status: null,
-  };
+  newProject: project = {} as project;
   validFields: string[] = [];
   validatedFields: string[] = [];
   requiredFields: string[] = [
@@ -334,9 +375,15 @@ export default class ProjectCrud extends Vue {
   opccrud!: string;
 
   async beforeMount() {
+    data.setActualDate(new Date());
     await data.collectData();
     this.projectlist = data.getProjects();
     this.users = data.getUsers();
+    document.querySelector('.spinner')?.classList.add('hidden');
+  }
+
+  beforeUnmount() {
+    document.querySelector('.spinner')?.classList.remove('hidden');      
   }
 
   editProject(project: project) {
@@ -382,11 +429,18 @@ export default class ProjectCrud extends Vue {
     }
   }
 
+  updateUserProjectStatus(user: user, project: project) {
+    if (project.users.some((obj) => obj.id == user.id)) {
+      // quitar el usuario del proyecto
+    } else {
+      // agregar el usuario al proyecto
+    }
+  }
+
   getImage(user: user): string {
     let userimage = this.users.filter((userin) => {
       if (user === userin) return user;
     });
-    console.log(userimage);
     if (userimage) {
       return userimage[0].profilePicture;
     } else {
@@ -398,21 +452,35 @@ export default class ProjectCrud extends Vue {
     // cdc: para limpiar los campos y arreglos al cancelar
     this.validatedFields = [];
     this.validFields = [];
-    this.newProject = {
-      id: 0, // Cambiado a 0
-      projectId: "",
-      name: "",
-      labDate: "",
-      proDate: "",
-      source: "",
-      status: null,
-    };
+    this.newProject = {} as project;
   }
 
   beforeCreate(): void {
-      if (!session.validateSession) {
-        this.$router.push("/login")
-      }
+    if (!session.validateSession) {
+      this.$router.push("/login");
+    }
   }
 }
 </script>
+
+<style>
+.flex-side {
+  display: flex;
+  position: absolute;
+  bottom: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.flex-side button {
+  margin: 5px;
+}
+
+.offcanvas-body .d-flex input {
+  width: 300px !important;
+}
+
+.spinner.active {
+  visibility: visible;
+}
+</style>

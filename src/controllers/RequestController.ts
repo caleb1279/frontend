@@ -70,9 +70,7 @@ export default {
       firstDay.toISOString().substring(0, 10) +
       "/" +
       lastDay.toISOString().substring(0, 10);
-      console.log(vari);
       const data = await request.get(vari);
-      console.log(data);
       return data.data;
     } catch (error) {
       console.log(error);

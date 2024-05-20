@@ -96,7 +96,12 @@
                           !validFields.includes('hours') &&
                           validatedFields.includes('hours'), // cdc otro array para saber si lo ha validado
                       }"
-                      @input="validateFields('hours', newReport.hours > 0 && newReport.hours <= 8 )"
+                      @input="
+                        validateFields(
+                          'hours',
+                          newReport.hours > 0 && newReport.hours <= 8
+                        )
+                      "
                     />
                   </div>
                 </div>
@@ -148,10 +153,7 @@
                         validatedFields.includes('project'), // cdc otro array para saber si lo ha validado
                     }"
                     @input="
-                      validateFields(
-                        'project',
-                        newReport.project.name !== ''
-                      )
+                      validateFields('project', newReport.project.name !== '')
                     "
                   ></vue3-simple-typeahead>
                 </div>
@@ -337,10 +339,10 @@ export default class ReportCrud extends Vue {
   user = session.getUserData();
   newReport: report = {
     id: 0,
-    date: new Date(),
-    hours: NaN,
-    estimatedHours: NaN,
+    date: "",
     detail: "",
+    hours: 0,
+    estimatedHours: 0,
     title: "",
     activity: {
       id: 0,
@@ -354,8 +356,36 @@ export default class ReportCrud extends Vue {
       proDate: "",
       source: "",
       status: null,
+      users: [],
     },
-    user: this.user,
+    user: {
+      id: 0,
+      email: "",
+      personalEmail: "",
+      name: "",
+      lastName: "",
+      password: "",
+      tipId: 0,
+      numId: 0,
+      vacationDays: 0,
+      startContract: "",
+      finishContract: "",
+      rol: {
+        id: 0,
+        rolName: "",
+      },
+      status: "",
+      minimumReportDate: "",
+      phone: 0,
+      phone2: 0,
+      emergencyPhone: 0,
+      emergencyContact: "",
+      relationshipContact: "",
+      birthday: "",
+      address: "",
+      workPosition: "",
+      profilePicture: "",
+    },
   };
   opccrud!: string;
   projects!: string[];
@@ -385,10 +415,10 @@ export default class ReportCrud extends Vue {
     await this.datos.collectData();
     this.projectlist = this.datos.getProjects();
     this.activitylist = this.datos.getActivities("");
-    this.reportlist = this.datos.getReports("")
-      .sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
+    this.reportlist = this.datos
+      .getReports("")
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    document.querySelector(".spinner")?.classList.add("hidden");
   }
 
   data() {
@@ -421,6 +451,10 @@ export default class ReportCrud extends Vue {
     this.newReport.project = report.project;
     this.newReport.date = new Date(report.date);
     this.newReport.activity = report.activity;
+  }
+
+  beforeUnmount() {
+    document.querySelector('.spinner')?.classList.remove('hidden');      
   }
 
   async submitForm() {
@@ -460,10 +494,9 @@ export default class ReportCrud extends Vue {
     this.actualDate = new Date(date.getFullYear(), date.getMonth() + dir, 1);
     this.datos.setActualDate(this.actualDate);
     await this.datos.collectData();
-    this.reportlist = this.datos.getReports("")
-      .sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
+    this.reportlist = this.datos
+      .getReports("")
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
   validateFields(fieldName: string, condition: boolean) {
@@ -486,11 +519,15 @@ export default class ReportCrud extends Vue {
     this.validFields = [];
     this.newReport = {
       id: 0,
-      title: "",
+      date: "",
       detail: "",
-      date: new Date(),
-      hours: NaN,
-      estimatedHours: NaN,
+      hours: 0,
+      estimatedHours: 0,
+      title: "",
+      activity: {
+        id: 0,
+        name: "",
+      },
       project: {
         id: 0,
         projectId: "",
@@ -499,19 +536,43 @@ export default class ReportCrud extends Vue {
         proDate: "",
         source: "",
         status: null,
+        users: [],
       },
-      activity: {
+      user: {
         id: 0,
+        email: "",
+        personalEmail: "",
         name: "",
+        lastName: "",
+        password: "",
+        tipId: 0,
+        numId: 0,
+        vacationDays: 0,
+        startContract: "",
+        finishContract: "",
+        rol: {
+          id: 0,
+          rolName: "",
+        },
+        status: "",
+        minimumReportDate: "",
+        phone: 0,
+        phone2: 0,
+        emergencyPhone: 0,
+        emergencyContact: "",
+        relationshipContact: "",
+        birthday: "",
+        address: "",
+        workPosition: "",
+        profilePicture: "",
       },
-      user: session.getUserData(),
     };
   }
 
   beforeCreate(): void {
-      if (!session.validateSession) {
-        this.$router.push("/login")
-      }
+    if (!session.validateSession) {
+      this.$router.push("/login");
+    }
   }
 }
 </script>

@@ -132,7 +132,7 @@ export default class LoginForm extends Vue {
           this.msg = "Usuario o Contraseña Incorrectos";
         }
       });
-    session.Login("Authorization", {
+      session.Login("Authorization", {
       id: 1,
       email: "john.doe@example.com", //correo empresarial
       personalEmail: "john.doe@gmail.com", // correo personal
@@ -147,8 +147,8 @@ export default class LoginForm extends Vue {
       startContract: new Date(), // fecha de ingreso
       finishContract: new Date(), // fecha de terminacion de contrato
       rol: {
-        id: 1,
-        rolName: "user",
+        id: 3,
+        rolName: "administrator",
       },
       status: "Disponible",
       minimumReportDate: new Date(), // fecha minima para reportar actividades
@@ -161,7 +161,7 @@ export default class LoginForm extends Vue {
       address: "", //dirección
       workPosition: "Desarrollador", //cargo en la empresa
       profilePicture: "https://starter-blog.rizkicitra.dev/_next/image?url=%2Fstatic%2Favatar.jpg&w=1080&q=75" // imagen de perfil
-    });
+    }); 
   }
 
   viewPassword() {

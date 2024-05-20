@@ -469,7 +469,7 @@
         <td>{{ user.email }}</td>
         <td>{{ user.phone }}</td>
         <td>{{ user.workPosition }}</td>
-        <td>{{ user.rol }}</td>
+        <td>{{ user.rol.rolName }}</td>
         <td>{{ user.status }}</td>
         <td>
           <a
@@ -544,6 +544,10 @@ export default class userCrud extends Vue {
   async beforeMount() {
     await data.collectData();
     this.userList = data.getUsers();
+    document.querySelector('.spinner')?.classList.add('hidden');      
+  }
+  beforeUnmount() {
+    document.querySelector('.spinner')?.classList.remove('hidden');      
   }
   data() {
     return {

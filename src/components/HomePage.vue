@@ -1,4 +1,24 @@
 <template>
+  <div
+    class="d-flex justify-content-center spinner"
+    style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.8);
+      width: 100%;
+      height: 100%;
+      z-index: 999;
+    "
+  >
+    <div
+      class="spinner-border text-primary m-auto"
+      style="width: 3rem; height: 3rem"
+      role="status"
+    >
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
   <div class="d-flex flex-column">
     <nav class="navbar" id="navbar">
       <div class="container-fluid justify-content-start">
@@ -170,7 +190,7 @@
                 opacity: {
                   value: 0.1,
                 },
-                size: {
+                size: { 
                   random: true,
                   value: 5,
                 },
@@ -196,13 +216,13 @@ export default class HomePage extends Vue {
   user = session.getUserData();
   logout = session.Logout;
   particlesContainer!: Container;
-  
+
   data() {
     return {
       user: this.user,
-    }
+    };
   }
-  
+
   particlesInit = async (engine: Engine) => {
     if (session.validateSession() === true) {
       await loadFull(engine);
@@ -220,9 +240,9 @@ export default class HomePage extends Vue {
   }
 
   beforeCreate(): void {
-      if (!session.validateSession) {
-        this.$router.push("/login")
-      }
+    if (!session.validateSession) {
+      this.$router.push("/login");
+    }
   }
 }
 </script>
@@ -263,5 +283,9 @@ ul li {
 
 .userbrand span {
   font-size: 0.8rem;
+}
+
+.spinner.hidden {
+  visibility: hidden;
 }
 </style>

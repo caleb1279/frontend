@@ -33,7 +33,7 @@
         <span class="text">Adherencia</span>
         <span class="number"
           >{{
-            Math.round(getTotalHours()[1] * 100 / getTotalHours()[0])
+            Math.round((getTotalHours()[1] * 100) / getTotalHours()[0])
           }}%</span
         >
       </div>
@@ -77,6 +77,19 @@
           },
           colors: ['#FC6945', '#960075'],
           chart: {
+            /*animations: {
+              enabled: true,
+              easing: 'easeinout',
+              speed: 10,
+              animateGradually: {
+                  enabled: true,
+                  delay: 800,
+              },
+              dynamicAnimation: {
+                  enabled: true,
+                  speed: 350,
+              }},
+            */
             stacked: false,
             toolbar: {
               show: true,
@@ -196,9 +209,14 @@ export default class DashboardPage extends Vue {
 
   filteredReport: string = "";
 
-  beforeMount() {
+  async beforeMount() {
     this.actualDate = new Date();
-    this.collectData();
+    await this.collectData();
+    document.querySelector(".spinner")?.classList.add("hidden");
+  }
+
+  beforeUnmount() {
+    document.querySelector(".spinner")?.classList.remove("hidden");
   }
 
   data() {
@@ -271,9 +289,9 @@ export default class DashboardPage extends Vue {
   }
 
   beforeCreate(): void {
-      if (!session.validateSession) {
-        this.$router.push("/login")
-      }
+    if (!session.validateSession) {
+      this.$router.push("/login");
+    }
   }
 }
 </script>
