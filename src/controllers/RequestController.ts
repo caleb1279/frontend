@@ -6,14 +6,9 @@ import { useStorage } from "vue3-storage";
 const storage = useStorage();
 
 const request = axios.create({
-  baseURL: "https://4233-186-84-89-254.ngrok-free.app",
+  baseURL: "http://localhost:9000/",
   withCredentials: false,
-  headers: {
-    Accept: "*/*",
-    //ContentType: "application/json",
-    //AccessControlAllowOrigin: "*",
-    //Authorization: storage.getStorageSync("Authorization") || "",
-  },
+  headers: {},
 });
 
 request.interceptors.response.use(
@@ -31,7 +26,7 @@ request.interceptors.response.use(
 
 export default {
   Login(json: { email: string; password: string }) {
-    return request.get("/users/login/"+json.email+"/"+json.password);
+    return request.get("/users/login/"+encodeURIComponent(json.email)+"/"+encodeURIComponent(json.password));
   },
   async getActivities() {
     try {
