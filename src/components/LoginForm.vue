@@ -118,7 +118,6 @@ export default class LoginForm extends Vue {
       password: CryptoJS.SHA256(this.passwd).toString(CryptoJS.enc.Hex),
     })
       .then((data: AxiosResponse) => {
-        console.log(data);
         if (data.status === 200) {
           session.Login(token, data.data);
         } else {
@@ -127,41 +126,11 @@ export default class LoginForm extends Vue {
       })
       .catch((error: AxiosError) => {
         if (error.response) {
-          this.msg = (error.response.data as {Error: string}).Error;
+          this.msg = (error.response.data as { Error: string }).Error;
         } else {
           this.msg = "Usuario o Contraseña Incorrectos";
         }
       });
-      session.Login("Authorization", {
-      id: 1,
-      email: "john.doe@example.com", //correo empresarial
-      personalEmail: "john.doe@gmail.com", // correo personal
-      name: "John",
-      lastName: "Doe", //apellidos
-      // fullName: string; 
-      password: "d41d8cd98f00b204e9800998ecf8427e",
-      tipId: 1, //tipo de id
-      numId: 4762553256, //cédula
-      //phone: number; 
-      vacationDays: 2,
-      startContract: new Date(), // fecha de ingreso
-      finishContract: new Date(), // fecha de terminacion de contrato
-      rol: {
-        id: 3,
-        rolName: "administrator",
-      },
-      status: "Disponible",
-      minimumReportDate: new Date(), // fecha minima para reportar actividades
-      phone: 4532348654,
-      phone2: 0,
-      emergencyPhone: 6423486564, //telefono contacto de emergencia
-      emergencyContact: "Susan", //nombre contacto de emergencia
-      relationshipContact: "Hermano/a", // parentesco del contacto de emergencia
-      birthday: new Date(), //cumpleaños
-      address: "", //dirección
-      workPosition: "Desarrollador", //cargo en la empresa
-      profilePicture: "https://starter-blog.rizkicitra.dev/_next/image?url=%2Fstatic%2Favatar.jpg&w=1080&q=75" // imagen de perfil
-    }); 
   }
 
   viewPassword() {

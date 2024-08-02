@@ -1,5 +1,5 @@
 export type rol = {
-  id: number;
+  rolId: number;
   rolName: string;
 };
 
@@ -38,7 +38,7 @@ export type activity = {
 
 export type project = {
   id: number;
-  projectId: string;
+  project_id: string;
   name: string;
   labDate: Date | string;
   proDate: Date | string;
@@ -57,4 +57,21 @@ export type report = {
   activity: activity;
   project: project;
   user: user;
+};
+
+export type TicketStatus = {
+  state: string;
+};
+
+export type TicketIncident = {
+  ticket: string;
+  hash: string;
+};
+
+export type ticket = {
+  user: number;
+  subject: string;
+  description: string;
+  status: TicketStatus;
+  incident: TicketIncident;
 };

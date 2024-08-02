@@ -23,7 +23,9 @@
       <div class="informacion">
         <span class="text">Promedio de Horas</span>
         <span class="number">{{
-          Math.round(getTotalHours()[0] / reports.length)
+          Number.isNaN(Math.round(getTotalHours()[0] / reports.length))
+            ? 0
+            : Math.round(getTotalHours()[0] / reports.length)
         }}</span>
       </div>
     </div>
@@ -33,7 +35,11 @@
         <span class="text">Adherencia</span>
         <span class="number"
           >{{
-            Math.round((getTotalHours()[1] * 100) / getTotalHours()[0])
+            Number.isNaN(
+              Math.round((getTotalHours()[1] * 100) / getTotalHours()[0])
+            )
+              ? 0
+              : Math.round((getTotalHours()[1] * 100) / getTotalHours()[0])
           }}%</span
         >
       </div>
@@ -77,22 +83,9 @@
           },
           colors: ['#FC6945', '#960075'],
           chart: {
-            /*animations: {
-              enabled: true,
-              easing: 'easeinout',
-              speed: 10,
-              animateGradually: {
-                  enabled: true,
-                  delay: 800,
-              },
-              dynamicAnimation: {
-                  enabled: true,
-                  speed: 350,
-              }},
-            */
             stacked: false,
             toolbar: {
-              show: true,
+              show: false,
             },
             zoom: {
               enabled: false,
@@ -142,7 +135,7 @@
           chart: {
             stacked: true,
             toolbar: {
-              show: true,
+              show: false,
             },
             zoom: {
               enabled: false,
@@ -177,16 +170,16 @@
       <div class="projects">
         <h2>Proyectos Activos</h2>
         <br />
-        <ul v-for="project in projects">
-          <a href="#" v-on:click.prevent="filtrarProyecto(project.name)"
-            ><li
+        <ul v-for="project in projects" :key="project.id">
+          <a href="#" v-on:click.prevent="filtrarProyecto(project.name)">
+            <li
               :class="{
                 active: filteredReport === project.name,
               }"
             >
               {{ project.name }}
-            </li></a
-          >
+            </li>
+          </a>
         </ul>
       </div>
     </div>
@@ -196,18 +189,16 @@
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import type { activity, project, report } from "@/registerDataType";
-import datacontroller from "@/controllers/DataController";
+import datos from "@/controllers/DataController";
 import session from "@/controllers/SessionController";
 
 export default class DashboardPage extends Vue {
   actualDate!: Date;
-  datos: any = datacontroller;
-
   reports: report[] = [];
   projects: project[] = [];
   activities: activity[] = [];
 
-  filteredReport: string = "";
+  filteredReport = "";
 
   async beforeMount() {
     this.actualDate = new Date();
@@ -229,11 +220,11 @@ export default class DashboardPage extends Vue {
   }
 
   async collectData() {
-    this.datos.setActualDate(this.actualDate);
-    await this.datos.collectData();
-    this.reports = this.datos.getReports(this.filteredReport);
-    this.projects = this.datos.getProjects();
-    this.activities = this.datos.getActivities("");
+    datos.setActualDate(this.actualDate);
+    await datos.collectData();
+    this.reports = datos.getReports(this.filteredReport);
+    this.projects = datos.getProjects();
+    this.activities = datos.getActivities("");
   }
 
   filtrarProyecto(proy: string) {

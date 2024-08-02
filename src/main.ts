@@ -14,7 +14,7 @@ import Particles from "vue3-particles";
 import VueApexCharts from "vue3-apexcharts";
 import { VueReCaptcha } from "vue-recaptcha-v3";
 import { ReCaptchaInstance } from "recaptcha-v3";
-import * as dotenv from "dotenv";
+// import * as dotenv from "dotenv";
 
 import {
   faClock,
@@ -38,6 +38,8 @@ import {
   faLessThan,
   faGreaterThan,
   faUserPlus,
+  faBug,
+  faDatabase,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "vue3-simple-typeahead/dist/vue3-simple-typeahead.css";
@@ -68,14 +70,16 @@ library.add(
   faLessThan,
   faGreaterThan,
   faUserPlus,
-  faMinus
+  faMinus,
+  faBug,
+  faDatabase
 );
 
-declare module '@vue/runtime-core' {
+declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
-    $recaptcha: (action: string) => Promise<string>
-    $recaptchaLoaded: () => Promise<boolean>
-    $recaptchaInstance: ReCaptchaInstance
+    $recaptcha: (action: string) => Promise<string>;
+    $recaptchaLoaded: () => Promise<boolean>;
+    $recaptchaInstance: ReCaptchaInstance;
   }
 }
 
