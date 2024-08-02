@@ -6,14 +6,9 @@ import { useStorage } from "vue3-storage";
 const storage = useStorage();
 
 const request = axios.create({
-  baseURL: "https://3cc1-191-156-176-63.ngrok-free.app",
+  baseURL: "http://localhost:9000/",
   withCredentials: false,
-  headers: {
-    Accept: "application/json",
-    ContentType: "application/json",
-    AccessControlAllowOrigin: "*",
-    Authorization: storage.getStorageSync("Authorization") || "",
-  },
+  headers: {},
 });
 
 request.interceptors.response.use(
@@ -31,7 +26,7 @@ request.interceptors.response.use(
 
 export default {
   Login(json: { email: string; password: string }) {
-    return request.post("/login", json);
+    return request.get("/users/login/"+encodeURIComponent(json.email)+"/"+encodeURIComponent(json.password));
   },
   async getActivities() {
     try {
@@ -51,28 +46,27 @@ export default {
       return null;
     }
   },
-  async getUser() {
+  async getUsers() {
     try {
-      const data = await request.get("/users/");
+      const data = await request.get("/users/all");
       return data.data.user;
     } catch (error) {
       console.log(error);
       return null;
     }
-  },
+  }, 
   async getReports(user: number, date: Date) {
     try {
       const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
       const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-      const data = await request.get(
-        "/reports/" +
-          user +
-          "/" +
-          firstDay.toISOString().substring(0, 10) +
-          "/" +
-          lastDay.toISOString().substring(0, 10)
-      );
-      return data.data.reports;
+      let vari = "/reports/" +
+      user +
+      "/" +
+      firstDay.toISOString().substring(0, 10) +
+      "/" +
+      lastDay.toISOString().substring(0, 10);
+      const data = await request.get(vari);
+      return data.data;
     } catch (error) {
       console.log(error);
       return null;
@@ -80,13 +74,19 @@ export default {
   },
   async sendReport(report: report) {
     try {
-      report.date = new Date(report.date).toISOString().substring(0, 10);
       const data = await request.post("/writereport", report);
-
       return data.status;
     } catch (error) {
       console.log(error);
       return null;
     }
   },
+
+  async deleteReport(id: number) {
+    try {
+      const data = await request.delete("/deletereport/"+id);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };

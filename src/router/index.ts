@@ -11,7 +11,7 @@ import AdminProfile from "@/components/AdminProfile.vue";
 import Profile from "@/components/Profile.vue";
 import DashboardPage from "@/components/DashboardPage.vue";
 
-//sesiones
+// sesiones
 import session from "@/controllers/SessionController";
 
 const authExceptions: Array<string> = ["ErrorNotFound", "Login"];
@@ -66,10 +66,9 @@ const router = createRouter({
   routes,
 });
 
-router.afterEach((to) => {
-  const authenticated = session.ValidateSesison();
+router.beforeEach((to) => {
+  const authenticated = session.validateSession();
   if (!authenticated && !authExceptions.includes(String(to.name))) {
-    console.log(to);
     router.push("/login");
   }
 });

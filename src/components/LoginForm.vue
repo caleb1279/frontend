@@ -4,7 +4,7 @@
       <form
         class="login-form needs-validation"
         id="form"
-        v-on:submit.prevent="login"
+        v-on:submit.prevent="recaptcha()"
       >
         <div class="children-login-form">
           <div class="image-logo text-center">
@@ -24,6 +24,7 @@
               id="username"
               v-model="uname"
               name="username"
+              autocomplete="email"
               placeholder="johndoe@example.com"
               @input="validateFields('username')"
               :class="{
@@ -41,6 +42,7 @@
               class="form-control shadow-none"
               type="password"
               id="password"
+              autocomplete="current-password"
               v-model="passwd"
               name="password"
               placeholder="**********"
@@ -83,9 +85,10 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-import session from "@/controllers/SessionController";
 import RequestController from "@/controllers/RequestController";
 import { AxiosError, AxiosResponse } from "axios";
+import CryptoJS from "crypto-js";
+import session from "@/controllers/SessionController";
 
 export default class LoginForm extends Vue {
   msg = "";
@@ -95,49 +98,70 @@ export default class LoginForm extends Vue {
   validFields: string[] = [];
   validatedFields: string[] = [];
 
-  login() {
-    RequestController.Login({ email: this.uname, password: this.passwd })
+  async recaptcha() {
+    await this.$recaptchaLoaded();
+    const token = await this.$recaptcha("login");
+    this.login(token);
+  }
+
+  data() {
+    return {
+      uname: this.uname,
+      passwd: this.passwd,
+    };
+  }
+
+  login(token: string) {
+    this.msg = "";
+    RequestController.Login({
+      email: this.uname,
+      password: CryptoJS.SHA256(this.passwd).toString(CryptoJS.enc.Hex),
+    })
       .then((data: AxiosResponse) => {
-        if (data.data.status === "200") {
-          session.Login(data.data.Authorization, data.data.user);
-          this.$router.push("/");
-        } else {
-          this.msg = data.data.message;
-        }
         console.log(data);
+        if (data.status === 200) {
+          session.Login(token, data.data);
+        } else {
+          this.msg = data.data.Error;
+        }
       })
       .catch((error: AxiosError) => {
-        console.log(error);
-        this.msg = "Ha ocurrido un error al intentar iniciar sesión";
-        session.Login("auth-123", {
-          id: 1,
-          email: "ejemplo@colnexsi.com.co",
-          /* fullName: "Pepito Perez", */
-          /* phone: 4942826, */
-          password: "password",
-          vacationDays: 15,
-          startContract: new Date("2022-01-01"),
-          finshContract: new Date("2024-01-31"),
-          tipId: 1,
-          numId: 1026574754,
-          perEmail: "usco.doe@example.com",
-          userName: "John",
-          userLastN: "Doe",
-          rol: { id: 1, rolName: "User" },
-          status: "Disponible",
-          minDate: new Date(),
-          phone1: 123456789,
-          phone2: 79716834,
-          phone3: 317247222,
-          contact: "Maria Teresa",
-          relatedTo: "Madre",
-          birthday: new Date("2003-05-08"),
-          address: "Velasquez St. No 80, Madrid",
-          position: "Desarrollador",
-          profileimage:
-            "https://i.pinimg.com/550x/8d/e7/fa/8de7fa2af12330350613ede63532c4fb.jpg",
-        });
+        if (error.response) {
+          this.msg = (error.response.data as {Error: string}).Error;
+        } else {
+          this.msg = "Usuario o Contraseña Incorrectos";
+        }
       });
+      session.Login("Authorization", {
+      id: 1,
+      email: "john.doe@example.com", //correo empresarial
+      personalEmail: "john.doe@gmail.com", // correo personal
+      name: "John",
+      lastName: "Doe", //apellidos
+      // fullName: string; 
+      password: "d41d8cd98f00b204e9800998ecf8427e",
+      tipId: 1, //tipo de id
+      numId: 4762553256, //cédula
+      //phone: number; 
+      vacationDays: 2,
+      startContract: new Date(), // fecha de ingreso
+      finishContract: new Date(), // fecha de terminacion de contrato
+      rol: {
+        id: 3,
+        rolName: "administrator",
+      },
+      status: "Disponible",
+      minimumReportDate: new Date(), // fecha minima para reportar actividades
+      phone: 4532348654,
+      phone2: 0,
+      emergencyPhone: 6423486564, //telefono contacto de emergencia
+      emergencyContact: "Susan", //nombre contacto de emergencia
+      relationshipContact: "Hermano/a", // parentesco del contacto de emergencia
+      birthday: new Date(), //cumpleaños
+      address: "", //dirección
+      workPosition: "Desarrollador", //cargo en la empresa
+      profilePicture: "https://starter-blog.rizkicitra.dev/_next/image?url=%2Fstatic%2Favatar.jpg&w=1080&q=75" // imagen de perfil
+    }); 
   }
 
   viewPassword() {

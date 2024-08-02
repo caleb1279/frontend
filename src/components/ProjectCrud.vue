@@ -68,7 +68,7 @@
                       v-model="newProject.labDate"
                       class="form-control shadow-none"
                       id="labdate"
-                      inputFormat="yyyy/MM/dd"
+                      inputFormat="yyyy-MM-dd"
                       :class="{
                         'is-valid': validFields.includes('labdate'),
                         'is-invalid':
@@ -88,7 +88,7 @@
                       v-model="newProject.proDate"
                       class="form-control shadow-none"
                       id="prodate"
-                      inputFormat="yyyy/MM/dd"
+                      inputFormat="yyyy-MM-dd"
                       :class="{
                         'is-valid': validFields.includes('prodate'),
                         'is-invalid':
@@ -173,14 +173,18 @@
           data-bs-toggle="modal"
           data-bs-target="#projectModal"
           v-on:click="opccrud = 'Creación'"
-          v-on:click.prevent=""
+          v-on:click.prevent="clearModal()"
         >
           <font-awesome-icon icon="plus" /> Crear Proyecto
         </button>
       </div>
       <div class="right-search nav">
         <form class="d-flex" role="search" v-on:click.prevent="">
-          <input class="form-control me-2 shadow-none" type="search" />
+          <input
+            class="form-control me-2 shadow-none"
+            id="search"
+            type="search"
+          />
           <button class="btn btn-primary" type="submit" v-on:click.prevent="">
             Buscar
           </button>
@@ -199,6 +203,7 @@
             <th scope="col">Estado</th>
             <th></th>
             <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -213,6 +218,117 @@
             </td>
             <td>{{ project.source }}</td>
             <td>{{ project.status ? "Activo" : "Inactivo" }}</td>
+            <td>
+              <div class="btn-group">
+                <a
+                  href="#"
+                  v-on:click.prevent=""
+                  data-bs-toggle="offcanvas"
+                  :data-bs-target="'#offcanvas' + project.id"
+                  aria-controls="offcanvasExample"
+                >
+                  <font-awesome-icon icon="user-plus" />
+                </a>
+                <div
+                  class="offcanvas offcanvas-end"
+                  tabindex="-1"
+                  :id="'offcanvas' + project.id"
+                  aria-labelledby="offcanvasExampleLabel"
+                >
+                  <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">
+                      Administrar usuarios
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="offcanvas"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="offcanvas-body">
+                    <form class="d-flex" role="search" v-on:click.prevent="">
+                      <input
+                        class="form-control me-2 shadow-none"
+                        id="search"
+                        type="search"
+                      />
+                      <button
+                        class="btn btn-primary"
+                        type="submit"
+                        v-on:click.prevent=""
+                      >
+                        Buscar
+                      </button>
+                    </form>
+                    <div class="table-contain">
+                      <table class="table text-left">
+                        <thead>
+                          <tr>
+                            <th></th>
+                            <th scope="col">Usuarios</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody
+                          v-for="user in users.sort((a: user, b: user) => (a.id - b.id))"
+                          :key="user.id"
+                        >
+                          <td>
+                            <img
+                              class="avatar-rounded"
+                              with="30"
+                              height="30"
+                              :src="getImage(user)"
+                            />
+                          </td>
+                          <td>{{ user.name }}</td>
+                          <td>{{ user.status }}</td>
+                          <td>
+                            <a
+                              href="#"
+                              v-on:click.prevent="
+                                updateUserProjectStatus(user, project)
+                              "
+                            >
+                              <font-awesome-icon
+                                :icon="
+                                  project.users.some(
+                                    (obj) => obj.name === user.name
+                                  )
+                                    ? 'minus'
+                                    : 'plus'
+                                "
+                              />
+                            </a>
+                          </td>
+                        </tbody>
+                      </table>
+                      <div class="modal-footer flex-side">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="offcanvas"
+                          aria-label="Close"
+                        >
+                          Cerrar
+                        </button>
+                        <button
+                          type="submit"
+                          class="btn btn-primary"
+                          data-bs-dismiss="offcanvas"
+                          aria-label="Close"
+                          @click=""
+                        >
+                          Guardar cambios
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
             <td>
               <a
                 href="#"
@@ -238,21 +354,15 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
+import data from "@/controllers/DataController";
+import type { project, user } from "@/registerDataType";
 import session from "@/controllers/SessionController";
-import type { project } from "@/registerDataType";
 
 export default class ProjectCrud extends Vue {
   projectlist: project[] = [];
+  users: user[] = [];
 
-  newProject: project = {
-    id: NaN,
-    labDate: "",
-    name: "",
-    proDate: "",
-    projectId: "",
-    source: "",
-    status: null,
-  };
+  newProject: project = {} as project;
   validFields: string[] = [];
   validatedFields: string[] = [];
   requiredFields: string[] = [
@@ -264,9 +374,16 @@ export default class ProjectCrud extends Vue {
   ]; // Lista de campos requeridos
   opccrud!: string;
 
-  beforeMount() {
-    const projects = session.getLocals("projectlist");
-    this.projectlist = projects === null ? [] : projects;
+  async beforeMount() {
+    data.setActualDate(new Date());
+    await data.collectData();
+    this.projectlist = data.getProjects();
+    this.users = data.getUsers();
+    document.querySelector('.spinner')?.classList.add('hidden');
+  }
+
+  beforeUnmount() {
+    document.querySelector('.spinner')?.classList.remove('hidden');      
   }
 
   editProject(project: project) {
@@ -312,19 +429,58 @@ export default class ProjectCrud extends Vue {
     }
   }
 
+  updateUserProjectStatus(user: user, project: project) {
+    if (project.users.some((obj) => obj.id == user.id)) {
+      // quitar el usuario del proyecto
+    } else {
+      // agregar el usuario al proyecto
+    }
+  }
+
+  getImage(user: user): string {
+    let userimage = this.users.filter((userin) => {
+      if (user === userin) return user;
+    });
+    if (userimage) {
+      return userimage[0].profilePicture;
+    } else {
+      return "";
+    }
+  }
+
   clearModal() {
     // cdc: para limpiar los campos y arreglos al cancelar
     this.validatedFields = [];
     this.validFields = [];
-    this.newProject = {
-      id: 0, // Cambiado a 0
-      projectId: "",
-      name: "",
-      labDate: "",
-      proDate: "",
-      source: "",
-      status: null,
-    };
+    this.newProject = {} as project;
+  }
+
+  beforeCreate(): void {
+    if (!session.validateSession) {
+      this.$router.push("/login");
+    }
   }
 }
 </script>
+
+<style>
+.flex-side {
+  display: flex;
+  position: absolute;
+  bottom: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.flex-side button {
+  margin: 5px;
+}
+
+.offcanvas-body .d-flex input {
+  width: 300px !important;
+}
+
+.spinner.active {
+  visibility: visible;
+}
+</style>

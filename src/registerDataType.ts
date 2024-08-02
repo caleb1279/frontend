@@ -1,14 +1,14 @@
 export type rol = {
-  id: string | number;
+  id: number;
   rolName: string;
 };
 
 export type user = {
-  id: string | number;
+  id: number;
   email: string; //correo empresarial
-  perEmail: string; // correo personal
-  userName: string;
-  userLastN: string; //apellidos
+  personalEmail: string; // correo personal
+  name: string;
+  lastName: string; //apellidos
   /* fullName: string; */
   password: string;
   tipId: number; //tipo de id
@@ -16,41 +16,43 @@ export type user = {
   /* phone: number; */
   vacationDays: number;
   startContract: Date | string; // fecha de ingreso
-  finshContract: Date | string; // fecha de terminacion de contrato
+  finishContract: Date | string; // fecha de terminacion de contrato
   rol: rol;
   status: string;
-  minDate: Date | string; // fecha minima para reportar actividades
-  phone1: number;
+  minimumReportDate: Date | string; // fecha minima para reportar actividades
+  phone: number;
   phone2: number;
-  phone3: number; //telefono contacto de emergencia
-  contact: string; //nombre contacto de emergencia
-  relatedTo: string; // parentesco del contacto de emergencia
+  emergencyPhone: number; //telefono contacto de emergencia
+  emergencyContact: string; //nombre contacto de emergencia
+  relationshipContact: string; // parentesco del contacto de emergencia
   birthday: Date | string; //cumpleaños
   address: string; //dirección
-  position: string; //cargo en la empresa
-  profileimage: string; // imagen de perfil
+  workPosition: string; //cargo en la empresa
+  profilePicture: string; // imagen de perfil
 };
 
 export type activity = {
-  id: string | number;
+  id: number;
   name: string;
 };
 
 export type project = {
-  id: string | number;
+  id: number;
   projectId: string;
   name: string;
   labDate: Date | string;
   proDate: Date | string;
   source: string;
   status: boolean | null;
+  users: user[];
 };
 
 export type report = {
-  id: string | number;
+  id: number;
   date: Date | string;
   detail: string;
-  hours: number;
+  hours: number; // horas reales
+  estimatedHours: number; // horas estimadas
   title: string;
   activity: activity;
   project: project;

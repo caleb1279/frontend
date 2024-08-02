@@ -87,17 +87,19 @@ table {
 /* 3. GENERIC ITEMS */
 html, body {
   text-align: center;
-  font-size: 11pt;
+  font-size: 13px;
 }
 
 h1 {
   font-weight: 500;
+  font-size: 2rem;
 }
 
 a {
   text-align: center;
   text-decoration: none;
   color: inherit;
+  background-color: rgba(0,0,0,0) !important;
 }
 
 ul li {
@@ -117,12 +119,12 @@ img {
 
 input, select, textarea {
   width: 100%;
-  min-height: 30px;
+  height: 2.3rem;
   border-radius: 0 !important;
 }
 
 input[type="submit"] {
-  margin-top: 25px;
+  margin-top: 2rem;
 }
 
 label {
@@ -132,6 +134,7 @@ label {
 
 nav {
   border-bottom: 1px solid $border-light-color;
+  max-height: 4.8rem;
 }
 
 figure {
@@ -139,18 +142,28 @@ figure {
 }
 
 .table-contain {
+  max-height: 20rem;
+  padding: 1rem;
   overflow: auto;
-  max-height: 380px;
-  padding: 16px;
 }
 
 .right-search {
-  width: 500px;
-  margin: 25px;
+  margin: 0;
+  margin-right: 2rem;
+}
+
+#search {
+  width: 200px;
+  height: 2.3rem;
+}
+
+.right-search button {
+  height: 2.3rem;
 }
 
 .left-options {
-  margin: auto 25px;
+  margin: 0 1.5rem;
+  margin-bottom: 1.5rem;
   width: 100%;
   text-align: left;
 }
@@ -179,7 +192,6 @@ figure {
 }
 
 /* 5. PARTS OF WEB */
-
 /* buttons */
 .btn-primary {
   background-color: $dark-color;
@@ -203,6 +215,22 @@ figure {
 }
 /* end buttons */
 
+/* navbar */
+#navbar {
+  padding: 0;
+}
+
+#navbar .justify-content-start {
+  max-width: 150px;
+  margin: 0;
+}
+
+#navbar .justify-content-end {
+  max-width: calc(100% - 150px);
+  margin: auto;
+}
+/* end navbar */
+
 /* login */
 .login-form {
   width: 100%;
@@ -213,7 +241,7 @@ figure {
 }
 
 .children-login-form {
-  max-width: 380px;
+  max-width: 400px;
 }
 /* end login */
 
@@ -223,13 +251,13 @@ figure {
 }
 
 .modal-form .form-group {
-  margin-bottom: 12px;
+  margin-bottom: 1rem;
 }
 /* end form */
 
 /* sidebar */
 .sidebar {
-  width: 200px;
+  width: 12rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -242,7 +270,7 @@ figure {
 }
 
 .sidebar ul li {
-  padding: 10px 35px;
+  padding: 10px 25px;
   text-align: left;
 }
 
@@ -256,7 +284,7 @@ figure {
 
 #particles-js{
   width: 100%;
-  height: 95px;
+  height: 6.5rem;
   background: linear-gradient(45deg, rgba(0,0,0,0.4), #11016FAA, #01102DAA), rgb(0, 0, 94);
   background-size: cover;
   background-position: 50% 50%;

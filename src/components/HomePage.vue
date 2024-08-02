@@ -1,10 +1,30 @@
 <template>
+  <div
+    class="d-flex justify-content-center spinner"
+    style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.8);
+      width: 100%;
+      height: 100%;
+      z-index: 999;
+    "
+  >
+    <div
+      class="spinner-border text-primary m-auto"
+      style="width: 3rem; height: 3rem"
+      role="status"
+    >
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
   <div class="d-flex flex-column">
-    <nav class="navbar bg-body-tertiary navbar-expand-lg" id="navbar">
+    <nav class="navbar" id="navbar">
       <div class="container-fluid justify-content-start">
         <div class="m-0">
           <div class="navbar-brand">
-            <img src="/img/logo.png" width="140" />
+            <img src="/img/logo.png" width="135" />
           </div>
         </div>
       </div>
@@ -32,14 +52,14 @@
             >
               <img
                 class="avatar-rounded"
-                :src="avatarimage"
-                width="40"
-                height="40"
+                :src="user.profilePicture"
+                width="35"
+                height="35"
               />
             </a>
             <ul class="dropdown-menu dropdown-menu-lg-end usuario">
               <li class="userbrand">
-                {{ user.userName }} {{ user.userLastN }}
+                {{ user.name }} {{ user.lastName }}
                 <span>{{ user.email }}</span>
               </li>
               <li class="dropdown-divider"></li>
@@ -92,13 +112,13 @@
             aria-expanded="false"
             aria-controls="collapseWidthExample"
           >
-            <li class="sidebar-item">
+            <li class="sidebar-item" v-if="user.rol.id >= 2">
               <font-awesome-icon icon="gears"></font-awesome-icon>
               Administrar
             </li>
           </a>
 
-          <div style="min-height: 120px">
+          <div style="min-height: 120px" v-if="user.rol.id >= 2">
             <div class="collapse" id="collapseWidthExample">
               <div class="card">
                 <a
@@ -138,7 +158,7 @@
                 value: 99,
               },
               fullScreen: {
-                enable: true,
+                enable: false,
               },
               fpsLimit: 60,
               particles: {
@@ -163,14 +183,14 @@
                 number: {
                   density: {
                     enable: true,
-                    area: 900,
+                    area: 800,
                   },
-                  value: 100,
+                  value: 200,
                 },
                 opacity: {
                   value: 0.1,
                 },
-                size: {
+                size: { 
                   random: true,
                   value: 5,
                 },
@@ -187,21 +207,24 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-import session from "@/controllers/SessionController";
-import request from "@/controllers/RequestController";
 import { loadFull } from "tsparticles";
 import { Engine, Container } from "tsparticles-engine";
-import type { activity, report, project, user } from "@/registerDataType";
+import { user } from "@/registerDataType";
+import session from "@/controllers/SessionController";
 
 export default class HomePage extends Vue {
   user = session.getUserData();
-
   logout = session.Logout;
   particlesContainer!: Container;
-  avatarimage = this.user === null ? "" : this.user.profileimage;
+
+  data() {
+    return {
+      user: this.user,
+    };
+  }
 
   particlesInit = async (engine: Engine) => {
-    if (session.ValidateSesison() === true) {
+    if (session.validateSession() === true) {
       await loadFull(engine);
     }
   };
@@ -210,32 +233,15 @@ export default class HomePage extends Vue {
     this.particlesContainer = container;
   };
 
-  activitylist!: activity[];
-  reportlist!: report[];
-  projectlist!: project[];
-
-  async beforeMount() {
-    let reports: report[] = await request.getReports(
-      this.user.userId,
-      new Date()
-    );
-
-    let projects: project[] = await request.getProjects(this.user.userId);
-
-    let activities: activity[] = await request.getActivities();
-
-    this.reportlist = reports !== null ? reports : [];
-    this.activitylist = activities !== null ? activities : [];
-    this.projectlist = projects !== null ? projects : [];
-
-    session.setLocals("projectlist", this.projectlist);
-    session.setLocals("reportlist", this.reportlist);
-    session.setLocals("activitylist", this.activitylist);
-  }
-
   beforeUnmount() {
     if (this.particlesContainer) {
       this.particlesContainer.destroy();
+    }
+  }
+
+  beforeCreate(): void {
+    if (!session.validateSession) {
+      this.$router.push("/login");
     }
   }
 }
@@ -277,5 +283,9 @@ ul li {
 
 .userbrand span {
   font-size: 0.8rem;
+}
+
+.spinner.hidden {
+  visibility: hidden;
 }
 </style>

@@ -1,5 +1,3 @@
-adminProfile
-
 <template>
   <div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
@@ -26,93 +24,77 @@ adminProfile
               <div class="col-md-6">
                 <label for="name">Nombre:</label>
                 <input
-                  v-model="newUser.userName"
+                  v-model="newUser.name"
                   class="form-control shadow-none"
                   type="text"
-                  id="userName"
+                  id="name"
                   :class="{
-                    'is-valid': validFields.includes('userName'),
+                    'is-valid': validFields.includes('name'),
                     'is-invalid':
-                      !validFields.includes('userName') &&
-                      validatedFields.includes('userName'),
+                      !validFields.includes('name') &&
+                      validatedFields.includes('name'),
                   }"
-                  @input="
-                    validateFields('userName', newUser.userName.length > 0)
-                  "
+                  @input="validateFields('name', newUser.name.length > 0)"
                 />
-                <div class="valid-feedback text-left">¡Se ve bien!</div>
-                <div class="invalid-feedback text-left">
-                  Por favor diligencia este campo
-                </div>
               </div>
               <div class="col-md-6">
                 <label for="lastN">Apellidos:</label>
                 <input
-                  v-model="newUser.userLastN"
+                  v-model="newUser.lastName"
                   class="form-control shadow-none"
                   type="text"
-                  id="userLastN"
+                  id="lastName"
                   :class="{
-                    'is-valid': validFields.includes('userLastN'),
+                    'is-valid': validFields.includes('lastName'),
                     'is-invalid':
-                      !validFields.includes('userLastN') &&
-                      validatedFields.includes('userLastN'),
+                      !validFields.includes('lastName') &&
+                      validatedFields.includes('lastName'),
                   }"
                   @input="
-                    validateFields('userLastN', newUser.userLastN.length > 0)
+                    validateFields('lastName', newUser.lastName.length > 0)
                   "
                 />
-                <div class="valid-feedback text-left">¡Se ve bien!</div>
-                <div class="invalid-feedback text-left">
-                  Por favor diligencia este campo
-                </div>
               </div>
             </div>
             <!--Email personal-->
             <div class="row datosPersonales">
               <div class="total-row form-group">
-                <label for="perEmail">Email Personal:</label>
+                <label for="personalEmail">Email Personal:</label>
                 <input
                   type="email"
                   class="form-control shadow-none"
-                  v-model="newUser.perEmail"
-                  id="perEmail"
+                  v-model="newUser.personalEmail"
+                  id="personalEmail"
                   :class="{
-                    'is-valid': validFields.includes('perEmail'),
+                    'is-valid': validFields.includes('personalEmail'),
                     'is-invalid':
-                      !validFields.includes('perEmail') &&
-                      validatedFields.includes('perEmail'),
+                      !validFields.includes('personalEmail') &&
+                      validatedFields.includes('personalEmail'),
                   }"
-                  @input="validateFields('user', newUser.perEmail.length > 0)"
+                  @input="
+                    validateFields('user', newUser.personalEmail.length > 0)
+                  "
                 />
-                <div class="valid-feedback text-left">¡Se ve bien!</div>
-                <div class="invalid-feedback text-left">
-                  Por favor diligencia este campo
-                </div>
               </div>
             </div>
             <!--Telefonos-->
             <div class="row datosPersonales">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="phone1">Telefono 1:</label>
+                  <label for="phone">Telefono 1:</label>
                   <input
-                    v-model="newUser.phone1"
+                    v-model="newUser.phone"
                     class="form-control shadow-none"
                     type="text"
-                    id="phone1"
+                    id="phone"
                     :class="{
-                      'is-valid': validFields.includes('phone1'),
+                      'is-valid': validFields.includes('phone'),
                       'is-invalid':
-                        !validFields.includes('phone1') &&
-                        validatedFields.includes('phone1'),
+                        !validFields.includes('phone') &&
+                        validatedFields.includes('phone'),
                     }"
-                    @input="validateFields('phone1', newUser.phone1 > 0)"
+                    @input="validateFields('phone', newUser.phone > 0)"
                   />
-                  <div class="valid-feedback text-left">¡Se ve bien!</div>
-                  <div class="invalid-feedback text-left">
-                    Por favor diligencia este campo
-                  </div>
                 </div>
               </div>
               <div class="col-md-6">
@@ -135,7 +117,7 @@ adminProfile
                   v-model="newUser.birthday"
                   class="form-control shadow-none"
                   id="birthday"
-                  inputFormat="yyyy/MM/dd"
+                  inputFormat="yyyy-MM-dd"
                   :class="{
                     'is-valid': validFields.includes('birthday'),
                     'is-invalid':
@@ -144,10 +126,6 @@ adminProfile
                   }"
                   @blur="validateFields('birthday', newUser.birthday !== '')"
                 />
-                <div class="valid-feedback">¡Se ve bien!</div>
-                <div class="invalid-feedback">
-                  Por favor diligencia este campo
-                </div>
               </div>
             </div>
             <!--Dirección-->
@@ -167,79 +145,73 @@ adminProfile
                   }"
                   @input="validateFields('address', newUser.address.length > 0)"
                 />
-                <div class="valid-feedback text-left">¡Se ve bien!</div>
-                <div class="invalid-feedback text-left">
-                  Por favor diligencia este campo
-                </div>
               </div>
             </div>
             <p class="titulo datosPersonales">
-              <span>Contacto de Emergencia</span>
+              <span>emergencyContacto de Emergencia</span>
             </p>
             <div class="row datosPersonales">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="contact">Nombre:</label>
+                  <label for="emergencyContact">Nombre:</label>
                   <input
-                    v-model="newUser.contact"
+                    v-model="newUser.emergencyContact"
                     class="form-control shadow-none"
                     type="text"
-                    id="contact"
+                    id="emergencyContact"
                     :class="{
-                      'is-valid': validFields.includes('contact'),
+                      'is-valid': validFields.includes('emergencyContact'),
                       'is-invalid':
-                        !validFields.includes('contact') &&
-                        validatedFields.includes('contact'),
+                        !validFields.includes('emergencyContact') &&
+                        validatedFields.includes('emergencyContact'),
                     }"
                     @input="
-                      validateFields('contact', newUser.contact.length > 0)
+                      validateFields(
+                        'emergencyContact',
+                        newUser.emergencyContact.length > 0
+                      )
                     "
                   />
-                  <div class="valid-feedback text-left">¡Se ve bien!</div>
-                  <div class="invalid-feedback text-left">
-                    Por favor diligencia este campo
-                  </div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="relatedTo">Parentesco:</label>
+                  <label for="relationshipContact">Parentesco:</label>
                   <input
-                    v-model="newUser.relatedTo"
+                    v-model="newUser.relationshipContact"
                     class="form-control shadow-none"
                     type="text"
-                    id="relatedTo"
+                    id="relationshipContact"
                     :class="{
-                      'is-valid': validFields.includes('relatedTo'),
+                      'is-valid': validFields.includes('relationshipContact'),
                       'is-invalid':
-                        !validFields.includes('relatedTo') &&
-                        validatedFields.includes('relatedTo'),
+                        !validFields.includes('relationshipContact') &&
+                        validatedFields.includes('relationshipContact'),
                     }"
                     @input="
-                      validateFields('relatedTo', newUser.relatedTo.length > 0)
+                      validateFields(
+                        'relationshipContact',
+                        newUser.relationshipContact.length > 0
+                      )
                     "
                   />
                 </div>
               </div>
               <div class="total-row">
-                <label for="phone3">Telefono :</label>
+                <label for="emergencyPhone">Telefono :</label>
                 <input
-                  v-model="newUser.phone3"
+                  v-model="newUser.emergencyPhone"
                   class="form-control shadow-none"
                   type="text"
-                  id="phone3"
+                  id="emergencyPhone"
                   :class="{
-                    'is-valid': validFields.includes('phone3'),
+                    'is-valid': validFields.includes('emergencyPhone'),
                     'is-invalid':
-                      !validFields.includes('phone3') &&
-                      validatedFields.includes('phone3'),
+                      !validFields.includes('emergencyPhone') &&
+                      validatedFields.includes('emergencyPhone'),
                   }"
-                  @input="validateFields('phone1', newUser.phone3 > 0)"
+                  @input="validateFields('phone', newUser.emergencyPhone > 0)"
                 />
-                <div class="valid-feedback text-left">¡Se ve bien!</div>
-                <div class="invalid-feedback text-left">
-                  Por favor diligencia este campo
-                </div>
               </div>
             </div>
             <p class="titulo">
@@ -262,10 +234,6 @@ adminProfile
                   }"
                   @input="validateFields('user', newUser.email.length > 0)"
                 />
-                <div class="valid-feedback text-left">¡Se ve bien!</div>
-                <div class="invalid-feedback text-left">
-                  Por favor diligencia este campo
-                </div>
               </div>
             </div>
             <!--Status-->
@@ -295,26 +263,25 @@ adminProfile
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group has-validation">
-                  <label for="position">Seleccione un Cargo:</label>
-                  <select
-                    v-model="newUser.position"
-                    class="form-select shadow-none"
-                    id="position"
+                  <label for="workPosition">Seleccione un Cargo:</label>
+                  <input
+                    type="text"
+                    v-model="newUser.workPosition"
+                    class="form-control shadow-none"
+                    id="workPosition"
                     :class="{
-                      'is-valid': validFields.includes('position'),
+                      'is-valid': validFields.includes('workPosition'),
                       'is-invalid':
-                        !validFields.includes('position') &&
-                        validatedFields.includes('position'),
+                        !validFields.includes('workPosition') &&
+                        validatedFields.includes('workPosition'),
                     }"
                     @change="
-                      validateFields('position', newUser.position.length > 0)
+                      validateFields(
+                        'workPosition',
+                        newUser.workPosition.length > 0
+                      )
                     "
-                  >
-                    <option>Director</option>
-                    <option>Coordinador</option>
-                    <option>Gerente</option>
-                    <option>Desarrollador</option>
-                  </select>
+                  />
                 </div>
               </div>
               <div class="col-md-6">
@@ -352,7 +319,7 @@ adminProfile
                   v-model="newUser.startContract"
                   class="form-control shadow-none"
                   id="startContract"
-                  inputFormat="yyyy/MM/dd"
+                  inputFormat="yyyy-MM-dd"
                   :class="{
                     'is-valid': validFields.includes('startContract'),
                     'is-invalid':
@@ -366,18 +333,14 @@ adminProfile
                     )
                   "
                 ></date-picker>
-                <div class="valid-feedback">¡Se ve bien!</div>
-                <div class="invalid-feedback">
-                  Por favor diligencia este campo
-                </div>
               </div>
               <div class="col-md-6 form-group">
-                <label for="finshContract">Fecha de terminación:</label>
+                <label for="finishContract">Fecha de terminación:</label>
                 <date-picker
-                  v-model="newUser.finshContract"
+                  v-model="newUser.finishContract"
                   class="form-control shadow-none"
-                  id="finshContract"
-                  inputFormat="yyyy/MM/dd"
+                  id="finishContract"
+                  inputFormat="yyyy-MM-dd"
                 ></date-picker>
               </div>
             </div>
@@ -389,24 +352,25 @@ adminProfile
 
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="minDate">Fecha mínima:</label>
+                  <label for="minimumReportDate">Fecha mínima:</label>
                   <date-picker
-                    v-model="newUser.minDate"
+                    v-model="newUser.minimumReportDate"
                     class="form-control shadow-none"
-                    id="minDate"
-                    inputFormat="yyyy/MM/dd"
+                    id="minimumReportDate"
+                    inputFormat="yyyy-MM-dd"
                     :class="{
-                      'is-valid': validFields.includes('minDate'),
+                      'is-valid': validFields.includes('minimumReportDate'),
                       'is-invalid':
-                        !validFields.includes('minDate') &&
-                        validatedFields.includes('minDate'),
+                        !validFields.includes('minimumReportDate') &&
+                        validatedFields.includes('minimumReportDate'),
                     }"
-                    @blur="validateFields('minDate', newUser.minDate !== '')"
+                    @blur="
+                      validateFields(
+                        'minimumReportDate',
+                        newUser.minimumReportDate !== ''
+                      )
+                    "
                   />
-                  <div class="valid-feedback">¡Se ve bien!</div>
-                  <div class="invalid-feedback">
-                    Por favor diligencia este campo
-                  </div>
                 </div>
               </div>
               <!--fecha limite-->
@@ -417,13 +381,9 @@ adminProfile
                     v-model="maxDate"
                     class="form-control shadow-none"
                     id="maxDate"
-                    inputFormat="yyyy/MM/dd"
+                    inputFormat="yyyy-MM-dd"
                     :disabled="true"
                   />
-                  <div class="valid-feedback">¡Se ve bien!</div>
-                  <div class="invalid-feedback">
-                    Por favor diligencia este campo
-                  </div>
                 </div>
               </div>
             </div>
@@ -469,7 +429,11 @@ adminProfile
     </div>
     <div class="right-search nav">
       <form class="d-flex" role="search" v-on:click.prevent="">
-        <input class="form-control me-2 shadow-none" type="search" />
+        <input
+          class="form-control me-2 shadow-none"
+          id="search"
+          type="search"
+        />
         <button class="btn btn-primary" type="submit" v-on:click.prevent="">
           Buscar
         </button>
@@ -488,24 +452,24 @@ adminProfile
           <th scope="col">Cargo</th>
           <th scope="col">Rol</th>
           <th scope="col">Estado</th>
-          <th></th>
-          <th></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody v-for="user in userList" :key="user.id">
         <td>
           <img
             class="avatar-rounded"
-            with="50"
-            height="50"
+            with="30"
+            height="30"
             :src="getImage(user)"
           />
         </td>
-        <td>{{ user.userName }} {{ user.userLastN }}</td>
+        <td>{{ user.name }} {{ user.lastName }}</td>
         <td>{{ user.email }}</td>
-        <td>{{ user.phone1 }}</td>
-        <td>{{ user.position }}</td>
-        <td>{{ user.rol }}</td>
+        <td>{{ user.phone }}</td>
+        <td>{{ user.workPosition }}</td>
+        <td>{{ user.rol.rolName }}</td>
         <td>{{ user.status }}</td>
         <td>
           <a
@@ -533,32 +497,34 @@ adminProfile
 </template>
 
 <script lang="ts">
-import controllers from "@/controllers/RequestController";
 import { Vue } from "vue-class-component";
+import data from "@/controllers/DataController";
+import session from "@/controllers/SessionController"
 import type { user } from "@/registerDataType";
+import router from "@/router";
 export default class userCrud extends Vue {
   newUser: user = {
     id: NaN,
-    userName: "",
-    userLastN: "", //apellidos
+    name: "",
+    lastName: "", //apellidos
     email: "", //correo empresarial
-    perEmail: "", //correo personal
-    minDate: "", // fecha minima para reportar actividades
+    personalEmail: "", //correo personal
+    minimumReportDate: "", // fecha minima para reportar actividades
     rol: { id: 0, rolName: "" },
     status: "",
     startContract: "", // fecha de ingreso
-    finshContract: "", //fecha de terminación de contrato
-    phone1: 0,
+    finishContract: "", //fecha de terminación de contrato
+    phone: 0,
     phone2: 0,
-    phone3: 0, // contacto de emergencia
+    emergencyPhone: 0, // emergencyContacto de emergencia
     birthday: "", //cumpleaños
     address: "", //dirección
-    position: "", //cargo en la empresa
-    contact: "", //nombre contacto de emergencia
-    profileimage: "",
+    workPosition: "", //cargo en la empresa
+    emergencyContact: "", //nombre emergencyContacto de emergencia
+    profilePicture: "",
     vacationDays: 0,
     password: "",
-    relatedTo: "",
+    relationshipContact: "",
     tipId: 0,
     numId: 0,
   };
@@ -571,55 +537,17 @@ export default class userCrud extends Vue {
     "rol",
     "status",
     "startContract",
-    "position",
+    "workPosition",
   ]; // Lista de campos requeridos
   opccrud!: string;
+
   async beforeMount() {
-    this.userList = (await controllers.getUser()) || [
-      {
-        userId: "39393939",
-        userName: "Esteban",
-        userLastN: "Rosa",
-        rol: "Administrador",
-        minDate: "2023/11/11",
-        status: "Disponible",
-        email: "estebanrosa@empresa.com",
-        perEmail: "estebanrosa@personal.com",
-        phone1: 3103030303,
-        phone2: 3104040404,
-        phone3: 3105050505,
-        birthday: "1987/06/11",
-        address: "calle 1 # 10 - 10",
-        position: "Director",
-        contact: "Julian Rosa",
-        profileimage:
-          "https://www.imagenesbonitasname.com/covers/preview/fondo-de-perfil-watsapp-flor-rosa.jpg",
-        startContract: "2023/08/09",
-        finshContract: "2024/08/09",
-        relatedTo: "Padre",
-      },
-      {
-        userId: "39393938",
-        userName: "Maria",
-        userLastN: "Rosa",
-        rol: "Lider de equipo",
-        minDate: "2023/11/11",
-        status: "Disponible",
-        email: "mariarosa@empresa.com",
-        perEmail: "mariarosa@personal.com",
-        phone1: 3103030303,
-        phone2: 3104040404,
-        phone3: 3105050505,
-        birthday: "1987/06/11",
-        address: "calle 1 # 10 - 10",
-        position: "Director",
-        contact: "Julian Rosa",
-        profileimage:
-          "https://www.imagenesbonitasname.com/covers/preview/fondo-de-perfil-watsapp-flor-rosa.jpg",
-        startContract: "2023/06/09",
-        relatedTo: "Padre",
-      },
-    ];
+    await data.collectData();
+    this.userList = data.getUsers();
+    document.querySelector('.spinner')?.classList.add('hidden');      
+  }
+  beforeUnmount() {
+    document.querySelector('.spinner')?.classList.remove('hidden');      
   }
   data() {
     return {
@@ -635,7 +563,7 @@ export default class userCrud extends Vue {
       if (user === userin) return user;
     });
     if (userimage) {
-      return userimage[0].profileimage;
+      return userimage[0].profilePicture;
     } else {
       return "";
     }
@@ -649,26 +577,26 @@ export default class userCrud extends Vue {
       "rol",
       "status",
       "startContract",
-      "position",
-      "minDate",
+      "workPosition",
+      "minimumReportDate",
     ]; // Lista de campos requeridos
     this.newUser.id = user.id;
     /* 
     this.newUser.birthday = new Date(user.birthday);
-    this.newUser.userName = user.userName; 
-    this.newUser.contact = user.contact;
-    this.newUser.phone1 = user.phone1;
+    this.newUser.name = user.name; 
+    this.newUser.emergencyContact = user.emergencyContact;
+    this.newUser.phone = user.phone;
     this.newUser.phone2 = user.phone2;
-    this.newUser.phone3 = user.phone3;
+    this.newUser.emergencyPhone = user.emergencyPhone;
     this.newUser.address = user.address;
-    this.newUser.perEmail = user.perEmail;*/
+    this.newUser.personalEmail = user.personalEmail;*/
     this.newUser.rol = user.rol;
     this.newUser.status = user.status;
     this.newUser.email = user.email;
-    this.newUser.position = user.position;
+    this.newUser.workPosition = user.workPosition;
     this.newUser.startContract = new Date(user.startContract);
-    this.newUser.minDate = new Date(user.minDate);
-    this.newUser.finshContract = new Date(user.finshContract);
+    this.newUser.minimumReportDate = new Date(user.minimumReportDate);
+    this.newUser.finishContract = new Date(user.finishContract);
     const diaHabilitado = document.querySelector(
       ".diaHabilitado"
     ) as HTMLElement;
@@ -677,22 +605,22 @@ export default class userCrud extends Vue {
   viewUser(user: user) {
     this.opccrud = "Visualización";
     this.newUser.id = user.id;
-    this.newUser.minDate = new Date(user.minDate);
-    this.newUser.finshContract = new Date(user.finshContract);
+    this.newUser.minimumReportDate = new Date(user.minimumReportDate);
+    this.newUser.finishContract = new Date(user.finishContract);
     this.newUser.birthday = new Date(user.birthday);
-    this.newUser.userName = user.userName;
-    this.newUser.userLastN = user.userLastN;
+    this.newUser.name = user.name;
+    this.newUser.lastName = user.lastName;
     this.newUser.rol = user.rol;
     this.newUser.status = user.status;
     this.newUser.email = user.email;
-    this.newUser.perEmail = user.perEmail;
-    this.newUser.contact = user.contact;
-    this.newUser.phone1 = user.phone1;
+    this.newUser.personalEmail = user.personalEmail;
+    this.newUser.emergencyContact = user.emergencyContact;
+    this.newUser.phone = user.phone;
     this.newUser.phone2 = user.phone2;
-    this.newUser.phone3 = user.phone3;
+    this.newUser.emergencyPhone = user.emergencyPhone;
     this.newUser.address = user.address;
-    this.newUser.position = user.position;
-    this.newUser.relatedTo = user.relatedTo;
+    this.newUser.workPosition = user.workPosition;
+    this.newUser.relationshipContact = user.relationshipContact;
     this.newUser.startContract = new Date(user.startContract);
     const btnGuardar = document.querySelector(".btnGuardar") as HTMLElement;
     btnGuardar.classList.add("hide");
@@ -700,40 +628,52 @@ export default class userCrud extends Vue {
       ".diaHabilitado"
     ) as HTMLElement;
     diaHabilitado.classList.add("show");
-    const minDate = document.getElementById("minDate") as HTMLInputElement;
-    minDate.disabled = true;
-    const finshContract = document.getElementById(
-      "finshContract"
+    const minimumReportDate = document.getElementById(
+      "minimumReportDate"
     ) as HTMLInputElement;
-    finshContract.disabled = true;
+    minimumReportDate.disabled = true;
+    const finishContract = document.getElementById(
+      "finishContract"
+    ) as HTMLInputElement;
+    finishContract.disabled = true;
     const birthday = document.getElementById("birthday") as HTMLInputElement;
     birthday.disabled = true;
     const email = document.getElementById("email") as HTMLInputElement;
     email.disabled = true;
-    const perEmail = document.getElementById("perEmail") as HTMLInputElement;
-    perEmail.disabled = true;
-    const contact = document.getElementById("contact") as HTMLInputElement;
-    contact.disabled = true;
-    const phone1 = document.getElementById("phone1") as HTMLInputElement;
-    phone1.disabled = true;
+    const personalEmail = document.getElementById(
+      "personalEmail"
+    ) as HTMLInputElement;
+    personalEmail.disabled = true;
+    const emergencyContact = document.getElementById(
+      "emergencyContact"
+    ) as HTMLInputElement;
+    emergencyContact.disabled = true;
+    const phone = document.getElementById("phone") as HTMLInputElement;
+    phone.disabled = true;
     const phone2 = document.getElementById("phone2") as HTMLInputElement;
     phone2.disabled = true;
-    const phone3 = document.getElementById("phone3") as HTMLInputElement;
-    phone3.disabled = true;
+    const emergencyPhone = document.getElementById(
+      "emergencyPhone"
+    ) as HTMLInputElement;
+    emergencyPhone.disabled = true;
     const address = document.getElementById("address") as HTMLTextAreaElement;
     address.disabled = true;
-    const position = document.getElementById("position") as HTMLSelectElement;
-    position.disabled = true;
+    const workPosition = document.getElementById(
+      "workPosition"
+    ) as HTMLSelectElement;
+    workPosition.disabled = true;
     const rol = document.getElementById("rol") as HTMLSelectElement;
     rol.disabled = true;
     const status = document.getElementById("status") as HTMLSelectElement;
     status.disabled = true;
-    const userName = document.getElementById("userName") as HTMLSelectElement;
-    userName.disabled = true;
-    const userLastN = document.getElementById("userLastN") as HTMLSelectElement;
-    userLastN.disabled = true;
-    const relatedTo = document.getElementById("relatedTo") as HTMLSelectElement;
-    relatedTo.disabled = true;
+    const name = document.getElementById("name") as HTMLSelectElement;
+    name.disabled = true;
+    const lastName = document.getElementById("lastName") as HTMLSelectElement;
+    lastName.disabled = true;
+    const relationshipContact = document.getElementById(
+      "relationshipContact"
+    ) as HTMLSelectElement;
+    relationshipContact.disabled = true;
     const startContract = document.getElementById(
       "startContract"
     ) as HTMLInputElement;
@@ -758,12 +698,15 @@ export default class userCrud extends Vue {
   }
   submitForm() {
     this.validateFields("email", this.newUser.email.length > 0);
-    this.validateFields("name", this.newUser.userName.length > 0);
-    this.validateFields("lastN", this.newUser.userLastN.length > 0);
-    this.validateFields("minDate", this.newUser.minDate !== "");
+    this.validateFields("name", this.newUser.name.length > 0);
+    this.validateFields("lastN", this.newUser.lastName.length > 0);
+    this.validateFields(
+      "minimumReportDate",
+      this.newUser.minimumReportDate !== ""
+    );
     this.validateFields("startContract", this.newUser.startContract !== "");
     this.validateFields("rol", this.newUser.rol.rolName.length > 0);
-    this.validateFields("position", this.newUser.position.length > 0);
+    this.validateFields("workPosition", this.newUser.workPosition.length > 0);
     this.validateFields("status", this.newUser.status !== null);
     // Validar que todos los campos requeridos estén diligenciados
     if (
@@ -785,31 +728,31 @@ export default class userCrud extends Vue {
       "rol",
       "status",
       "startContract",
-      "position",
+      "workPosition",
     ];
     this.newUser = {
       //cambiado a 0
       id: NaN,
-      userName: "",
-      userLastN: "", //apellidos
+      name: "",
+      lastName: "", //apellidos
       email: "", //correo empresarial
-      perEmail: "", //correo personal
-      minDate: "", // fecha minima para reportar actividades
+      personalEmail: "", //correo personal
+      minimumReportDate: "", // fecha minima para reportar actividades
       rol: { id: 0, rolName: "" },
       status: "",
       startContract: "", // fecha de ingreso
-      finshContract: "", // fecha de terminación de contrato
-      phone1: 0,
+      finishContract: "", // fecha de terminación de contrato
+      phone: 0,
       phone2: 0,
-      phone3: 0, // contacto de emergencia
+      emergencyPhone: 0, // emergencyContacto de emergencia
       birthday: "", //cumpleaños
       address: "", //dirección
-      position: "", //cargo en la empresa
-      contact: "", //nombre contacto de emergencia
-      profileimage: "",
+      workPosition: "", //cargo en la empresa
+      emergencyContact: "", //nombre emergencyContacto de emergencia
+      profilePicture: "",
       vacationDays: 0,
       password: "",
-      relatedTo: "",
+      relationshipContact: "",
       tipId: 0,
       numId: 0,
     };
@@ -824,36 +767,46 @@ export default class userCrud extends Vue {
     if (diaHabilitado.classList.contains("show")) {
       diaHabilitado.classList.remove("show");
     }
-    const minDate = document.getElementById("minDate") as HTMLInputElement;
-    minDate.disabled = false;
-    const finshContract = document.getElementById(
-      "finshContract"
+    const minimumReportDate = document.getElementById(
+      "minimumReportDate"
     ) as HTMLInputElement;
-    finshContract.disabled = false;
+    minimumReportDate.disabled = false;
+    const finishContract = document.getElementById(
+      "finishContract"
+    ) as HTMLInputElement;
+    finishContract.disabled = false;
     const birthday = document.getElementById("birthday") as HTMLInputElement;
     birthday.disabled = false;
     const email = document.getElementById("email") as HTMLInputElement;
     email.disabled = false;
-    const perEmail = document.getElementById("perEmail") as HTMLInputElement;
-    perEmail.disabled = false;
-    const contact = document.getElementById("contact") as HTMLInputElement;
-    contact.disabled = false;
-    const phone1 = document.getElementById("phone1") as HTMLInputElement;
-    phone1.disabled = false;
+    const personalEmail = document.getElementById(
+      "personalEmail"
+    ) as HTMLInputElement;
+    personalEmail.disabled = false;
+    const emergencyContact = document.getElementById(
+      "emergencyContact"
+    ) as HTMLInputElement;
+    emergencyContact.disabled = false;
+    const phone = document.getElementById("phone") as HTMLInputElement;
+    phone.disabled = false;
     const phone2 = document.getElementById("phone2") as HTMLInputElement;
     phone2.disabled = false;
-    const phone3 = document.getElementById("phone3") as HTMLInputElement;
-    phone3.disabled = false;
+    const emergencyPhone = document.getElementById(
+      "emergencyPhone"
+    ) as HTMLInputElement;
+    emergencyPhone.disabled = false;
     const address = document.getElementById("address") as HTMLTextAreaElement;
     address.disabled = false;
-    const position = document.getElementById("position") as HTMLSelectElement;
-    position.disabled = false;
+    const workPosition = document.getElementById(
+      "workPosition"
+    ) as HTMLSelectElement;
+    workPosition.disabled = false;
     const rol = document.getElementById("rol") as HTMLSelectElement;
     rol.disabled = false;
     const status = document.getElementById("status") as HTMLSelectElement;
     status.disabled = false;
-    const userName = document.getElementById("userName") as HTMLSelectElement;
-    userName.disabled = false;
+    const name = document.getElementById("name") as HTMLSelectElement;
+    name.disabled = false;
     const startContract = document.getElementById(
       "startContract"
     ) as HTMLInputElement;
@@ -863,31 +816,17 @@ export default class userCrud extends Vue {
       element.classList.remove("show");
     });
   }
+
+  beforeCreate(): void {
+      if (!session.validateSession) {
+        this.$router.push("/login")
+      }
+  }
 }
 </script>
 
 <!--Estilos-->
 <style scoped lang="scss">
-.text-left {
-  // cdc: para alinear el texto a la izquierda
-  text-align: left;
-}
-.table-contain {
-  overflow: auto;
-  max-height: 380px;
-  padding: 16px;
-}
-
-.right-search {
-  width: 500px;
-  margin: 25px;
-}
-
-.left-options {
-  margin: auto 25px;
-  width: 100%;
-  text-align: left;
-}
 .titulo {
   position: relative;
   z-index: 1;
@@ -927,5 +866,9 @@ export default class userCrud extends Vue {
 }
 p.datosPersonales.show {
   display: block !important;
+}
+
+.avatar-rounded {
+  padding: 2px;
 }
 </style>

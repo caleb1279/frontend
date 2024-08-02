@@ -12,7 +12,9 @@ import Datepicker from "vue3-datepicker";
 import SimpleTypeahead from "vue3-simple-typeahead/src/vue3-simple-typeahead.vue";
 import Particles from "vue3-particles";
 import VueApexCharts from "vue3-apexcharts";
-import VueCookies from "vue3-cookies";
+import { VueReCaptcha } from "vue-recaptcha-v3";
+import { ReCaptchaInstance } from "recaptcha-v3";
+import * as dotenv from "dotenv";
 
 import {
   faClock,
@@ -26,12 +28,16 @@ import {
   faPen,
   faTrash,
   faPlus,
+  faMinus,
   faUsers,
   faGears,
   faArrowTrendUp,
   faTimeline,
   faUsersGear,
   faCalendar,
+  faLessThan,
+  faGreaterThan,
+  faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "vue3-simple-typeahead/dist/vue3-simple-typeahead.css";
@@ -58,17 +64,33 @@ library.add(
   faTimeline,
   faUsersGear,
   faArrowTrendUp,
-  faCalendar
+  faCalendar,
+  faLessThan,
+  faGreaterThan,
+  faUserPlus,
+  faMinus
 );
+
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    $recaptcha: (action: string) => Promise<string>
+    $recaptchaLoaded: () => Promise<boolean>
+    $recaptchaInstance: ReCaptchaInstance
+  }
+}
 
 app.use(BootstrapVue3);
 app.use(Axios, axios);
 app.use(Particles);
-app.use(VueCookies);
 app.use(VueApexCharts);
+app.use(VueReCaptcha, {
+  siteKey: "" + process.env.VUE_APP_CAPTCHA_TOKEN,
+  loaderOptions: {
+    useRecaptchaNet: true,
+  },
+});
 app.use(Vue3Storage, { namespace: "pro_", storage: StorageType.Local });
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.component("date-picker", Datepicker);
 app.component("vue3-simple-typeahead", SimpleTypeahead);
-app.use(VueApexCharts);
 app.use(router).mount("#app");

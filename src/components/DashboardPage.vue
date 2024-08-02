@@ -1,7 +1,5 @@
 <template>
-  <div class="maintitle px-4 mt-3">
-    <h1>Dashboard de {{ username }}</h1>
-  </div>
+  <br />
   <div class="boxes">
     <div class="box">
       <i
@@ -10,145 +8,296 @@
 
       <div class="informacion">
         <span class="text">Horas totales</span>
-        <span class="number">1075</span>
+        <span class="number">{{ getTotalHours()[0] }}</span>
       </div>
     </div>
     <div class="box">
       <i><font-awesome-icon icon="arrow-trend-up"></font-awesome-icon></i>
       <div class="informacion">
-        <span class="text">Avance</span>
-        <span class="number">71%</span>
+        <span class="text">Actividades Totales</span>
+        <span class="number">{{ reports.length }}</span>
+      </div>
+    </div>
+    <div class="box">
+      <i><font-awesome-icon icon="arrow-trend-up"></font-awesome-icon></i>
+      <div class="informacion">
+        <span class="text">Promedio de Horas</span>
+        <span class="number">{{
+          Math.round(getTotalHours()[0] / reports.length)
+        }}</span>
       </div>
     </div>
     <div class="box">
       <i><font-awesome-icon icon="users-gear"></font-awesome-icon></i>
       <div class="informacion">
         <span class="text">Adherencia</span>
-        <span class="number">45%</span>
+        <span class="number"
+          >{{
+            Math.round((getTotalHours()[1] * 100) / getTotalHours()[0])
+          }}%</span
+        >
       </div>
     </div>
     <div class="box">
-      <i><font-awesome-icon icon="calendar"></font-awesome-icon></i>
+      <i class="clickable" v-on:click.prevent="updateRecords(-1)"
+        ><font-awesome-icon icon="less-than"></font-awesome-icon>
+      </i>
+      <i class="clickable" v-on:click.prevent="updateRecords(1)"
+        ><font-awesome-icon icon="greater-than"></font-awesome-icon
+      ></i>
       <div class="informacion">
-        <span class="text">Mes actual</span>
-        <span class="number">Dic</span>
+        <span class="text">Mes Actual</span>
+        <span class="number">{{
+          new Date(actualDate).toLocaleString("default", { month: "short" })
+        }}</span>
       </div>
     </div>
   </div>
-  <div class="charts">
-    <apexchart
-      width="500"
-      type="bar"
-      :options="{
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            borderRadius: '8',
-            borderRariusWhenStacked: 'last',
-            columnWidth: '20%',
+
+  <h1
+    class="text-left"
+    style="margin: 0; margin-top: 12px; margin-left: 56px; margin-bottom: -8px"
+  >
+    Horas reales vs Horas estimadas
+  </h1>
+  <div class="container">
+    <div class="chart">
+      <apexchart
+        type="area"
+        height="255"
+        width="500"
+        :options="{
+          theme: {
+            monochrome: {
+              enabled: false,
+              shadeTo: 'light',
+              shadeIntensity: 0.8,
+              color: '#000083',
+            },
           },
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        theme: {
-          monochrome: {
-            enabled: true,
-            shadeTo: 'light',
-            shadeIntensity: 0.8,
-            color: '#000083',
+          colors: ['#FC6945', '#960075'],
+          chart: {
+            /*animations: {
+              enabled: true,
+              easing: 'easeinout',
+              speed: 10,
+              animateGradually: {
+                  enabled: true,
+                  delay: 800,
+              },
+              dynamicAnimation: {
+                  enabled: true,
+                  speed: 350,
+              }},
+            */
+            stacked: false,
+            toolbar: {
+              show: true,
+            },
+            zoom: {
+              enabled: false,
+            },
           },
-        },
-        chart: {
-          type: 'bar',
-          height: 350,
-          stacked: true,
-          toolbar: {
-            show: false,
-          },
-          zoom: {
+          dataLabels: {
             enabled: false,
           },
-        },
-      }"
-      :series="[
-        {
-          name: 'En curso',
-          data: [44, 55, 41, 67, 22, 43],
-        },
-        {
-          name: 'Realizado',
-          data: [13, 23, 20, 8, 13, 27],
-        },
-        {
-          name: 'Pendiente',
-          data: [11, 17, 15, 15, 21, 14],
-        },
-      ]"
-    ></apexchart>
-    <apexchart
-      width="400"
-      type="area"
-      :options="{
-        theme: {
-          monochrome: {
-            enabled: true,
-            shadeTo: 'light',
-            shadeIntensity: 0.8,
-            color: '#000083',
+          title: {
+            text: '',
+            align: 'left',
           },
-        },
-        chart: {
-          height: 375,
-          type: 'area',
-          toolbar: {
-            show: false,
+          stroke: {
+            curve: 'smooth',
           },
-          zoom: {
+          xaxis: {
+            categories: reports.map((obj) => obj.title),
+            labels: {
+              show: false,
+            },
+          },
+        }"
+        :series="[
+          {
+            name: 'Horas Reales',
+            data: reports.map((obj) => obj.hours),
+          },
+          {
+            name: 'Horas Estimadas',
+            data: reports.map((obj) => obj.estimatedHours),
+          },
+        ]"
+      ></apexchart>
+      <apexchart
+        type="bar"
+        height="225"
+        width="300"
+        :options="{
+          theme: {
+            monochrome: {
+              enabled: true,
+              shadeTo: 'light',
+              shadeIntensity: 0.8,
+              color: '#C9345D',
+            },
+          },
+          chart: {
+            stacked: true,
+            toolbar: {
+              show: true,
+            },
+            zoom: {
+              enabled: false,
+            },
+          },
+          plotOptions: {
+            bar: {
+              horizontal: true,
+            },
+          },
+          dataLabels: {
             enabled: false,
           },
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          curve: 'smooth',
-        },
-      }"
-      :series="[
-        {
-          name: 'Promedio horas estimadas',
-          data: [31, 40, 28, 51, 42, 109, 100],
-        },
-        {
-          name: 'Promedio horas reales',
-          data: [11, 32, 45, 32, 34, 52, 41],
-        },
-      ]"
-    ></apexchart>
+          title: {
+            text: '',
+            align: 'left',
+          },
+          xaxis: {
+            categories: activities.map((obj) => obj.name),
+            labels: {
+              show: false,
+            },
+          },
+        }"
+        :series="[
+          {
+            name: 'data',
+            data: getActivityResume(),
+          },
+        ]"
+      ></apexchart>
+      <div class="projects">
+        <h2>Proyectos Activos</h2>
+        <br />
+        <ul v-for="project in projects">
+          <a href="#" v-on:click.prevent="filtrarProyecto(project.name)"
+            ><li
+              :class="{
+                active: filteredReport === project.name,
+              }"
+            >
+              {{ project.name }}
+            </li></a
+          >
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
+import type { activity, project, report } from "@/registerDataType";
+import datacontroller from "@/controllers/DataController";
 import session from "@/controllers/SessionController";
+
 export default class DashboardPage extends Vue {
-  username!: string;
-  beforeMount() {
-    this.username = session.getUserData() === null ? "" : session.getUserData().userName;
+  actualDate!: Date;
+  datos: any = datacontroller;
+
+  reports: report[] = [];
+  projects: project[] = [];
+  activities: activity[] = [];
+
+  filteredReport: string = "";
+
+  async beforeMount() {
+    this.actualDate = new Date();
+    await this.collectData();
+    document.querySelector(".spinner")?.classList.add("hidden");
+  }
+
+  beforeUnmount() {
+    document.querySelector(".spinner")?.classList.remove("hidden");
   }
 
   data() {
     return {
-      username: this.username,
+      filteredReport: this.filteredReport,
+      projects: this.projects,
+      reports: this.reports,
+      activities: this.activities,
     };
+  }
+
+  async collectData() {
+    this.datos.setActualDate(this.actualDate);
+    await this.datos.collectData();
+    this.reports = this.datos.getReports(this.filteredReport);
+    this.projects = this.datos.getProjects();
+    this.activities = this.datos.getActivities("");
+  }
+
+  filtrarProyecto(proy: string) {
+    if (this.filteredReport === "" || this.filteredReport !== proy) {
+      this.filteredReport = proy;
+    } else {
+      this.filteredReport = "";
+    }
+
+    this.collectData();
+  }
+
+  async updateRecords(dir: number) {
+    if (
+      this.actualDate.getMonth() === new Date().getMonth() &&
+      this.actualDate.getFullYear() === new Date().getFullYear() &&
+      dir == 1
+    )
+      return;
+
+    let date = this.actualDate;
+    this.actualDate = new Date(date.getFullYear(), date.getMonth() + dir, 1);
+
+    this.collectData();
+  }
+
+  getActivityResume() {
+    let totalActivityHours: number[] = [];
+    this.activities.forEach((activity) => {
+      let totalHours = 0;
+
+      this.reports.forEach((report) => {
+        if (report.activity.id === activity.id) {
+          totalHours += report.hours;
+        }
+      });
+
+      totalActivityHours.push(totalHours);
+    });
+
+    return totalActivityHours;
+  }
+
+  getTotalHours() {
+    let totalHours = 0;
+    let totalEstimated = 0;
+    this.reports.forEach((report) => {
+      totalHours += report.hours;
+      totalEstimated += report.estimatedHours;
+    });
+
+    return [totalHours, totalEstimated];
+  }
+
+  beforeCreate(): void {
+    if (!session.validateSession) {
+      this.$router.push("/login");
+    }
   }
 }
 </script>
 
-<style>
+<style scoped lang="scss">
 .boxes {
-  padding: 25px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -162,12 +311,10 @@ export default class DashboardPage extends Vue {
   flex-direction: row;
   align-items: right;
   justify-content: space-between;
-  border-radius: 12px;
-  width: calc((90% / 4) - 15px);
+  width: calc((90% / 5) - 0.4rem);
   padding: 15px 20px;
-  background: linear-gradient(45deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6))
-    #000083;
-  color: #dbdbdb;
+  border: 1px solid #dbdbdb;
+  border-radius: 5px;
 }
 
 .boxes .box i {
@@ -192,13 +339,54 @@ export default class DashboardPage extends Vue {
   flex-direction: column;
   text-align: right;
 }
-.charts {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+
+.clickable:hover {
+  cursor: pointer;
 }
 
-.charts * {
-  margin: auto !important;
+.container {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.chart {
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  justify-content: center;
+}
+
+.vue-apexcharts {
+  margin: 1rem auto;
+}
+
+.projects {
+  border-left: 1px solid #dbdbdb;
+}
+
+.projects ul {
+  margin: 0;
+  padding: 0;
+}
+
+.projects li {
+  text-align: left;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.projects li:hover {
+  background-color: #eee;
+}
+
+.projects ul .active {
+  background-color: #eee;
+}
+
+.projects h2 {
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 6px;
 }
 </style>
