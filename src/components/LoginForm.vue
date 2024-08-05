@@ -74,8 +74,21 @@
               <b>¿Olvidó su contraseña?</b>
             </a>
           </div>
+          <br />
         </div>
+        <GoogleLogin class="text-center google" :callback="signInWithGoogle" />
       </form>
+      <!-- <div class="text-center">
+        <hr />
+      </div>
+      <br /> -->
+      <!-- <button class="btn google-btn" @click="signInWithGoogle">
+        <img
+          src="https://img.icons8.com/color/48/000000/google-logo.png"
+          alt="Google Logo"
+        />
+        <span>Continuar con Google</span>
+      </button> -->
     </div>
     <div class="column-right">
       <img src="/img/hacker-man-laptop.png" class="right-cover-image" />
@@ -102,6 +115,10 @@ export default class LoginForm extends Vue {
     await this.$recaptchaLoaded();
     const token = await this.$recaptcha("login");
     this.login(token);
+  }
+
+  signInWithGoogle() {
+    console.log("");
   }
 
   data() {
@@ -178,5 +195,9 @@ h1 {
 .image-logo {
   max-width: 300px;
   margin-bottom: 18px;
+}
+
+.google {
+  display: block;
 }
 </style>

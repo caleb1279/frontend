@@ -41,6 +41,7 @@ import {
   faBug,
   faDatabase,
 } from "@fortawesome/free-solid-svg-icons";
+import vue3GoogleLogin from "vue3-google-login";
 
 import "vue3-simple-typeahead/dist/vue3-simple-typeahead.css";
 import "bootstrap/dist/css/bootstrap.css";
@@ -93,6 +94,11 @@ app.use(VueReCaptcha, {
     useRecaptchaNet: true,
   },
 });
+
+app.use(vue3GoogleLogin, {
+  clientId: "YOUR_CLIENT_ID",
+});
+
 app.use(Vue3Storage, { namespace: "pro_", storage: StorageType.Local });
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.component("date-picker", Datepicker);
