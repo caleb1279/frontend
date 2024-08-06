@@ -167,7 +167,6 @@ export default class TicketsCrud extends Vue {
   activeTicket!: ticket | null;
 
   async beforeMount() {
-    data.setActualDate(new Date());
     await data.collectData();
     this.tickets = data.getTickets();
     this.tickets = this.tickets.filter((i) => i.subject !== "origin");

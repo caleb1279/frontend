@@ -4,14 +4,13 @@ module.exports = defineConfig({
   lintOnSave: false,
 });
 
-/* module.exports = {
+module.exports = {
   devServer: {
     proxy: {
       "^/": {
-        target: process.env.VUE_APP_API_URL,
+        target: ""+process.env.VUE_APP_API_URL,
         changeOrigin: true,
       },
     },
   },
 };
- */

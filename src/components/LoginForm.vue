@@ -74,21 +74,20 @@
               <b>¿Olvidó su contraseña?</b>
             </a>
           </div>
+          <div class="text-center">
+            <hr />
+          </div>
           <br />
+          <!--button class="btn google-btn" @click.prevent="signInWithGoogle">
+            <img
+              src="https://img.icons8.com/color/48/000000/google-logo.png"
+              alt="Google Logo"
+            />
+            <span>Continuar con Google</span>
+          </button-->
+          <GoogleLogin :callback="signInWithGoogle" auto-login />
         </div>
-        <GoogleLogin class="text-center google" :callback="signInWithGoogle" />
       </form>
-      <!-- <div class="text-center">
-        <hr />
-      </div>
-      <br /> -->
-      <!-- <button class="btn google-btn" @click="signInWithGoogle">
-        <img
-          src="https://img.icons8.com/color/48/000000/google-logo.png"
-          alt="Google Logo"
-        />
-        <span>Continuar con Google</span>
-      </button> -->
     </div>
     <div class="column-right">
       <img src="/img/hacker-man-laptop.png" class="right-cover-image" />
@@ -102,6 +101,9 @@ import RequestController from "@/controllers/RequestController";
 import { AxiosError, AxiosResponse } from "axios";
 import CryptoJS from "crypto-js";
 import session from "@/controllers/SessionController";
+import { GoogleLogin } from "vue3-google-login";
+import { googleOneTap } from "vue3-google-login";
+//import { google } from "googleapis";
 
 export default class LoginForm extends Vue {
   msg = "";
@@ -117,8 +119,12 @@ export default class LoginForm extends Vue {
     this.login(token);
   }
 
-  signInWithGoogle() {
-    console.log("");
+  async signInWithGoogle(response: any) {
+    if (response.credential) {
+      session.LoginWithGoogle(response.credential);
+    } else {
+      console.log("google login error");
+    }
   }
 
   data() {
@@ -129,8 +135,8 @@ export default class LoginForm extends Vue {
   }
 
   login(token: string) {
-    this.msg = "";
-    RequestController.Login({
+    this.msg = "not supported for now";
+    /* RequestController.Login({
       email: this.uname,
       password: CryptoJS.SHA256(this.passwd).toString(CryptoJS.enc.Hex),
     })
@@ -147,7 +153,7 @@ export default class LoginForm extends Vue {
         } else {
           this.msg = "Usuario o Contraseña Incorrectos";
         }
-      });
+      }); */
   }
 
   viewPassword() {
@@ -173,6 +179,16 @@ export default class LoginForm extends Vue {
         this.validFields.splice(index, 1);
       }
     }
+  }
+
+  mounted(): void {
+    googleOneTap({ autoLogin: true })
+      .then((response) => {
+        session.LoginWithGoogle(response.credential);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 }
 </script>

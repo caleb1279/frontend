@@ -14,7 +14,7 @@ import Particles from "vue3-particles";
 import VueApexCharts from "vue3-apexcharts";
 import { VueReCaptcha } from "vue-recaptcha-v3";
 import { ReCaptchaInstance } from "recaptcha-v3";
-import * as dotenv from "dotenv";
+import GAuth from "vue3-google-login";
 
 import {
   faClock,
@@ -75,11 +75,11 @@ library.add(
   faDatabase
 );
 
-declare module '@vue/runtime-core' {
+declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
-    $recaptcha: (action: string) => Promise<string>
-    $recaptchaLoaded: () => Promise<boolean>
-    $recaptchaInstance: ReCaptchaInstance
+    $recaptcha: (action: string) => Promise<string>;
+    $recaptchaLoaded: () => Promise<boolean>;
+    $recaptchaInstance: ReCaptchaInstance;
   }
 }
 
@@ -88,6 +88,10 @@ app.use(VueReCaptcha, {
   loaderOptions: {
     useRecaptchaNet: true,
   },
+});
+
+app.use(GAuth, {
+  clientId: "" + process.env.VUE_APP_OAUTH_CLIENT_ID,
 });
 
 app.use(BootstrapVue3);

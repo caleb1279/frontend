@@ -3,7 +3,7 @@ import axios from "axios";
 import type { report, ticket } from "@/registerDataType";
 
 const request = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
+  baseURL: "" + process.env.VUE_APP_API_URL_SERVICE,
   headers: {},
 });
 
@@ -21,7 +21,7 @@ request.interceptors.response.use(
 );
 
 export default {
-  Login(json: { email: string; password: string }) {
+  /* Login(json: { email: string; password: string }) {
     return request.get(
       "/users/login/" +
         encodeURIComponent(json.email) +
@@ -94,8 +94,7 @@ export default {
       console.log(error);
       return null;
     }
-  },
-
+  }, */
   async getTickets() {
     try {
       const data = await request.get("/tickets/incidents");

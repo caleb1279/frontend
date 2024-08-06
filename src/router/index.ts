@@ -5,12 +5,12 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import LoginForm from "@/components/LoginForm.vue";
 import ErrorNotFound from "@/components/ErrorNotFound.vue";
 import HomePage from "@/components/HomePage.vue";
-import ReportCrud from "@/components/ReportCrud.vue";
+// import ReportCrud from "@/components/ReportCrud.vue";
 // import ProjectCrud from "@/components/ProjectCrud.vue";
 // import AdminProfile from "@/components/AdminProfile.vue";
 // import Profile from "@/components/Profile.vue";
 // import ExportReportData from "@/components/ExportReportData.vue";
-import DashboardPage from "@/components/DashboardPage.vue";
+// import DashboardPage from "@/components/DashboardPage.vue";
 import TicketCrud from "@/components/TicketsCrud.vue";
 
 // sesiones
@@ -24,7 +24,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "HomePage",
     component: HomePage,
     children: [
-      {
+      /* {
         path: "/",
         name: "Dashboard",
         component: DashboardPage,
@@ -33,7 +33,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "/report",
         name: "ReportCrud",
         component: ReportCrud,
-      },
+      }, */
       /* {
         path: "/project",
         name: "ProjectCrud",
@@ -55,7 +55,7 @@ const routes: Array<RouteRecordRaw> = [
         component: ExportReportData,
       }, */
       {
-        path: "/tickets",
+        path: "/",
         name: "Tickets",
         component: TicketCrud,
       },

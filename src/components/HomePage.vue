@@ -92,7 +92,7 @@
       <div class="sidebar">
         <ul>
           <li></li>
-          <a href="" v-on:click.prevent="$router.push('/')">
+          <a href="" v-on:click.prevent="$router.push('/tickets')">
             <li class="sidebar-item">
               <font-awesome-icon icon="home"></font-awesome-icon>
               Dashboard
@@ -104,7 +104,7 @@
               Actividades
             </li>
           </a>
-          <a href="" v-on:click.prevent="$router.push('/tickets')">
+          <a href="" v-on:click.prevent="$router.push('/')">
             <li class="sidebar-item">
               <font-awesome-icon icon="bug"></font-awesome-icon>
               Incidentes
