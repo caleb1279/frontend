@@ -14,7 +14,7 @@ import Particles from "vue3-particles";
 import VueApexCharts from "vue3-apexcharts";
 import { VueReCaptcha } from "vue-recaptcha-v3";
 import { ReCaptchaInstance } from "recaptcha-v3";
-// import * as dotenv from "dotenv";
+import * as dotenv from "dotenv";
 
 import {
   faClock,
@@ -41,7 +41,6 @@ import {
   faBug,
   faDatabase,
 } from "@fortawesome/free-solid-svg-icons";
-import vue3GoogleLogin from "vue3-google-login";
 
 import "vue3-simple-typeahead/dist/vue3-simple-typeahead.css";
 import "bootstrap/dist/css/bootstrap.css";
@@ -76,18 +75,14 @@ library.add(
   faDatabase
 );
 
-declare module "@vue/runtime-core" {
+declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    $recaptcha: (action: string) => Promise<string>;
-    $recaptchaLoaded: () => Promise<boolean>;
-    $recaptchaInstance: ReCaptchaInstance;
+    $recaptcha: (action: string) => Promise<string>
+    $recaptchaLoaded: () => Promise<boolean>
+    $recaptchaInstance: ReCaptchaInstance
   }
 }
 
-app.use(BootstrapVue3);
-app.use(Axios, axios);
-app.use(Particles);
-app.use(VueApexCharts);
 app.use(VueReCaptcha, {
   siteKey: "" + process.env.VUE_APP_CAPTCHA_TOKEN,
   loaderOptions: {
@@ -95,10 +90,10 @@ app.use(VueReCaptcha, {
   },
 });
 
-app.use(vue3GoogleLogin, {
-  clientId: "YOUR_CLIENT_ID",
-});
-
+app.use(BootstrapVue3);
+app.use(Axios, axios);
+app.use(Particles);
+app.use(VueApexCharts);
 app.use(Vue3Storage, { namespace: "pro_", storage: StorageType.Local });
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.component("date-picker", Datepicker);

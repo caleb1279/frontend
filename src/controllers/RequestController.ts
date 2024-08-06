@@ -3,12 +3,7 @@ import axios from "axios";
 import type { report, ticket } from "@/registerDataType";
 
 const request = axios.create({
-<<<<<<< HEAD
   baseURL: process.env.VUE_APP_API_URL,
-=======
-  baseURL: "http://localhost:9000/",
-  withCredentials: false,
->>>>>>> 1b0874e1f91bc116e4baab45d31598000c4dd9df
   headers: {},
 });
 
@@ -27,16 +22,12 @@ request.interceptors.response.use(
 
 export default {
   Login(json: { email: string; password: string }) {
-<<<<<<< HEAD
     return request.get(
       "/users/login/" +
         encodeURIComponent(json.email) +
         "/" +
         encodeURIComponent(json.password)
     );
-=======
-    return request.get("/users/login/"+encodeURIComponent(json.email)+"/"+encodeURIComponent(json.password));
->>>>>>> 1b0874e1f91bc116e4baab45d31598000c4dd9df
   },
   async getActivities() {
     try {
