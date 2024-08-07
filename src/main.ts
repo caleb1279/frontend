@@ -83,6 +83,10 @@ declare module "@vue/runtime-core" {
   }
 }
 
+app.use(BootstrapVue3);
+app.use(Axios, axios);
+app.use(Particles);
+app.use(VueApexCharts);
 app.use(VueReCaptcha, {
   siteKey: "" + process.env.VUE_APP_CAPTCHA_TOKEN,
   loaderOptions: {
@@ -94,10 +98,6 @@ app.use(GAuth, {
   clientId: "" + process.env.VUE_APP_OAUTH_CLIENT_ID,
 });
 
-app.use(BootstrapVue3);
-app.use(Axios, axios);
-app.use(Particles);
-app.use(VueApexCharts);
 app.use(Vue3Storage, { namespace: "pro_", storage: StorageType.Local });
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.component("date-picker", Datepicker);

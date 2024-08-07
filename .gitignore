@@ -22,7 +22,3 @@ pnpm-debug.log*
 *.sln
 *.sw?
 .env
-
-# others
-package-lock.json
-webpack.config.js
