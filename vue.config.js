@@ -6,7 +6,6 @@ module.exports = defineConfig({
 
 module.exports = {
   devServer: {
-<<<<<<< HEAD
     proxy: {
       "^/": {
         target: process.env.VUE_APP_API_URL,
@@ -15,7 +14,3 @@ module.exports = {
     },
   },
 };
-=======
-      proxy: 'http://localhost:9000'
-  } }
->>>>>>> 1b0874e1f91bc116e4baab45d31598000c4dd9df
