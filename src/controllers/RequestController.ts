@@ -1,9 +1,9 @@
 import router from "@/router";
 import axios from "axios";
-import type { report, ticket } from "@/registerDataType";
+import type { ticket } from "@/registerDataType";
 
 const request = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
+  baseURL: process.env.VUE_APP_API_URL_SERVICE,
   headers: {},
 });
 

@@ -1,11 +1,4 @@
-import {
-  activity,
-  project,
-  report,
-  user,
-  ticket,
-  TicketStatus,
-} from "@/registerDataType";
+import { ticket, TicketStatus } from "@/registerDataType";
 import request from "@/controllers/RequestController";
 import session from "@/controllers/SessionController";
 

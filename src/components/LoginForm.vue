@@ -97,9 +97,9 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-import RequestController from "@/controllers/RequestController";
+/* import RequestController from "@/controllers/RequestController";
 import { AxiosError, AxiosResponse } from "axios";
-import CryptoJS from "crypto-js";
+import CryptoJS from "crypto-js"; */
 import session from "@/controllers/SessionController";
 import { GoogleLogin } from "vue3-google-login";
 import { googleOneTap } from "vue3-google-login";
@@ -136,6 +136,7 @@ export default class LoginForm extends Vue {
 
   login(token: string) {
     this.msg = "not supported for now";
+    console.log(token);
     /* RequestController.Login({
       email: this.uname,
       password: CryptoJS.SHA256(this.passwd).toString(CryptoJS.enc.Hex),
