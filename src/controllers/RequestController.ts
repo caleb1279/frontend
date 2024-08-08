@@ -28,9 +28,9 @@ export default {
         "/" +
         encodeURIComponent(json.password)
     );
-=======
     return request.get("/users/login/"+encodeURIComponent(json.email)+"/"+encodeURIComponent(json.password));
->>>>>>> 1b0874e1f91bc116e4baab45d31598000c4dd9df
+  Login(json: { email: string; password: string }) {
+    return request.get("/users/login/"+encodeURIComponent(json.email)+"/"+encodeURIComponent(json.password));
   },
   async getActivities() {
     try {
