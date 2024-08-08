@@ -1,5 +1,5 @@
 export type rol = {
-  id: number;
+  rolId: number;
   rolName: string;
 };
 
@@ -38,7 +38,7 @@ export type activity = {
 
 export type project = {
   id: number;
-  projectId: string;
+  project_id: string;
   name: string;
   labDate: Date | string;
   proDate: Date | string;
@@ -58,3 +58,38 @@ export type report = {
   project: project;
   user: user;
 };
+
+export type TicketStatus = {
+  state: string;
+};
+
+export type TicketIncident = {
+  ticket: string;
+  hash: string;
+};
+
+export type ticket = {
+  user: number;
+  subject: string;
+  description: string;
+  status: TicketStatus;
+  incident: TicketIncident;
+};
+
+export type googleUserData = {
+  aud: string;
+  azp: string;
+  email: string;
+  email_verified: boolean;
+  exp: number;
+  family_name: string;
+  given_name: string;
+  hd: string;
+  iat: number;
+  iss: string;
+  jti: string;
+  name: string;
+  nbf: number;
+  picture: string;
+  sub: number;
+}

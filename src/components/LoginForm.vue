@@ -74,6 +74,18 @@
               <b>¿Olvidó su contraseña?</b>
             </a>
           </div>
+          <div class="text-center">
+            <hr />
+          </div>
+          <br />
+          <!--button class="btn google-btn" @click.prevent="signInWithGoogle">
+            <img
+              src="https://img.icons8.com/color/48/000000/google-logo.png"
+              alt="Google Logo"
+            />
+            <span>Continuar con Google</span>
+          </button-->
+          <GoogleLogin :callback="signInWithGoogle" auto-login />
         </div>
       </form>
     </div>
@@ -85,10 +97,13 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-import RequestController from "@/controllers/RequestController";
+/* import RequestController from "@/controllers/RequestController";
 import { AxiosError, AxiosResponse } from "axios";
-import CryptoJS from "crypto-js";
+import CryptoJS from "crypto-js"; */
 import session from "@/controllers/SessionController";
+import { GoogleLogin } from "vue3-google-login";
+import { googleOneTap } from "vue3-google-login";
+//import { google } from "googleapis";
 
 export default class LoginForm extends Vue {
   msg = "";
@@ -104,6 +119,14 @@ export default class LoginForm extends Vue {
     this.login(token);
   }
 
+  async signInWithGoogle(response: any) {
+    if (response.credential) {
+      session.LoginWithGoogle(response.credential);
+    } else {
+      console.log("google login error");
+    }
+  }
+
   data() {
     return {
       uname: this.uname,
@@ -112,13 +135,13 @@ export default class LoginForm extends Vue {
   }
 
   login(token: string) {
-    this.msg = "";
-    RequestController.Login({
+    this.msg = "not supported for now";
+    console.log(token);
+    /* RequestController.Login({
       email: this.uname,
       password: CryptoJS.SHA256(this.passwd).toString(CryptoJS.enc.Hex),
     })
       .then((data: AxiosResponse) => {
-        console.log(data);
         if (data.status === 200) {
           session.Login(token, data.data);
         } else {
@@ -127,41 +150,11 @@ export default class LoginForm extends Vue {
       })
       .catch((error: AxiosError) => {
         if (error.response) {
-          this.msg = (error.response.data as {Error: string}).Error;
+          this.msg = (error.response.data as { Error: string }).Error;
         } else {
           this.msg = "Usuario o Contraseña Incorrectos";
         }
-      });
-      session.Login("Authorization", {
-      id: 1,
-      email: "john.doe@example.com", //correo empresarial
-      personalEmail: "john.doe@gmail.com", // correo personal
-      name: "John",
-      lastName: "Doe", //apellidos
-      // fullName: string; 
-      password: "d41d8cd98f00b204e9800998ecf8427e",
-      tipId: 1, //tipo de id
-      numId: 4762553256, //cédula
-      //phone: number; 
-      vacationDays: 2,
-      startContract: new Date(), // fecha de ingreso
-      finishContract: new Date(), // fecha de terminacion de contrato
-      rol: {
-        id: 3,
-        rolName: "administrator",
-      },
-      status: "Disponible",
-      minimumReportDate: new Date(), // fecha minima para reportar actividades
-      phone: 4532348654,
-      phone2: 0,
-      emergencyPhone: 6423486564, //telefono contacto de emergencia
-      emergencyContact: "Susan", //nombre contacto de emergencia
-      relationshipContact: "Hermano/a", // parentesco del contacto de emergencia
-      birthday: new Date(), //cumpleaños
-      address: "", //dirección
-      workPosition: "Desarrollador", //cargo en la empresa
-      profilePicture: "https://starter-blog.rizkicitra.dev/_next/image?url=%2Fstatic%2Favatar.jpg&w=1080&q=75" // imagen de perfil
-    }); 
+      }); */
   }
 
   viewPassword() {
@@ -188,6 +181,22 @@ export default class LoginForm extends Vue {
       }
     }
   }
+
+  mounted(): void {
+    googleOneTap({ autoLogin: true })
+      .then((response) => {
+        session.LoginWithGoogle(response.credential);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  beforeCreate(): void {
+    if (session.validateSession()) {
+      this.$router.push("/");
+    }
+  }
 }
 </script>
 
@@ -209,5 +218,9 @@ h1 {
 .image-logo {
   max-width: 300px;
   margin-bottom: 18px;
+}
+
+.google {
+  display: block;
 }
 </style>

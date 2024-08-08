@@ -92,7 +92,7 @@
       <div class="sidebar">
         <ul>
           <li></li>
-          <a href="" v-on:click.prevent="$router.push('/')">
+          <a href="" v-on:click.prevent="$router.push('/tickets')">
             <li class="sidebar-item">
               <font-awesome-icon icon="home"></font-awesome-icon>
               Dashboard
@@ -104,6 +104,12 @@
               Actividades
             </li>
           </a>
+          <a href="" v-on:click.prevent="$router.push('/')">
+            <li class="sidebar-item">
+              <font-awesome-icon icon="bug"></font-awesome-icon>
+              Incidentes
+            </li>
+          </a>
           <a
             href="#"
             v-on:click.prevent=""
@@ -112,13 +118,13 @@
             aria-expanded="false"
             aria-controls="collapseWidthExample"
           >
-            <li class="sidebar-item" v-if="user.rol.id >= 2">
+            <li class="sidebar-item" v-if="(user.rol.id = 1)">
               <font-awesome-icon icon="gears"></font-awesome-icon>
               Administrar
             </li>
           </a>
 
-          <div style="min-height: 120px" v-if="user.rol.id >= 2">
+          <div style="min-height: 120px" v-if="(user.rol.rolId = '1')">
             <div class="collapse" id="collapseWidthExample">
               <div class="card">
                 <a
@@ -139,6 +145,16 @@
                   <li class="sidebar-item">
                     <font-awesome-icon icon="users"></font-awesome-icon>
                     Usuarios
+                  </li>
+                </a>
+                <a
+                  href=""
+                  v-on:click.prevent="$router.push('/exportside')"
+                  id="admin"
+                >
+                  <li class="sidebar-item">
+                    <font-awesome-icon icon="database"></font-awesome-icon>
+                    Informes
                   </li>
                 </a>
               </div>
@@ -190,7 +206,7 @@
                 opacity: {
                   value: 0.1,
                 },
-                size: { 
+                size: {
                   random: true,
                   value: 5,
                 },
@@ -209,7 +225,6 @@
 import { Vue } from "vue-class-component";
 import { loadFull } from "tsparticles";
 import { Engine, Container } from "tsparticles-engine";
-import { user } from "@/registerDataType";
 import session from "@/controllers/SessionController";
 
 export default class HomePage extends Vue {
@@ -240,7 +255,7 @@ export default class HomePage extends Vue {
   }
 
   beforeCreate(): void {
-    if (!session.validateSession) {
+    if (!session.validateSession()) {
       this.$router.push("/login");
     }
   }
@@ -271,6 +286,7 @@ export default class HomePage extends Vue {
   border: none;
   padding-left: 20px;
 }
+
 ul li {
   text-align: center;
   padding: 4px;

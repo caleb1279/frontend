@@ -5,11 +5,13 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import LoginForm from "@/components/LoginForm.vue";
 import ErrorNotFound from "@/components/ErrorNotFound.vue";
 import HomePage from "@/components/HomePage.vue";
-import ReportCrud from "@/components/ReportCrud.vue";
-import ProjectCrud from "@/components/ProjectCrud.vue";
-import AdminProfile from "@/components/AdminProfile.vue";
-import Profile from "@/components/Profile.vue";
-import DashboardPage from "@/components/DashboardPage.vue";
+// import ReportCrud from "@/components/ReportCrud.vue";
+// import ProjectCrud from "@/components/ProjectCrud.vue";
+// import AdminProfile from "@/components/AdminProfile.vue";
+// import Profile from "@/components/Profile.vue";
+// import ExportReportData from "@/components/ExportReportData.vue";
+// import DashboardPage from "@/components/DashboardPage.vue";
+import TicketCrud from "@/components/TicketsCrud.vue";
 
 // sesiones
 import session from "@/controllers/SessionController";
@@ -22,7 +24,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "HomePage",
     component: HomePage,
     children: [
-      {
+      /* {
         path: "/",
         name: "Dashboard",
         component: DashboardPage,
@@ -31,21 +33,31 @@ const routes: Array<RouteRecordRaw> = [
         path: "/report",
         name: "ReportCrud",
         component: ReportCrud,
-      },
-      {
+      }, */
+      /* {
         path: "/project",
         name: "ProjectCrud",
         component: ProjectCrud,
-      },
+      }, */
+      // {
+      //   path: "/admin",
+      //   name: "AdminProfile",
+      //   component: AdminProfile,
+      // },
+      // {
+      //   path: "/Profile",
+      //   name: "Profile",
+      //   component: Profile,
+      // },
+      /* {
+        path: "/exportside",
+        name: "ExportReports",
+        component: ExportReportData,
+      }, */
       {
-        path: "/admin",
-        name: "AdminProfile",
-        component: AdminProfile,
-      },
-      {
-        path: "/Profile",
-        name: "Profile",
-        component: Profile,
+        path: "/",
+        name: "Tickets",
+        component: TicketCrud,
       },
     ],
   },
