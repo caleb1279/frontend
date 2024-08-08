@@ -255,7 +255,7 @@ export default class HomePage extends Vue {
   }
 
   beforeCreate(): void {
-    if (!session.validateSession) {
+    if (!session.validateSession()) {
       this.$router.push("/login");
     }
   }

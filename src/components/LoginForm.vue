@@ -191,6 +191,12 @@ export default class LoginForm extends Vue {
         console.log(error);
       });
   }
+
+  beforeCreate(): void {
+    if (session.validateSession()) {
+      this.$router.push("/");
+    }
+  }
 }
 </script>
 

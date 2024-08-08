@@ -243,7 +243,7 @@ export default class TicketsCrud extends Vue {
   }
 
   beforeCreate(): void {
-    if (!session.validateSession) {
+    if (!session.validateSession()) {
       this.$router.push("/login");
     }
   }
